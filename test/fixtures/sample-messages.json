@@ -1,0 +1,114 @@
+{
+  "multiTurn": {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          { "type": "text", "text": "Read the file" },
+          {
+            "type": "tool_result",
+            "tool_use_id": "old_1",
+            "content": "{\n  \"name\": \"old\",\n  \"version\": \"1.0.0\",\n  \"description\": \"should not change\"\n}"
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "content": [
+          { "type": "text", "text": "I read the file." },
+          { "type": "tool_use", "id": "tu_1", "name": "Read", "input": { "path": "/tmp/test.json" } }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "tu_1",
+            "content": "{\n  \"name\": \"toona\",\n  \"version\": \"0.1.0\",\n  \"type\": \"module\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"start\": \"node index.js\",\n    \"test\": \"node --test\"\n  }\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "errorResult": {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "tu_err",
+            "is_error": true,
+            "content": "{\n  \"error\": \"file not found\",\n  \"code\": 404\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "mixedContent": {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "tu_mix",
+            "content": [
+              { "type": "text", "text": "{\n  \"name\": \"test\",\n  \"version\": \"2.0.0\",\n  \"description\": \"a test package\"\n}" },
+              { "type": "image", "source": { "type": "base64", "media_type": "image/png", "data": "abc123" } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "arrayData": {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "tu_arr",
+            "content": "[\n  {\n    \"id\": 1,\n    \"name\": \"Alice\",\n    \"email\": \"alice@example.com\"\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Bob\",\n    \"email\": \"bob@example.com\"\n  },\n  {\n    \"id\": 3,\n    \"name\": \"Charlie\",\n    \"email\": \"charlie@example.com\"\n  }\n]"
+          }
+        ]
+      }
+    ]
+  },
+  "noUserMessages": {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "assistant",
+        "content": "Hello!"
+      }
+    ]
+  },
+  "textContent": {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "tu_txt",
+            "content": "# README\n\nThis is a markdown file with some content.\nIt has multiple lines and is not JSON.\nIt should not be compressed by minify or toon stages."
+          }
+        ]
+      }
+    ]
+  }
+}

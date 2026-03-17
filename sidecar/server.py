@@ -18,6 +18,7 @@ async def load_model():
     compressor = PromptCompressor(
         model_name="microsoft/llmlingua-2-xlm-roberta-large-meetingbank",
         use_llmlingua2=True,
+        device_map="cpu",
     )
 
 

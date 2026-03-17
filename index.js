@@ -80,8 +80,9 @@ function pipeRequest(req, res, upstreamUrl, prefixChunks) {
 }
 
 return http.createServer(async (req, res) => {
+  if (config.log) console.error(`[toona] ${req.method} ${req.url}`)
   const upstreamUrl = new URL(req.url, config.upstream)
-  const isMessages = req.method === 'POST' && req.url === '/v1/messages'
+  const isMessages = req.method === 'POST' && req.url.startsWith('/v1/messages')
 
   if (!isMessages) {
     return pipeRequest(req, res, upstreamUrl)

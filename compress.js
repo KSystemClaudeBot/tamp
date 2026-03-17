@@ -1,5 +1,5 @@
 import { encode } from '@toon-format/toon'
-import { tryParseJSON, classifyContent } from './detect.js'
+import { tryParseJSON, classifyContent, stripLineNumbers } from './detect.js'
 
 export function compressText(text, config) {
   if (text.length < config.minSize) return null
@@ -11,9 +11,10 @@ export function compressText(text, config) {
     }
     return null
   }
-  if (cls !== 'json') return null
+  if (cls !== 'json' && cls !== 'json-lined') return null
 
-  const { ok, value } = tryParseJSON(text)
+  const raw = cls === 'json-lined' ? stripLineNumbers(text) : text
+  const { ok, value } = tryParseJSON(raw)
   if (!ok) return null
 
   const minified = JSON.stringify(value)
@@ -71,6 +72,7 @@ export async function compressMessages(body, config) {
   if (lastUserIdx === -1) return { body, stats }
 
   const msg = body.messages[lastUserIdx]
+  const debug = config.log
 
   if (typeof msg.content === 'string') {
     const result = await compressBlock(msg.content, config)
@@ -85,11 +87,21 @@ export async function compressMessages(body, config) {
       if (block.is_error) { stats.push({ index: i, skipped: 'error' }); continue }
 
       if (typeof block.content === 'string') {
+        if (debug) {
+          const cls = classifyContent(block.content)
+          const len = block.content.length
+          console.error(`[toona] debug block[${i}]: type=${cls} len=${len} tool_use_id=${block.tool_use_id || '?'}`)
+        }
         const result = await compressBlock(block.content, config)
         if (result) { block.content = result.text; stats.push({ index: i, ...result }) }
       } else if (Array.isArray(block.content)) {
         for (const sub of block.content) {
           if (sub.type === 'text') {
+            if (debug) {
+              const cls = classifyContent(sub.text)
+              const len = sub.text.length
+              console.error(`[toona] debug sub-block: type=${cls} len=${len}`)
+            }
             const result = await compressBlock(sub.text, config)
             if (result) { sub.text = result.text; stats.push({ index: i, ...result }) }
           }

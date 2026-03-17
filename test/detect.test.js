@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { tryParseJSON, isTOON, classifyContent } from '../detect.js'
+import { tryParseJSON, isTOON, classifyContent, stripLineNumbers } from '../detect.js'
 
 describe('tryParseJSON', () => {
   it('parses valid JSON object', () => {
@@ -84,5 +84,41 @@ describe('classifyContent', () => {
 
   it('classifies non-string as unknown', () => {
     assert.equal(classifyContent(null), 'unknown')
+  })
+
+  it('classifies line-numbered JSON as json-lined', () => {
+    const input = '     1\t{\n     2\t  "name": "toona",\n     3\t  "version": "0.1.0"\n     4\t}'
+    assert.equal(classifyContent(input), 'json-lined')
+  })
+
+  it('classifies line-numbered JSON with arrow separator as json-lined', () => {
+    const input = '     1→{\n     2→  "name": "toona",\n     3→  "version": "0.1.0"\n     4→}'
+    assert.equal(classifyContent(input), 'json-lined')
+  })
+
+  it('does not misclassify numbered list as json-lined', () => {
+    const input = '1. First item\n2. Second item\n3. Third item'
+    assert.equal(classifyContent(input), 'text')
+  })
+})
+
+describe('stripLineNumbers', () => {
+  it('strips tab-separated line numbers', () => {
+    const input = '     1\t{\n     2\t  "a": 1\n     3\t}'
+    assert.equal(stripLineNumbers(input), '{\n  "a": 1\n}')
+  })
+
+  it('strips arrow-separated line numbers', () => {
+    const input = '     1→{\n     2→  "a": 1\n     3→}'
+    assert.equal(stripLineNumbers(input), '{\n  "a": 1\n}')
+  })
+
+  it('returns original if no line numbers detected', () => {
+    const input = 'just regular text\nwith newlines'
+    assert.equal(stripLineNumbers(input), input)
+  })
+
+  it('returns non-string input unchanged', () => {
+    assert.equal(stripLineNumbers(42), 42)
   })
 })

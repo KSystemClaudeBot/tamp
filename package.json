@@ -1,5 +1,13 @@
 {
-  "name": "tamp",
+  "name": "@sliday/tamp",
+  "files": [
+    "index.js",
+    "bin/",
+    "compress.js",
+    "config.js",
+    "detect.js",
+    "stats.js"
+  ],
   "version": "0.1.0",
   "description": "Token compression proxy for Claude Code. 50% fewer tokens, zero behavior change.",
   "type": "module",

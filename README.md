@@ -3,7 +3,7 @@
 **Save up to 50% on input tokens.** A transparent compression proxy for Claude Code that sits between your client and the Anthropic API.
 
 ```
-npx tamp
+npx @sliday/tamp
 ```
 
 Or install globally:
@@ -41,7 +41,7 @@ Only `minify` is enabled by default. Enable more with `TOONA_STAGES=minify,toon`
 ### 1. Start the proxy
 
 ```bash
-npx tamp
+npx @sliday/tamp
 ```
 
 ```
@@ -83,7 +83,7 @@ All configuration via environment variables:
 
 ```bash
 # Maximum compression
-TOONA_STAGES=minify,toon npx tamp
+TOONA_STAGES=minify,toon npx @sliday/tamp
 ```
 
 ## Installation Methods
@@ -91,14 +91,14 @@ TOONA_STAGES=minify,toon npx tamp
 ### npx (no install)
 
 ```bash
-npx tamp
+npx @sliday/tamp
 ```
 
 ### npm global
 
 ```bash
 npm install -g @sliday/tamp
-tamp
+npx @sliday/tamp
 ```
 
 ### Git clone

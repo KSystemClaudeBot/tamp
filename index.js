@@ -94,7 +94,8 @@ return http.createServer(async (req, res) => {
   }
 
   const upstream = config.upstreams?.[provider.name] || config.upstream
-  const upstreamUrl = new URL(req.url, upstream)
+  const reqUrl = provider.normalizeUrl ? provider.normalizeUrl(req.url) : req.url
+  const upstreamUrl = new URL(reqUrl, upstream)
 
   const chunks = []
   let size = 0

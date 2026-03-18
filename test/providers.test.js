@@ -26,6 +26,20 @@ describe('detectProvider', () => {
   it('returns null for GET /v1/messages (wrong method)', () => {
     assert.equal(detectProvider('GET', '/v1/messages'), null)
   })
+
+  it('returns openai for POST /chat/completions (no /v1 prefix)', () => {
+    assert.equal(detectProvider('POST', '/chat/completions').name, 'openai')
+  })
+})
+
+describe('openai normalizeUrl', () => {
+  it('prepends /v1 when missing', () => {
+    assert.equal(openai.normalizeUrl('/chat/completions'), '/v1/chat/completions')
+  })
+
+  it('keeps /v1 prefix as-is', () => {
+    assert.equal(openai.normalizeUrl('/v1/chat/completions'), '/v1/chat/completions')
+  })
 })
 
 describe('anthropic adapter', () => {

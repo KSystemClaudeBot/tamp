@@ -1,6 +1,6 @@
 # Tamp
 
-**Save up to 50% on input tokens.** A transparent compression proxy for Claude Code that sits between your client and the Anthropic API.
+**Token compression proxy for Claude Code.** 33.9% fewer input tokens, zero code changes. Sits between your client and the Anthropic API.
 
 ```
 npx @sliday/tamp

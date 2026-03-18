@@ -183,7 +183,7 @@
     DAUB.setTemperature('auto');
     DAUB.setTexture('metal');
     DAUB.setFamily('gruvbox');
-    DAUB.setAccent('#4B5D78');
+    DAUB.resetAccent();
 </script>
 
 <!-- NAVBAR -->
@@ -224,11 +224,11 @@
         </p>
 
         <div class="install-card db-card db-surface--raised" style="margin-top: 2rem;">
-            <pre><span class="prompt">$</span> <span class="cmd">curl -fsSL https://raw.githubusercontent.com/sliday/tamp/main/setup.sh | bash</span></pre>
+            <pre><span class="prompt">$</span> <span class="cmd">npx @sliday/tamp</span></pre>
         </div>
 
         <p class="db-caption" style="margin-top: 0.75rem; opacity: 0.5;">
-            Installs to ~/.tamp, configures your shell, adds <code>tamp</code> alias.
+            Starts the proxy on port 7778. Set <code>ANTHROPIC_BASE_URL=http://localhost:7778</code> and go.
         </p>
 
         <div style="margin-top: 1rem;">
@@ -238,10 +238,12 @@
         <details style="margin-top: 1.5rem; text-align: left; max-width: 560px; width: 100; margin-left: auto; margin-right: auto;">
             <summary class="db-caption" style="cursor: pointer; opacity: 0.5;">Other installation methods</summary>
             <div class="install-card" style="margin-top: 0.75rem;">
-                <pre><span class="comment"># Manual</span>
+                <pre><span class="comment"># Shell installer</span>
+<span class="prompt">$</span> <span class="cmd">curl -fsSL https://raw.githubusercontent.com/sliday/tamp/main/setup.sh | bash</span>
+
+<span class="comment"># Manual</span>
 <span class="prompt">$</span> <span class="cmd">git clone https://github.com/sliday/tamp ~/.tamp</span>
 <span class="prompt">$</span> <span class="cmd">cd ~/.tamp && npm install</span>
-<span class="prompt">$</span> <span class="cmd">export ANTHROPIC_BASE_URL=http://localhost:7778</span>
 <span class="prompt">$</span> <span class="cmd">node index.js</span></pre>
             </div>
         </details>
@@ -489,7 +491,7 @@ size[3]{1024|2048|512}</div>
             <div class="db-list__item"><div class="db-list__title">Response caching for repeated tool calls</div></div>
             <div class="db-list__item"><div class="db-list__title">Per-session dashboards with live stats</div></div>
             <div class="db-list__item"><div class="db-list__title">Configurable compression aggressiveness</div></div>
-            <div class="db-list__item"><div class="db-list__title">npm package: <code>npx tamp</code></div></div>
+            <div class="db-list__item"><div class="db-list__title">Cloudflare Workers edge deployment</div></div>
         </div>
     </div>
 </section>

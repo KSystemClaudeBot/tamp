@@ -1,4 +1,5 @@
 import { encode } from '@toon-format/toon'
+import { countTokens } from '@anthropic-ai/tokenizer'
 import { tryParseJSON, classifyContent, stripLineNumbers } from './detect.js'
 
 export function compressText(text, config) {
@@ -31,7 +32,7 @@ export function compressText(text, config) {
     } catch { /* fall back to minified */ }
   }
 
-  return { text: best.text, method: best.method, originalLen: text.length, compressedLen: best.text.length }
+  return { text: best.text, method: best.method, originalLen: text.length, compressedLen: best.text.length, originalTokens: countTokens(text), compressedTokens: countTokens(best.text) }
 }
 
 async function compressWithLLMLingua(text, config) {
@@ -47,7 +48,7 @@ async function compressWithLLMLingua(text, config) {
     clearTimeout(timeout)
     if (!res.ok) return null
     const data = await res.json()
-    return { text: data.text, method: 'llmlingua', originalLen: text.length, compressedLen: data.text.length }
+    return { text: data.text, method: 'llmlingua', originalLen: text.length, compressedLen: data.text.length, originalTokens: countTokens(text), compressedTokens: countTokens(data.text) }
   } catch {
     return null
   }

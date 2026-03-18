@@ -8,20 +8,24 @@ export function formatRequestLog(stats, session) {
       lines.push(`[toona]   block[${s.index}]: skipped (${s.skipped})`)
     } else if (s.method) {
       const pct = (((s.originalLen - s.compressedLen) / s.originalLen) * 100).toFixed(1)
-      lines.push(`[toona]   block[${s.index}]: ${s.originalLen}->${s.compressedLen} chars (-${pct}%) [${s.method}]`)
+      const tokInfo = s.originalTokens ? ` ${s.originalTokens}->${s.compressedTokens} tok` : ''
+      lines.push(`[toona]   block[${s.index}]: ${s.originalLen}->${s.compressedLen} chars (-${pct}%)${tokInfo} [${s.method}]`)
     }
   }
 
   const totalOrig = compressed.reduce((a, s) => a + s.originalLen, 0)
   const totalComp = compressed.reduce((a, s) => a + s.compressedLen, 0)
+  const totalOrigTok = compressed.reduce((a, s) => a + (s.originalTokens || 0), 0)
+  const totalCompTok = compressed.reduce((a, s) => a + (s.compressedTokens || 0), 0)
   if (compressed.length > 0) {
     const pct = (((totalOrig - totalComp) / totalOrig) * 100).toFixed(1)
-    lines.push(`[toona]   total: ${totalOrig}->${totalComp} chars (-${pct}%)`)
+    const tokPct = totalOrigTok > 0 ? (((totalOrigTok - totalCompTok) / totalOrigTok) * 100).toFixed(1) : '0.0'
+    lines.push(`[toona]   total: ${totalOrig}->${totalComp} chars (-${pct}%), ${totalOrigTok}->${totalCompTok} tokens (-${tokPct}%)`)
   }
 
   if (session) {
     const totals = session.getTotals()
-    lines.push(`[toona]   session: ${totals.totalSaved} chars saved across ${totals.compressionCount} compressions`)
+    lines.push(`[toona]   session: ${totals.totalSaved} chars, ${totals.totalTokensSaved} tokens saved across ${totals.compressionCount} compressions`)
   }
 
   return lines.join('\n')
@@ -29,6 +33,7 @@ export function formatRequestLog(stats, session) {
 
 export function createSession() {
   let totalSaved = 0
+  let totalTokensSaved = 0
   let compressionCount = 0
 
   return {
@@ -36,12 +41,13 @@ export function createSession() {
       for (const s of stats) {
         if (s.method && s.originalLen && s.compressedLen) {
           totalSaved += s.originalLen - s.compressedLen
+          totalTokensSaved += (s.originalTokens || 0) - (s.compressedTokens || 0)
           compressionCount++
         }
       }
     },
     getTotals() {
-      return { totalSaved, compressionCount }
+      return { totalSaved, totalTokensSaved, compressionCount }
     },
   }
 }

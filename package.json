@@ -19,7 +19,14 @@
     "start": "node bin/tamp.js",
     "test": "node --test test/*.test.js"
   },
-  "keywords": ["claude", "anthropic", "proxy", "compression", "tokens", "llm"],
+  "keywords": [
+    "claude",
+    "anthropic",
+    "proxy",
+    "compression",
+    "tokens",
+    "llm"
+  ],
   "author": "Stas Kulesh <stas@sliday.com>",
   "license": "MIT",
   "repository": {
@@ -28,6 +35,7 @@
   },
   "homepage": "https://github.com/sliday/tamp",
   "dependencies": {
+    "@anthropic-ai/tokenizer": "^0.0.4",
     "@toon-format/toon": "^2.1.0"
   }
 }

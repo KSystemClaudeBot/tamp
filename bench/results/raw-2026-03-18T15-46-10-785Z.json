@@ -1,0 +1,1024 @@
+{
+  "meta": {
+    "timestamp": "2026-03-18T15:41:34.084Z",
+    "model": "anthropic/claude-sonnet-4-20250514",
+    "pricing": {
+      "input_per_mtok": 3,
+      "output_per_mtok": 15
+    },
+    "runs": 5
+  },
+  "scenarios": [
+    {
+      "id": "small-json",
+      "name": "Small JSON (package.json)",
+      "description": "Pretty-printed package.json returned by Read tool",
+      "expectedCompression": "15-25%",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 315,
+            "output_tokens": 5,
+            "latency_ms": 2629,
+            "body_bytes": 1004,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 246,
+            "output_tokens": 5,
+            "latency_ms": 2548,
+            "body_bytes": 792,
+            "stop_reason": "end_turn",
+            "compression_ms": 61,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "name: @example/my-app\nversion: 2.4.1\ndescription: A full-stack web application with real-time features\ntype: module\nmain: dist/index.js\nscripts:\n  dev: vite dev\n  build: vite build\n  test: vitest run\n  lint: eslint src/\n  preview: vite preview\ndependencies:\n  react: ^18.2.0\n  \"react-dom\": ^18.2.0\n  \"react-router-dom\": ^6.20.0\ndevDependencies:\n  vite: ^5.0.0\n  vitest: ^1.0.0\n  eslint: ^8.55.0",
+                "method": "toon",
+                "originalLen": 535,
+                "compressedLen": 394,
+                "originalTokens": 202,
+                "compressedTokens": 148
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 315,
+            "output_tokens": 10,
+            "latency_ms": 2339,
+            "body_bytes": 1004,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 246,
+            "output_tokens": 5,
+            "latency_ms": 2415,
+            "body_bytes": 792,
+            "stop_reason": "end_turn",
+            "compression_ms": 46,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "name: @example/my-app\nversion: 2.4.1\ndescription: A full-stack web application with real-time features\ntype: module\nmain: dist/index.js\nscripts:\n  dev: vite dev\n  build: vite build\n  test: vitest run\n  lint: eslint src/\n  preview: vite preview\ndependencies:\n  react: ^18.2.0\n  \"react-dom\": ^18.2.0\n  \"react-router-dom\": ^6.20.0\ndevDependencies:\n  vite: ^5.0.0\n  vitest: ^1.0.0\n  eslint: ^8.55.0",
+                "method": "toon",
+                "originalLen": 535,
+                "compressedLen": 394,
+                "originalTokens": 202,
+                "compressedTokens": 148
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 315,
+            "output_tokens": 10,
+            "latency_ms": 2969,
+            "body_bytes": 1004,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 246,
+            "output_tokens": 10,
+            "latency_ms": 1897,
+            "body_bytes": 792,
+            "stop_reason": "max_tokens",
+            "compression_ms": 49,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "name: @example/my-app\nversion: 2.4.1\ndescription: A full-stack web application with real-time features\ntype: module\nmain: dist/index.js\nscripts:\n  dev: vite dev\n  build: vite build\n  test: vitest run\n  lint: eslint src/\n  preview: vite preview\ndependencies:\n  react: ^18.2.0\n  \"react-dom\": ^18.2.0\n  \"react-router-dom\": ^6.20.0\ndevDependencies:\n  vite: ^5.0.0\n  vitest: ^1.0.0\n  eslint: ^8.55.0",
+                "method": "toon",
+                "originalLen": 535,
+                "compressedLen": 394,
+                "originalTokens": 202,
+                "compressedTokens": 148
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 315,
+            "output_tokens": 4,
+            "latency_ms": 2296,
+            "body_bytes": 1004,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 246,
+            "output_tokens": 5,
+            "latency_ms": 2331,
+            "body_bytes": 792,
+            "stop_reason": "end_turn",
+            "compression_ms": 53,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "name: @example/my-app\nversion: 2.4.1\ndescription: A full-stack web application with real-time features\ntype: module\nmain: dist/index.js\nscripts:\n  dev: vite dev\n  build: vite build\n  test: vitest run\n  lint: eslint src/\n  preview: vite preview\ndependencies:\n  react: ^18.2.0\n  \"react-dom\": ^18.2.0\n  \"react-router-dom\": ^6.20.0\ndevDependencies:\n  vite: ^5.0.0\n  vitest: ^1.0.0\n  eslint: ^8.55.0",
+                "method": "toon",
+                "originalLen": 535,
+                "compressedLen": 394,
+                "originalTokens": 202,
+                "compressedTokens": 148
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 315,
+            "output_tokens": 10,
+            "latency_ms": 2049,
+            "body_bytes": 1004,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 246,
+            "output_tokens": 5,
+            "latency_ms": 3186,
+            "body_bytes": 792,
+            "stop_reason": "end_turn",
+            "compression_ms": 55,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "name: @example/my-app\nversion: 2.4.1\ndescription: A full-stack web application with real-time features\ntype: module\nmain: dist/index.js\nscripts:\n  dev: vite dev\n  build: vite build\n  test: vitest run\n  lint: eslint src/\n  preview: vite preview\ndependencies:\n  react: ^18.2.0\n  \"react-dom\": ^18.2.0\n  \"react-router-dom\": ^6.20.0\ndevDependencies:\n  vite: ^5.0.0\n  vitest: ^1.0.0\n  eslint: ^8.55.0",
+                "method": "toon",
+                "originalLen": 535,
+                "compressedLen": 394,
+                "originalTokens": 202,
+                "compressedTokens": 148
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "large-json",
+      "name": "Large JSON (dependency tree)",
+      "description": "Deep nested npm dependency tree with resolved URLs and integrity hashes",
+      "expectedCompression": "20-35%",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 6773,
+            "output_tokens": 5,
+            "latency_ms": 2606,
+            "body_bytes": 18511,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 4855,
+            "output_tokens": 10,
+            "latency_ms": 2641,
+            "body_bytes": 13382,
+            "stop_reason": "max_tokens",
+            "compression_ms": 62,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"name\":\"my-project\",\"version\":\"1.0.0\",\"lockfileVersion\":3,\"dependencies\":{\"express\":{\"name\":\"express\",\"version\":\"5.11.5\",\"resolved\":\"https://registry.npmjs.org/express/-/express-0.0.0.tgz\",\"integrity\":\"sha512-MA====\",\"requires\":{},\"dev\":true},\"lodash\":{\"name\":\"lodash\",\"version\":\"4.1.6\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-1.0.0.tgz\",\"integrity\":\"sha512-NzkxOQ====\",\"requires\":{},\"dev\":false},\"axios\":{\"name\":\"axios\",\"version\":\"2.17.5\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-2.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzg===\",\"requires\":{},\"dev\":false},\"moment\":{\"name\":\"moment\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-3.0.0.tgz\",\"integrity\":\"sha512-MjM3NTc===\",\"requires\":{\"axios\":\"^2.0.0\"},\"dev\":true},\"chalk\":{\"name\":\"chalk\",\"version\":\"2.3.3\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz\",\"integrity\":\"sha512-MzE2NzY===\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":false},\"commander\":{\"name\":\"commander\",\"version\":\"3.8.0\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-5.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTU===\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":false},\"inquirer\":{\"name\":\"inquirer\",\"version\":\"3.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-6.0.0.tgz\",\"integrity\":\"sha512-NDc1MTQ===\",\"requires\":{\"commander\":\"^2.0.0\"},\"dev\":true},\"ora\":{\"name\":\"ora\",\"version\":\"2.14.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-7.0.0.tgz\",\"integrity\":\"sha512-NTU0MzM===\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":false},\"glob\":{\"name\":\"glob\",\"version\":\"2.5.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-8.0.0.tgz\",\"integrity\":\"sha512-NjMzNTI===\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf\":{\"name\":\"rimraf\",\"version\":\"5.7.3\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-9.0.0.tgz\",\"integrity\":\"sha512-NzEyNzE===\",\"requires\":{\"glob\":\"^3.0.0\"},\"dev\":true},\"mkdirp\":{\"name\":\"mkdirp\",\"version\":\"3.18.4\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-10.0.0.tgz\",\"integrity\":\"sha512-NzkxOTA===\",\"requires\":{\"rimraf\":\"^2.0.0\"},\"dev\":false},\"semver\":{\"name\":\"semver\",\"version\":\"1.9.6\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-11.0.0.tgz\",\"integrity\":\"sha512-ODcxMDk===\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":false},\"uuid\":{\"name\":\"uuid\",\"version\":\"2.1.9\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-12.0.0.tgz\",\"integrity\":\"sha512-OTUwMjg===\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":true},\"dotenv\":{\"name\":\"dotenv\",\"version\":\"1.10.2\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-13.0.0.tgz\",\"integrity\":\"sha512-MTAyOTQ3==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors\":{\"name\":\"cors\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-14.0.0.tgz\",\"integrity\":\"sha512-MTEwODY2==\",\"requires\":{\"dotenv\":\"^3.0.0\"},\"dev\":false},\"helmet\":{\"name\":\"helmet\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-15.0.0.tgz\",\"integrity\":\"sha512-MTE4Nzg1==\",\"requires\":{\"cors\":\"^2.0.0\"},\"dev\":true},\"morgan\":{\"name\":\"morgan\",\"version\":\"3.14.4\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-16.0.0.tgz\",\"integrity\":\"sha512-MTI2NzA0==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston\":{\"name\":\"winston\",\"version\":\"5.19.2\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-17.0.0.tgz\",\"integrity\":\"sha512-MTM0NjIz==\",\"requires\":{\"morgan\":\"^1.0.0\"},\"dev\":false},\"debug\":{\"name\":\"debug\",\"version\":\"3.9.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-18.0.0.tgz\",\"integrity\":\"sha512-MTQyNTQy==\",\"requires\":{\"winston\":\"^3.0.0\"},\"dev\":true},\"yargs\":{\"name\":\"yargs\",\"version\":\"4.18.8\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-19.0.0.tgz\",\"integrity\":\"sha512-MTUwNDYx==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist\":{\"name\":\"minimist\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-20.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzgw==\",\"requires\":{\"yargs\":\"^3.0.0\"},\"dev\":false},\"fast-glob\":{\"name\":\"fast-glob\",\"version\":\"4.14.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-21.0.0.tgz\",\"integrity\":\"sha512-MTY2Mjk5==\",\"requires\":{\"minimist\":\"^1.0.0\"},\"dev\":true},\"chokidar\":{\"name\":\"chokidar\",\"version\":\"1.10.3\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-22.0.0.tgz\",\"integrity\":\"sha512-MTc0MjE4==\",\"requires\":{\"fast-glob\":\"^2.0.0\"},\"dev\":false},\"ws\":{\"name\":\"ws\",\"version\":\"5.8.8\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-23.0.0.tgz\",\"integrity\":\"sha512-MTgyMTM3==\",\"requires\":{\"chokidar\":\"^1.0.0\"},\"dev\":false},\"socket.io\":{\"name\":\"socket.io\",\"version\":\"4.1.4\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-24.0.0.tgz\",\"integrity\":\"sha512-MTkwMDU2==\",\"requires\":{\"ws\":\"^3.0.0\"},\"dev\":true},\"express-v1\":{\"name\":\"express-v1\",\"version\":\"5.4.8\",\"resolved\":\"https://registry.npmjs.org/express/-/express-25.0.0.tgz\",\"integrity\":\"sha512-MTk3OTc1==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v1\":{\"name\":\"lodash-v1\",\"version\":\"5.6.0\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-26.0.0.tgz\",\"integrity\":\"sha512-MjA1ODk0==\",\"requires\":{\"express\":\"^3.0.0\"},\"dev\":false},\"axios-v1\":{\"name\":\"axios-v1\",\"version\":\"2.4.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-27.0.0.tgz\",\"integrity\":\"sha512-MjEzODEz==\",\"requires\":{\"lodash\":\"^2.0.0\"},\"dev\":true},\"moment-v1\":{\"name\":\"moment-v1\",\"version\":\"1.2.5\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-28.0.0.tgz\",\"integrity\":\"sha512-MjIxNzMy==\",\"requires\":{\"axios\":\"^1.0.0\"},\"dev\":false},\"chalk-v1\":{\"name\":\"chalk-v1\",\"version\":\"4.9.5\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-29.0.0.tgz\",\"integrity\":\"sha512-MjI5NjUx==\",\"requires\":{\"moment\":\"^2.0.0\"},\"dev\":false},\"commander-v1\":{\"name\":\"commander-v1\",\"version\":\"4.0.6\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-30.0.0.tgz\",\"integrity\":\"sha512-MjM3NTcw==\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":true},\"inquirer-v1\":{\"name\":\"inquirer-v1\",\"version\":\"1.16.6\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-31.0.0.tgz\",\"integrity\":\"sha512-MjQ1NDg5==\",\"requires\":{\"commander\":\"^3.0.0\"},\"dev\":false},\"ora-v1\":{\"name\":\"ora-v1\",\"version\":\"5.16.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-32.0.0.tgz\",\"integrity\":\"sha512-MjUzNDA4==\",\"requires\":{\"inquirer\":\"^2.0.0\"},\"dev\":false},\"glob-v1\":{\"name\":\"glob-v1\",\"version\":\"5.17.8\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-33.0.0.tgz\",\"integrity\":\"sha512-MjYxMzI3==\",\"requires\":{\"ora\":\"^3.0.0\"},\"dev\":true},\"rimraf-v1\":{\"name\":\"rimraf-v1\",\"version\":\"1.6.8\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-34.0.0.tgz\",\"integrity\":\"sha512-MjY5MjQ2==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false},\"mkdirp-v1\":{\"name\":\"mkdirp-v1\",\"version\":\"3.14.8\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-35.0.0.tgz\",\"integrity\":\"sha512-Mjc3MTY1==\",\"requires\":{\"rimraf\":\"^1.0.0\"},\"dev\":false},\"semver-v1\":{\"name\":\"semver-v1\",\"version\":\"1.8.7\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-36.0.0.tgz\",\"integrity\":\"sha512-Mjg1MDg0==\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":true},\"uuid-v1\":{\"name\":\"uuid-v1\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-37.0.0.tgz\",\"integrity\":\"sha512-MjkzMDAz==\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":false},\"dotenv-v1\":{\"name\":\"dotenv-v1\",\"version\":\"4.5.0\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-38.0.0.tgz\",\"integrity\":\"sha512-MzAwOTIy==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors-v1\":{\"name\":\"cors-v1\",\"version\":\"1.11.3\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-39.0.0.tgz\",\"integrity\":\"sha512-MzA4ODQx==\",\"requires\":{\"dotenv\":\"^2.0.0\"},\"dev\":true},\"helmet-v1\":{\"name\":\"helmet-v1\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-40.0.0.tgz\",\"integrity\":\"sha512-MzE2NzYw==\",\"requires\":{\"cors\":\"^1.0.0\"},\"dev\":false},\"morgan-v1\":{\"name\":\"morgan-v1\",\"version\":\"3.19.5\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-41.0.0.tgz\",\"integrity\":\"sha512-MzI0Njc5==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston-v1\":{\"name\":\"winston-v1\",\"version\":\"1.19.5\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-42.0.0.tgz\",\"integrity\":\"sha512-MzMyNTk4==\",\"requires\":{\"morgan\":\"^2.0.0\"},\"dev\":true},\"debug-v1\":{\"name\":\"debug-v1\",\"version\":\"4.2.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-43.0.0.tgz\",\"integrity\":\"sha512-MzQwNTE3==\",\"requires\":{\"winston\":\"^2.0.0\"},\"dev\":false},\"yargs-v1\":{\"name\":\"yargs-v1\",\"version\":\"1.11.7\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-44.0.0.tgz\",\"integrity\":\"sha512-MzQ4NDM2==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist-v1\":{\"name\":\"minimist-v1\",\"version\":\"1.14.8\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-45.0.0.tgz\",\"integrity\":\"sha512-MzU2MzU1==\",\"requires\":{\"yargs\":\"^1.0.0\"},\"dev\":true},\"fast-glob-v1\":{\"name\":\"fast-glob-v1\",\"version\":\"1.7.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-46.0.0.tgz\",\"integrity\":\"sha512-MzY0Mjc0==\",\"requires\":{\"minimist\":\"^3.0.0\"},\"dev\":false},\"chokidar-v1\":{\"name\":\"chokidar-v1\",\"version\":\"1.18.9\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-47.0.0.tgz\",\"integrity\":\"sha512-MzcyMTkz==\",\"requires\":{\"fast-glob\":\"^3.0.0\"},\"dev\":false},\"ws-v1\":{\"name\":\"ws-v1\",\"version\":\"1.1.6\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-48.0.0.tgz\",\"integrity\":\"sha512-MzgwMTEy==\",\"requires\":{\"chokidar\":\"^2.0.0\"},\"dev\":true},\"socket.io-v1\":{\"name\":\"socket.io-v1\",\"version\":\"4.6.0\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-49.0.0.tgz\",\"integrity\":\"sha512-Mzg4MDMx==\",\"requires\":{\"ws\":\"^1.0.0\"},\"dev\":false},\"express-v2\":{\"name\":\"express-v2\",\"version\":\"1.9.2\",\"resolved\":\"https://registry.npmjs.org/express/-/express-50.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTUw==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v2\":{\"name\":\"lodash-v2\",\"version\":\"2.1.5\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-51.0.0.tgz\",\"integrity\":\"sha512-NDAzODY5==\",\"requires\":{\"express\":\"^1.0.0\"},\"dev\":true},\"axios-v2\":{\"name\":\"axios-v2\",\"version\":\"2.19.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-52.0.0.tgz\",\"integrity\":\"sha512-NDExNzg4==\",\"requires\":{\"lodash\":\"^1.0.0\"},\"dev\":false},\"moment-v2\":{\"name\":\"moment-v2\",\"version\":\"3.13.6\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-53.0.0.tgz\",\"integrity\":\"sha512-NDE5NzA3==\",\"requires\":{\"axios\":\"^3.0.0\"},\"dev\":false},\"chalk-v2\":{\"name\":\"chalk-v2\",\"version\":\"5.13.9\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-54.0.0.tgz\",\"integrity\":\"sha512-NDI3NjI2==\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":true},\"commander-v2\":{\"name\":\"commander-v2\",\"version\":\"3.14.5\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-55.0.0.tgz\",\"integrity\":\"sha512-NDM1NTQ1==\",\"requires\":{\"chalk\":\"^2.0.0\"},\"dev\":false},\"inquirer-v2\":{\"name\":\"inquirer-v2\",\"version\":\"4.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-56.0.0.tgz\",\"integrity\":\"sha512-NDQzNDY0==\",\"requires\":{\"commander\":\"^1.0.0\"},\"dev\":false},\"ora-v2\":{\"name\":\"ora-v2\",\"version\":\"3.9.2\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-57.0.0.tgz\",\"integrity\":\"sha512-NDUxMzgz==\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":true},\"glob-v2\":{\"name\":\"glob-v2\",\"version\":\"5.16.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-58.0.0.tgz\",\"integrity\":\"sha512-NDU5MzAy==\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf-v2\":{\"name\":\"rimraf-v2\",\"version\":\"2.4.6\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-59.0.0.tgz\",\"integrity\":\"sha512-NDY3MjIx==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false}}}",
+                "method": "minify",
+                "originalLen": 15973,
+                "compressedLen": 11444,
+                "originalTokens": 5811,
+                "compressedTokens": 4371
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 6773,
+            "output_tokens": 5,
+            "latency_ms": 3785,
+            "body_bytes": 18511,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 4855,
+            "output_tokens": 10,
+            "latency_ms": 2381,
+            "body_bytes": 13382,
+            "stop_reason": "max_tokens",
+            "compression_ms": 60,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"name\":\"my-project\",\"version\":\"1.0.0\",\"lockfileVersion\":3,\"dependencies\":{\"express\":{\"name\":\"express\",\"version\":\"5.11.5\",\"resolved\":\"https://registry.npmjs.org/express/-/express-0.0.0.tgz\",\"integrity\":\"sha512-MA====\",\"requires\":{},\"dev\":true},\"lodash\":{\"name\":\"lodash\",\"version\":\"4.1.6\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-1.0.0.tgz\",\"integrity\":\"sha512-NzkxOQ====\",\"requires\":{},\"dev\":false},\"axios\":{\"name\":\"axios\",\"version\":\"2.17.5\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-2.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzg===\",\"requires\":{},\"dev\":false},\"moment\":{\"name\":\"moment\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-3.0.0.tgz\",\"integrity\":\"sha512-MjM3NTc===\",\"requires\":{\"axios\":\"^2.0.0\"},\"dev\":true},\"chalk\":{\"name\":\"chalk\",\"version\":\"2.3.3\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz\",\"integrity\":\"sha512-MzE2NzY===\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":false},\"commander\":{\"name\":\"commander\",\"version\":\"3.8.0\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-5.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTU===\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":false},\"inquirer\":{\"name\":\"inquirer\",\"version\":\"3.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-6.0.0.tgz\",\"integrity\":\"sha512-NDc1MTQ===\",\"requires\":{\"commander\":\"^2.0.0\"},\"dev\":true},\"ora\":{\"name\":\"ora\",\"version\":\"2.14.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-7.0.0.tgz\",\"integrity\":\"sha512-NTU0MzM===\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":false},\"glob\":{\"name\":\"glob\",\"version\":\"2.5.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-8.0.0.tgz\",\"integrity\":\"sha512-NjMzNTI===\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf\":{\"name\":\"rimraf\",\"version\":\"5.7.3\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-9.0.0.tgz\",\"integrity\":\"sha512-NzEyNzE===\",\"requires\":{\"glob\":\"^3.0.0\"},\"dev\":true},\"mkdirp\":{\"name\":\"mkdirp\",\"version\":\"3.18.4\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-10.0.0.tgz\",\"integrity\":\"sha512-NzkxOTA===\",\"requires\":{\"rimraf\":\"^2.0.0\"},\"dev\":false},\"semver\":{\"name\":\"semver\",\"version\":\"1.9.6\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-11.0.0.tgz\",\"integrity\":\"sha512-ODcxMDk===\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":false},\"uuid\":{\"name\":\"uuid\",\"version\":\"2.1.9\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-12.0.0.tgz\",\"integrity\":\"sha512-OTUwMjg===\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":true},\"dotenv\":{\"name\":\"dotenv\",\"version\":\"1.10.2\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-13.0.0.tgz\",\"integrity\":\"sha512-MTAyOTQ3==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors\":{\"name\":\"cors\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-14.0.0.tgz\",\"integrity\":\"sha512-MTEwODY2==\",\"requires\":{\"dotenv\":\"^3.0.0\"},\"dev\":false},\"helmet\":{\"name\":\"helmet\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-15.0.0.tgz\",\"integrity\":\"sha512-MTE4Nzg1==\",\"requires\":{\"cors\":\"^2.0.0\"},\"dev\":true},\"morgan\":{\"name\":\"morgan\",\"version\":\"3.14.4\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-16.0.0.tgz\",\"integrity\":\"sha512-MTI2NzA0==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston\":{\"name\":\"winston\",\"version\":\"5.19.2\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-17.0.0.tgz\",\"integrity\":\"sha512-MTM0NjIz==\",\"requires\":{\"morgan\":\"^1.0.0\"},\"dev\":false},\"debug\":{\"name\":\"debug\",\"version\":\"3.9.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-18.0.0.tgz\",\"integrity\":\"sha512-MTQyNTQy==\",\"requires\":{\"winston\":\"^3.0.0\"},\"dev\":true},\"yargs\":{\"name\":\"yargs\",\"version\":\"4.18.8\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-19.0.0.tgz\",\"integrity\":\"sha512-MTUwNDYx==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist\":{\"name\":\"minimist\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-20.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzgw==\",\"requires\":{\"yargs\":\"^3.0.0\"},\"dev\":false},\"fast-glob\":{\"name\":\"fast-glob\",\"version\":\"4.14.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-21.0.0.tgz\",\"integrity\":\"sha512-MTY2Mjk5==\",\"requires\":{\"minimist\":\"^1.0.0\"},\"dev\":true},\"chokidar\":{\"name\":\"chokidar\",\"version\":\"1.10.3\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-22.0.0.tgz\",\"integrity\":\"sha512-MTc0MjE4==\",\"requires\":{\"fast-glob\":\"^2.0.0\"},\"dev\":false},\"ws\":{\"name\":\"ws\",\"version\":\"5.8.8\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-23.0.0.tgz\",\"integrity\":\"sha512-MTgyMTM3==\",\"requires\":{\"chokidar\":\"^1.0.0\"},\"dev\":false},\"socket.io\":{\"name\":\"socket.io\",\"version\":\"4.1.4\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-24.0.0.tgz\",\"integrity\":\"sha512-MTkwMDU2==\",\"requires\":{\"ws\":\"^3.0.0\"},\"dev\":true},\"express-v1\":{\"name\":\"express-v1\",\"version\":\"5.4.8\",\"resolved\":\"https://registry.npmjs.org/express/-/express-25.0.0.tgz\",\"integrity\":\"sha512-MTk3OTc1==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v1\":{\"name\":\"lodash-v1\",\"version\":\"5.6.0\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-26.0.0.tgz\",\"integrity\":\"sha512-MjA1ODk0==\",\"requires\":{\"express\":\"^3.0.0\"},\"dev\":false},\"axios-v1\":{\"name\":\"axios-v1\",\"version\":\"2.4.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-27.0.0.tgz\",\"integrity\":\"sha512-MjEzODEz==\",\"requires\":{\"lodash\":\"^2.0.0\"},\"dev\":true},\"moment-v1\":{\"name\":\"moment-v1\",\"version\":\"1.2.5\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-28.0.0.tgz\",\"integrity\":\"sha512-MjIxNzMy==\",\"requires\":{\"axios\":\"^1.0.0\"},\"dev\":false},\"chalk-v1\":{\"name\":\"chalk-v1\",\"version\":\"4.9.5\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-29.0.0.tgz\",\"integrity\":\"sha512-MjI5NjUx==\",\"requires\":{\"moment\":\"^2.0.0\"},\"dev\":false},\"commander-v1\":{\"name\":\"commander-v1\",\"version\":\"4.0.6\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-30.0.0.tgz\",\"integrity\":\"sha512-MjM3NTcw==\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":true},\"inquirer-v1\":{\"name\":\"inquirer-v1\",\"version\":\"1.16.6\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-31.0.0.tgz\",\"integrity\":\"sha512-MjQ1NDg5==\",\"requires\":{\"commander\":\"^3.0.0\"},\"dev\":false},\"ora-v1\":{\"name\":\"ora-v1\",\"version\":\"5.16.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-32.0.0.tgz\",\"integrity\":\"sha512-MjUzNDA4==\",\"requires\":{\"inquirer\":\"^2.0.0\"},\"dev\":false},\"glob-v1\":{\"name\":\"glob-v1\",\"version\":\"5.17.8\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-33.0.0.tgz\",\"integrity\":\"sha512-MjYxMzI3==\",\"requires\":{\"ora\":\"^3.0.0\"},\"dev\":true},\"rimraf-v1\":{\"name\":\"rimraf-v1\",\"version\":\"1.6.8\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-34.0.0.tgz\",\"integrity\":\"sha512-MjY5MjQ2==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false},\"mkdirp-v1\":{\"name\":\"mkdirp-v1\",\"version\":\"3.14.8\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-35.0.0.tgz\",\"integrity\":\"sha512-Mjc3MTY1==\",\"requires\":{\"rimraf\":\"^1.0.0\"},\"dev\":false},\"semver-v1\":{\"name\":\"semver-v1\",\"version\":\"1.8.7\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-36.0.0.tgz\",\"integrity\":\"sha512-Mjg1MDg0==\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":true},\"uuid-v1\":{\"name\":\"uuid-v1\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-37.0.0.tgz\",\"integrity\":\"sha512-MjkzMDAz==\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":false},\"dotenv-v1\":{\"name\":\"dotenv-v1\",\"version\":\"4.5.0\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-38.0.0.tgz\",\"integrity\":\"sha512-MzAwOTIy==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors-v1\":{\"name\":\"cors-v1\",\"version\":\"1.11.3\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-39.0.0.tgz\",\"integrity\":\"sha512-MzA4ODQx==\",\"requires\":{\"dotenv\":\"^2.0.0\"},\"dev\":true},\"helmet-v1\":{\"name\":\"helmet-v1\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-40.0.0.tgz\",\"integrity\":\"sha512-MzE2NzYw==\",\"requires\":{\"cors\":\"^1.0.0\"},\"dev\":false},\"morgan-v1\":{\"name\":\"morgan-v1\",\"version\":\"3.19.5\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-41.0.0.tgz\",\"integrity\":\"sha512-MzI0Njc5==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston-v1\":{\"name\":\"winston-v1\",\"version\":\"1.19.5\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-42.0.0.tgz\",\"integrity\":\"sha512-MzMyNTk4==\",\"requires\":{\"morgan\":\"^2.0.0\"},\"dev\":true},\"debug-v1\":{\"name\":\"debug-v1\",\"version\":\"4.2.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-43.0.0.tgz\",\"integrity\":\"sha512-MzQwNTE3==\",\"requires\":{\"winston\":\"^2.0.0\"},\"dev\":false},\"yargs-v1\":{\"name\":\"yargs-v1\",\"version\":\"1.11.7\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-44.0.0.tgz\",\"integrity\":\"sha512-MzQ4NDM2==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist-v1\":{\"name\":\"minimist-v1\",\"version\":\"1.14.8\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-45.0.0.tgz\",\"integrity\":\"sha512-MzU2MzU1==\",\"requires\":{\"yargs\":\"^1.0.0\"},\"dev\":true},\"fast-glob-v1\":{\"name\":\"fast-glob-v1\",\"version\":\"1.7.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-46.0.0.tgz\",\"integrity\":\"sha512-MzY0Mjc0==\",\"requires\":{\"minimist\":\"^3.0.0\"},\"dev\":false},\"chokidar-v1\":{\"name\":\"chokidar-v1\",\"version\":\"1.18.9\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-47.0.0.tgz\",\"integrity\":\"sha512-MzcyMTkz==\",\"requires\":{\"fast-glob\":\"^3.0.0\"},\"dev\":false},\"ws-v1\":{\"name\":\"ws-v1\",\"version\":\"1.1.6\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-48.0.0.tgz\",\"integrity\":\"sha512-MzgwMTEy==\",\"requires\":{\"chokidar\":\"^2.0.0\"},\"dev\":true},\"socket.io-v1\":{\"name\":\"socket.io-v1\",\"version\":\"4.6.0\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-49.0.0.tgz\",\"integrity\":\"sha512-Mzg4MDMx==\",\"requires\":{\"ws\":\"^1.0.0\"},\"dev\":false},\"express-v2\":{\"name\":\"express-v2\",\"version\":\"1.9.2\",\"resolved\":\"https://registry.npmjs.org/express/-/express-50.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTUw==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v2\":{\"name\":\"lodash-v2\",\"version\":\"2.1.5\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-51.0.0.tgz\",\"integrity\":\"sha512-NDAzODY5==\",\"requires\":{\"express\":\"^1.0.0\"},\"dev\":true},\"axios-v2\":{\"name\":\"axios-v2\",\"version\":\"2.19.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-52.0.0.tgz\",\"integrity\":\"sha512-NDExNzg4==\",\"requires\":{\"lodash\":\"^1.0.0\"},\"dev\":false},\"moment-v2\":{\"name\":\"moment-v2\",\"version\":\"3.13.6\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-53.0.0.tgz\",\"integrity\":\"sha512-NDE5NzA3==\",\"requires\":{\"axios\":\"^3.0.0\"},\"dev\":false},\"chalk-v2\":{\"name\":\"chalk-v2\",\"version\":\"5.13.9\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-54.0.0.tgz\",\"integrity\":\"sha512-NDI3NjI2==\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":true},\"commander-v2\":{\"name\":\"commander-v2\",\"version\":\"3.14.5\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-55.0.0.tgz\",\"integrity\":\"sha512-NDM1NTQ1==\",\"requires\":{\"chalk\":\"^2.0.0\"},\"dev\":false},\"inquirer-v2\":{\"name\":\"inquirer-v2\",\"version\":\"4.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-56.0.0.tgz\",\"integrity\":\"sha512-NDQzNDY0==\",\"requires\":{\"commander\":\"^1.0.0\"},\"dev\":false},\"ora-v2\":{\"name\":\"ora-v2\",\"version\":\"3.9.2\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-57.0.0.tgz\",\"integrity\":\"sha512-NDUxMzgz==\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":true},\"glob-v2\":{\"name\":\"glob-v2\",\"version\":\"5.16.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-58.0.0.tgz\",\"integrity\":\"sha512-NDU5MzAy==\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf-v2\":{\"name\":\"rimraf-v2\",\"version\":\"2.4.6\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-59.0.0.tgz\",\"integrity\":\"sha512-NDY3MjIx==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false}}}",
+                "method": "minify",
+                "originalLen": 15973,
+                "compressedLen": 11444,
+                "originalTokens": 5811,
+                "compressedTokens": 4371
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 6773,
+            "output_tokens": 10,
+            "latency_ms": 3161,
+            "body_bytes": 18511,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 4855,
+            "output_tokens": 5,
+            "latency_ms": 2676,
+            "body_bytes": 13382,
+            "stop_reason": "end_turn",
+            "compression_ms": 52,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"name\":\"my-project\",\"version\":\"1.0.0\",\"lockfileVersion\":3,\"dependencies\":{\"express\":{\"name\":\"express\",\"version\":\"5.11.5\",\"resolved\":\"https://registry.npmjs.org/express/-/express-0.0.0.tgz\",\"integrity\":\"sha512-MA====\",\"requires\":{},\"dev\":true},\"lodash\":{\"name\":\"lodash\",\"version\":\"4.1.6\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-1.0.0.tgz\",\"integrity\":\"sha512-NzkxOQ====\",\"requires\":{},\"dev\":false},\"axios\":{\"name\":\"axios\",\"version\":\"2.17.5\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-2.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzg===\",\"requires\":{},\"dev\":false},\"moment\":{\"name\":\"moment\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-3.0.0.tgz\",\"integrity\":\"sha512-MjM3NTc===\",\"requires\":{\"axios\":\"^2.0.0\"},\"dev\":true},\"chalk\":{\"name\":\"chalk\",\"version\":\"2.3.3\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz\",\"integrity\":\"sha512-MzE2NzY===\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":false},\"commander\":{\"name\":\"commander\",\"version\":\"3.8.0\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-5.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTU===\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":false},\"inquirer\":{\"name\":\"inquirer\",\"version\":\"3.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-6.0.0.tgz\",\"integrity\":\"sha512-NDc1MTQ===\",\"requires\":{\"commander\":\"^2.0.0\"},\"dev\":true},\"ora\":{\"name\":\"ora\",\"version\":\"2.14.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-7.0.0.tgz\",\"integrity\":\"sha512-NTU0MzM===\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":false},\"glob\":{\"name\":\"glob\",\"version\":\"2.5.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-8.0.0.tgz\",\"integrity\":\"sha512-NjMzNTI===\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf\":{\"name\":\"rimraf\",\"version\":\"5.7.3\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-9.0.0.tgz\",\"integrity\":\"sha512-NzEyNzE===\",\"requires\":{\"glob\":\"^3.0.0\"},\"dev\":true},\"mkdirp\":{\"name\":\"mkdirp\",\"version\":\"3.18.4\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-10.0.0.tgz\",\"integrity\":\"sha512-NzkxOTA===\",\"requires\":{\"rimraf\":\"^2.0.0\"},\"dev\":false},\"semver\":{\"name\":\"semver\",\"version\":\"1.9.6\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-11.0.0.tgz\",\"integrity\":\"sha512-ODcxMDk===\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":false},\"uuid\":{\"name\":\"uuid\",\"version\":\"2.1.9\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-12.0.0.tgz\",\"integrity\":\"sha512-OTUwMjg===\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":true},\"dotenv\":{\"name\":\"dotenv\",\"version\":\"1.10.2\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-13.0.0.tgz\",\"integrity\":\"sha512-MTAyOTQ3==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors\":{\"name\":\"cors\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-14.0.0.tgz\",\"integrity\":\"sha512-MTEwODY2==\",\"requires\":{\"dotenv\":\"^3.0.0\"},\"dev\":false},\"helmet\":{\"name\":\"helmet\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-15.0.0.tgz\",\"integrity\":\"sha512-MTE4Nzg1==\",\"requires\":{\"cors\":\"^2.0.0\"},\"dev\":true},\"morgan\":{\"name\":\"morgan\",\"version\":\"3.14.4\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-16.0.0.tgz\",\"integrity\":\"sha512-MTI2NzA0==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston\":{\"name\":\"winston\",\"version\":\"5.19.2\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-17.0.0.tgz\",\"integrity\":\"sha512-MTM0NjIz==\",\"requires\":{\"morgan\":\"^1.0.0\"},\"dev\":false},\"debug\":{\"name\":\"debug\",\"version\":\"3.9.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-18.0.0.tgz\",\"integrity\":\"sha512-MTQyNTQy==\",\"requires\":{\"winston\":\"^3.0.0\"},\"dev\":true},\"yargs\":{\"name\":\"yargs\",\"version\":\"4.18.8\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-19.0.0.tgz\",\"integrity\":\"sha512-MTUwNDYx==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist\":{\"name\":\"minimist\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-20.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzgw==\",\"requires\":{\"yargs\":\"^3.0.0\"},\"dev\":false},\"fast-glob\":{\"name\":\"fast-glob\",\"version\":\"4.14.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-21.0.0.tgz\",\"integrity\":\"sha512-MTY2Mjk5==\",\"requires\":{\"minimist\":\"^1.0.0\"},\"dev\":true},\"chokidar\":{\"name\":\"chokidar\",\"version\":\"1.10.3\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-22.0.0.tgz\",\"integrity\":\"sha512-MTc0MjE4==\",\"requires\":{\"fast-glob\":\"^2.0.0\"},\"dev\":false},\"ws\":{\"name\":\"ws\",\"version\":\"5.8.8\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-23.0.0.tgz\",\"integrity\":\"sha512-MTgyMTM3==\",\"requires\":{\"chokidar\":\"^1.0.0\"},\"dev\":false},\"socket.io\":{\"name\":\"socket.io\",\"version\":\"4.1.4\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-24.0.0.tgz\",\"integrity\":\"sha512-MTkwMDU2==\",\"requires\":{\"ws\":\"^3.0.0\"},\"dev\":true},\"express-v1\":{\"name\":\"express-v1\",\"version\":\"5.4.8\",\"resolved\":\"https://registry.npmjs.org/express/-/express-25.0.0.tgz\",\"integrity\":\"sha512-MTk3OTc1==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v1\":{\"name\":\"lodash-v1\",\"version\":\"5.6.0\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-26.0.0.tgz\",\"integrity\":\"sha512-MjA1ODk0==\",\"requires\":{\"express\":\"^3.0.0\"},\"dev\":false},\"axios-v1\":{\"name\":\"axios-v1\",\"version\":\"2.4.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-27.0.0.tgz\",\"integrity\":\"sha512-MjEzODEz==\",\"requires\":{\"lodash\":\"^2.0.0\"},\"dev\":true},\"moment-v1\":{\"name\":\"moment-v1\",\"version\":\"1.2.5\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-28.0.0.tgz\",\"integrity\":\"sha512-MjIxNzMy==\",\"requires\":{\"axios\":\"^1.0.0\"},\"dev\":false},\"chalk-v1\":{\"name\":\"chalk-v1\",\"version\":\"4.9.5\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-29.0.0.tgz\",\"integrity\":\"sha512-MjI5NjUx==\",\"requires\":{\"moment\":\"^2.0.0\"},\"dev\":false},\"commander-v1\":{\"name\":\"commander-v1\",\"version\":\"4.0.6\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-30.0.0.tgz\",\"integrity\":\"sha512-MjM3NTcw==\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":true},\"inquirer-v1\":{\"name\":\"inquirer-v1\",\"version\":\"1.16.6\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-31.0.0.tgz\",\"integrity\":\"sha512-MjQ1NDg5==\",\"requires\":{\"commander\":\"^3.0.0\"},\"dev\":false},\"ora-v1\":{\"name\":\"ora-v1\",\"version\":\"5.16.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-32.0.0.tgz\",\"integrity\":\"sha512-MjUzNDA4==\",\"requires\":{\"inquirer\":\"^2.0.0\"},\"dev\":false},\"glob-v1\":{\"name\":\"glob-v1\",\"version\":\"5.17.8\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-33.0.0.tgz\",\"integrity\":\"sha512-MjYxMzI3==\",\"requires\":{\"ora\":\"^3.0.0\"},\"dev\":true},\"rimraf-v1\":{\"name\":\"rimraf-v1\",\"version\":\"1.6.8\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-34.0.0.tgz\",\"integrity\":\"sha512-MjY5MjQ2==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false},\"mkdirp-v1\":{\"name\":\"mkdirp-v1\",\"version\":\"3.14.8\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-35.0.0.tgz\",\"integrity\":\"sha512-Mjc3MTY1==\",\"requires\":{\"rimraf\":\"^1.0.0\"},\"dev\":false},\"semver-v1\":{\"name\":\"semver-v1\",\"version\":\"1.8.7\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-36.0.0.tgz\",\"integrity\":\"sha512-Mjg1MDg0==\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":true},\"uuid-v1\":{\"name\":\"uuid-v1\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-37.0.0.tgz\",\"integrity\":\"sha512-MjkzMDAz==\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":false},\"dotenv-v1\":{\"name\":\"dotenv-v1\",\"version\":\"4.5.0\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-38.0.0.tgz\",\"integrity\":\"sha512-MzAwOTIy==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors-v1\":{\"name\":\"cors-v1\",\"version\":\"1.11.3\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-39.0.0.tgz\",\"integrity\":\"sha512-MzA4ODQx==\",\"requires\":{\"dotenv\":\"^2.0.0\"},\"dev\":true},\"helmet-v1\":{\"name\":\"helmet-v1\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-40.0.0.tgz\",\"integrity\":\"sha512-MzE2NzYw==\",\"requires\":{\"cors\":\"^1.0.0\"},\"dev\":false},\"morgan-v1\":{\"name\":\"morgan-v1\",\"version\":\"3.19.5\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-41.0.0.tgz\",\"integrity\":\"sha512-MzI0Njc5==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston-v1\":{\"name\":\"winston-v1\",\"version\":\"1.19.5\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-42.0.0.tgz\",\"integrity\":\"sha512-MzMyNTk4==\",\"requires\":{\"morgan\":\"^2.0.0\"},\"dev\":true},\"debug-v1\":{\"name\":\"debug-v1\",\"version\":\"4.2.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-43.0.0.tgz\",\"integrity\":\"sha512-MzQwNTE3==\",\"requires\":{\"winston\":\"^2.0.0\"},\"dev\":false},\"yargs-v1\":{\"name\":\"yargs-v1\",\"version\":\"1.11.7\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-44.0.0.tgz\",\"integrity\":\"sha512-MzQ4NDM2==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist-v1\":{\"name\":\"minimist-v1\",\"version\":\"1.14.8\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-45.0.0.tgz\",\"integrity\":\"sha512-MzU2MzU1==\",\"requires\":{\"yargs\":\"^1.0.0\"},\"dev\":true},\"fast-glob-v1\":{\"name\":\"fast-glob-v1\",\"version\":\"1.7.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-46.0.0.tgz\",\"integrity\":\"sha512-MzY0Mjc0==\",\"requires\":{\"minimist\":\"^3.0.0\"},\"dev\":false},\"chokidar-v1\":{\"name\":\"chokidar-v1\",\"version\":\"1.18.9\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-47.0.0.tgz\",\"integrity\":\"sha512-MzcyMTkz==\",\"requires\":{\"fast-glob\":\"^3.0.0\"},\"dev\":false},\"ws-v1\":{\"name\":\"ws-v1\",\"version\":\"1.1.6\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-48.0.0.tgz\",\"integrity\":\"sha512-MzgwMTEy==\",\"requires\":{\"chokidar\":\"^2.0.0\"},\"dev\":true},\"socket.io-v1\":{\"name\":\"socket.io-v1\",\"version\":\"4.6.0\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-49.0.0.tgz\",\"integrity\":\"sha512-Mzg4MDMx==\",\"requires\":{\"ws\":\"^1.0.0\"},\"dev\":false},\"express-v2\":{\"name\":\"express-v2\",\"version\":\"1.9.2\",\"resolved\":\"https://registry.npmjs.org/express/-/express-50.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTUw==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v2\":{\"name\":\"lodash-v2\",\"version\":\"2.1.5\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-51.0.0.tgz\",\"integrity\":\"sha512-NDAzODY5==\",\"requires\":{\"express\":\"^1.0.0\"},\"dev\":true},\"axios-v2\":{\"name\":\"axios-v2\",\"version\":\"2.19.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-52.0.0.tgz\",\"integrity\":\"sha512-NDExNzg4==\",\"requires\":{\"lodash\":\"^1.0.0\"},\"dev\":false},\"moment-v2\":{\"name\":\"moment-v2\",\"version\":\"3.13.6\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-53.0.0.tgz\",\"integrity\":\"sha512-NDE5NzA3==\",\"requires\":{\"axios\":\"^3.0.0\"},\"dev\":false},\"chalk-v2\":{\"name\":\"chalk-v2\",\"version\":\"5.13.9\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-54.0.0.tgz\",\"integrity\":\"sha512-NDI3NjI2==\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":true},\"commander-v2\":{\"name\":\"commander-v2\",\"version\":\"3.14.5\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-55.0.0.tgz\",\"integrity\":\"sha512-NDM1NTQ1==\",\"requires\":{\"chalk\":\"^2.0.0\"},\"dev\":false},\"inquirer-v2\":{\"name\":\"inquirer-v2\",\"version\":\"4.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-56.0.0.tgz\",\"integrity\":\"sha512-NDQzNDY0==\",\"requires\":{\"commander\":\"^1.0.0\"},\"dev\":false},\"ora-v2\":{\"name\":\"ora-v2\",\"version\":\"3.9.2\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-57.0.0.tgz\",\"integrity\":\"sha512-NDUxMzgz==\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":true},\"glob-v2\":{\"name\":\"glob-v2\",\"version\":\"5.16.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-58.0.0.tgz\",\"integrity\":\"sha512-NDU5MzAy==\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf-v2\":{\"name\":\"rimraf-v2\",\"version\":\"2.4.6\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-59.0.0.tgz\",\"integrity\":\"sha512-NDY3MjIx==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false}}}",
+                "method": "minify",
+                "originalLen": 15973,
+                "compressedLen": 11444,
+                "originalTokens": 5811,
+                "compressedTokens": 4371
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 6773,
+            "output_tokens": 5,
+            "latency_ms": 2990,
+            "body_bytes": 18511,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 4855,
+            "output_tokens": 5,
+            "latency_ms": 3019,
+            "body_bytes": 13382,
+            "stop_reason": "end_turn",
+            "compression_ms": 49,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"name\":\"my-project\",\"version\":\"1.0.0\",\"lockfileVersion\":3,\"dependencies\":{\"express\":{\"name\":\"express\",\"version\":\"5.11.5\",\"resolved\":\"https://registry.npmjs.org/express/-/express-0.0.0.tgz\",\"integrity\":\"sha512-MA====\",\"requires\":{},\"dev\":true},\"lodash\":{\"name\":\"lodash\",\"version\":\"4.1.6\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-1.0.0.tgz\",\"integrity\":\"sha512-NzkxOQ====\",\"requires\":{},\"dev\":false},\"axios\":{\"name\":\"axios\",\"version\":\"2.17.5\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-2.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzg===\",\"requires\":{},\"dev\":false},\"moment\":{\"name\":\"moment\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-3.0.0.tgz\",\"integrity\":\"sha512-MjM3NTc===\",\"requires\":{\"axios\":\"^2.0.0\"},\"dev\":true},\"chalk\":{\"name\":\"chalk\",\"version\":\"2.3.3\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz\",\"integrity\":\"sha512-MzE2NzY===\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":false},\"commander\":{\"name\":\"commander\",\"version\":\"3.8.0\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-5.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTU===\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":false},\"inquirer\":{\"name\":\"inquirer\",\"version\":\"3.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-6.0.0.tgz\",\"integrity\":\"sha512-NDc1MTQ===\",\"requires\":{\"commander\":\"^2.0.0\"},\"dev\":true},\"ora\":{\"name\":\"ora\",\"version\":\"2.14.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-7.0.0.tgz\",\"integrity\":\"sha512-NTU0MzM===\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":false},\"glob\":{\"name\":\"glob\",\"version\":\"2.5.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-8.0.0.tgz\",\"integrity\":\"sha512-NjMzNTI===\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf\":{\"name\":\"rimraf\",\"version\":\"5.7.3\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-9.0.0.tgz\",\"integrity\":\"sha512-NzEyNzE===\",\"requires\":{\"glob\":\"^3.0.0\"},\"dev\":true},\"mkdirp\":{\"name\":\"mkdirp\",\"version\":\"3.18.4\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-10.0.0.tgz\",\"integrity\":\"sha512-NzkxOTA===\",\"requires\":{\"rimraf\":\"^2.0.0\"},\"dev\":false},\"semver\":{\"name\":\"semver\",\"version\":\"1.9.6\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-11.0.0.tgz\",\"integrity\":\"sha512-ODcxMDk===\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":false},\"uuid\":{\"name\":\"uuid\",\"version\":\"2.1.9\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-12.0.0.tgz\",\"integrity\":\"sha512-OTUwMjg===\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":true},\"dotenv\":{\"name\":\"dotenv\",\"version\":\"1.10.2\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-13.0.0.tgz\",\"integrity\":\"sha512-MTAyOTQ3==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors\":{\"name\":\"cors\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-14.0.0.tgz\",\"integrity\":\"sha512-MTEwODY2==\",\"requires\":{\"dotenv\":\"^3.0.0\"},\"dev\":false},\"helmet\":{\"name\":\"helmet\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-15.0.0.tgz\",\"integrity\":\"sha512-MTE4Nzg1==\",\"requires\":{\"cors\":\"^2.0.0\"},\"dev\":true},\"morgan\":{\"name\":\"morgan\",\"version\":\"3.14.4\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-16.0.0.tgz\",\"integrity\":\"sha512-MTI2NzA0==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston\":{\"name\":\"winston\",\"version\":\"5.19.2\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-17.0.0.tgz\",\"integrity\":\"sha512-MTM0NjIz==\",\"requires\":{\"morgan\":\"^1.0.0\"},\"dev\":false},\"debug\":{\"name\":\"debug\",\"version\":\"3.9.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-18.0.0.tgz\",\"integrity\":\"sha512-MTQyNTQy==\",\"requires\":{\"winston\":\"^3.0.0\"},\"dev\":true},\"yargs\":{\"name\":\"yargs\",\"version\":\"4.18.8\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-19.0.0.tgz\",\"integrity\":\"sha512-MTUwNDYx==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist\":{\"name\":\"minimist\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-20.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzgw==\",\"requires\":{\"yargs\":\"^3.0.0\"},\"dev\":false},\"fast-glob\":{\"name\":\"fast-glob\",\"version\":\"4.14.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-21.0.0.tgz\",\"integrity\":\"sha512-MTY2Mjk5==\",\"requires\":{\"minimist\":\"^1.0.0\"},\"dev\":true},\"chokidar\":{\"name\":\"chokidar\",\"version\":\"1.10.3\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-22.0.0.tgz\",\"integrity\":\"sha512-MTc0MjE4==\",\"requires\":{\"fast-glob\":\"^2.0.0\"},\"dev\":false},\"ws\":{\"name\":\"ws\",\"version\":\"5.8.8\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-23.0.0.tgz\",\"integrity\":\"sha512-MTgyMTM3==\",\"requires\":{\"chokidar\":\"^1.0.0\"},\"dev\":false},\"socket.io\":{\"name\":\"socket.io\",\"version\":\"4.1.4\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-24.0.0.tgz\",\"integrity\":\"sha512-MTkwMDU2==\",\"requires\":{\"ws\":\"^3.0.0\"},\"dev\":true},\"express-v1\":{\"name\":\"express-v1\",\"version\":\"5.4.8\",\"resolved\":\"https://registry.npmjs.org/express/-/express-25.0.0.tgz\",\"integrity\":\"sha512-MTk3OTc1==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v1\":{\"name\":\"lodash-v1\",\"version\":\"5.6.0\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-26.0.0.tgz\",\"integrity\":\"sha512-MjA1ODk0==\",\"requires\":{\"express\":\"^3.0.0\"},\"dev\":false},\"axios-v1\":{\"name\":\"axios-v1\",\"version\":\"2.4.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-27.0.0.tgz\",\"integrity\":\"sha512-MjEzODEz==\",\"requires\":{\"lodash\":\"^2.0.0\"},\"dev\":true},\"moment-v1\":{\"name\":\"moment-v1\",\"version\":\"1.2.5\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-28.0.0.tgz\",\"integrity\":\"sha512-MjIxNzMy==\",\"requires\":{\"axios\":\"^1.0.0\"},\"dev\":false},\"chalk-v1\":{\"name\":\"chalk-v1\",\"version\":\"4.9.5\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-29.0.0.tgz\",\"integrity\":\"sha512-MjI5NjUx==\",\"requires\":{\"moment\":\"^2.0.0\"},\"dev\":false},\"commander-v1\":{\"name\":\"commander-v1\",\"version\":\"4.0.6\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-30.0.0.tgz\",\"integrity\":\"sha512-MjM3NTcw==\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":true},\"inquirer-v1\":{\"name\":\"inquirer-v1\",\"version\":\"1.16.6\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-31.0.0.tgz\",\"integrity\":\"sha512-MjQ1NDg5==\",\"requires\":{\"commander\":\"^3.0.0\"},\"dev\":false},\"ora-v1\":{\"name\":\"ora-v1\",\"version\":\"5.16.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-32.0.0.tgz\",\"integrity\":\"sha512-MjUzNDA4==\",\"requires\":{\"inquirer\":\"^2.0.0\"},\"dev\":false},\"glob-v1\":{\"name\":\"glob-v1\",\"version\":\"5.17.8\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-33.0.0.tgz\",\"integrity\":\"sha512-MjYxMzI3==\",\"requires\":{\"ora\":\"^3.0.0\"},\"dev\":true},\"rimraf-v1\":{\"name\":\"rimraf-v1\",\"version\":\"1.6.8\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-34.0.0.tgz\",\"integrity\":\"sha512-MjY5MjQ2==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false},\"mkdirp-v1\":{\"name\":\"mkdirp-v1\",\"version\":\"3.14.8\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-35.0.0.tgz\",\"integrity\":\"sha512-Mjc3MTY1==\",\"requires\":{\"rimraf\":\"^1.0.0\"},\"dev\":false},\"semver-v1\":{\"name\":\"semver-v1\",\"version\":\"1.8.7\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-36.0.0.tgz\",\"integrity\":\"sha512-Mjg1MDg0==\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":true},\"uuid-v1\":{\"name\":\"uuid-v1\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-37.0.0.tgz\",\"integrity\":\"sha512-MjkzMDAz==\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":false},\"dotenv-v1\":{\"name\":\"dotenv-v1\",\"version\":\"4.5.0\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-38.0.0.tgz\",\"integrity\":\"sha512-MzAwOTIy==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors-v1\":{\"name\":\"cors-v1\",\"version\":\"1.11.3\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-39.0.0.tgz\",\"integrity\":\"sha512-MzA4ODQx==\",\"requires\":{\"dotenv\":\"^2.0.0\"},\"dev\":true},\"helmet-v1\":{\"name\":\"helmet-v1\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-40.0.0.tgz\",\"integrity\":\"sha512-MzE2NzYw==\",\"requires\":{\"cors\":\"^1.0.0\"},\"dev\":false},\"morgan-v1\":{\"name\":\"morgan-v1\",\"version\":\"3.19.5\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-41.0.0.tgz\",\"integrity\":\"sha512-MzI0Njc5==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston-v1\":{\"name\":\"winston-v1\",\"version\":\"1.19.5\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-42.0.0.tgz\",\"integrity\":\"sha512-MzMyNTk4==\",\"requires\":{\"morgan\":\"^2.0.0\"},\"dev\":true},\"debug-v1\":{\"name\":\"debug-v1\",\"version\":\"4.2.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-43.0.0.tgz\",\"integrity\":\"sha512-MzQwNTE3==\",\"requires\":{\"winston\":\"^2.0.0\"},\"dev\":false},\"yargs-v1\":{\"name\":\"yargs-v1\",\"version\":\"1.11.7\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-44.0.0.tgz\",\"integrity\":\"sha512-MzQ4NDM2==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist-v1\":{\"name\":\"minimist-v1\",\"version\":\"1.14.8\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-45.0.0.tgz\",\"integrity\":\"sha512-MzU2MzU1==\",\"requires\":{\"yargs\":\"^1.0.0\"},\"dev\":true},\"fast-glob-v1\":{\"name\":\"fast-glob-v1\",\"version\":\"1.7.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-46.0.0.tgz\",\"integrity\":\"sha512-MzY0Mjc0==\",\"requires\":{\"minimist\":\"^3.0.0\"},\"dev\":false},\"chokidar-v1\":{\"name\":\"chokidar-v1\",\"version\":\"1.18.9\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-47.0.0.tgz\",\"integrity\":\"sha512-MzcyMTkz==\",\"requires\":{\"fast-glob\":\"^3.0.0\"},\"dev\":false},\"ws-v1\":{\"name\":\"ws-v1\",\"version\":\"1.1.6\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-48.0.0.tgz\",\"integrity\":\"sha512-MzgwMTEy==\",\"requires\":{\"chokidar\":\"^2.0.0\"},\"dev\":true},\"socket.io-v1\":{\"name\":\"socket.io-v1\",\"version\":\"4.6.0\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-49.0.0.tgz\",\"integrity\":\"sha512-Mzg4MDMx==\",\"requires\":{\"ws\":\"^1.0.0\"},\"dev\":false},\"express-v2\":{\"name\":\"express-v2\",\"version\":\"1.9.2\",\"resolved\":\"https://registry.npmjs.org/express/-/express-50.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTUw==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v2\":{\"name\":\"lodash-v2\",\"version\":\"2.1.5\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-51.0.0.tgz\",\"integrity\":\"sha512-NDAzODY5==\",\"requires\":{\"express\":\"^1.0.0\"},\"dev\":true},\"axios-v2\":{\"name\":\"axios-v2\",\"version\":\"2.19.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-52.0.0.tgz\",\"integrity\":\"sha512-NDExNzg4==\",\"requires\":{\"lodash\":\"^1.0.0\"},\"dev\":false},\"moment-v2\":{\"name\":\"moment-v2\",\"version\":\"3.13.6\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-53.0.0.tgz\",\"integrity\":\"sha512-NDE5NzA3==\",\"requires\":{\"axios\":\"^3.0.0\"},\"dev\":false},\"chalk-v2\":{\"name\":\"chalk-v2\",\"version\":\"5.13.9\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-54.0.0.tgz\",\"integrity\":\"sha512-NDI3NjI2==\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":true},\"commander-v2\":{\"name\":\"commander-v2\",\"version\":\"3.14.5\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-55.0.0.tgz\",\"integrity\":\"sha512-NDM1NTQ1==\",\"requires\":{\"chalk\":\"^2.0.0\"},\"dev\":false},\"inquirer-v2\":{\"name\":\"inquirer-v2\",\"version\":\"4.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-56.0.0.tgz\",\"integrity\":\"sha512-NDQzNDY0==\",\"requires\":{\"commander\":\"^1.0.0\"},\"dev\":false},\"ora-v2\":{\"name\":\"ora-v2\",\"version\":\"3.9.2\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-57.0.0.tgz\",\"integrity\":\"sha512-NDUxMzgz==\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":true},\"glob-v2\":{\"name\":\"glob-v2\",\"version\":\"5.16.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-58.0.0.tgz\",\"integrity\":\"sha512-NDU5MzAy==\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf-v2\":{\"name\":\"rimraf-v2\",\"version\":\"2.4.6\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-59.0.0.tgz\",\"integrity\":\"sha512-NDY3MjIx==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false}}}",
+                "method": "minify",
+                "originalLen": 15973,
+                "compressedLen": 11444,
+                "originalTokens": 5811,
+                "compressedTokens": 4371
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 6773,
+            "output_tokens": 5,
+            "latency_ms": 2921,
+            "body_bytes": 18511,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 4855,
+            "output_tokens": 5,
+            "latency_ms": 2535,
+            "body_bytes": 13382,
+            "stop_reason": "end_turn",
+            "compression_ms": 60,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"name\":\"my-project\",\"version\":\"1.0.0\",\"lockfileVersion\":3,\"dependencies\":{\"express\":{\"name\":\"express\",\"version\":\"5.11.5\",\"resolved\":\"https://registry.npmjs.org/express/-/express-0.0.0.tgz\",\"integrity\":\"sha512-MA====\",\"requires\":{},\"dev\":true},\"lodash\":{\"name\":\"lodash\",\"version\":\"4.1.6\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-1.0.0.tgz\",\"integrity\":\"sha512-NzkxOQ====\",\"requires\":{},\"dev\":false},\"axios\":{\"name\":\"axios\",\"version\":\"2.17.5\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-2.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzg===\",\"requires\":{},\"dev\":false},\"moment\":{\"name\":\"moment\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-3.0.0.tgz\",\"integrity\":\"sha512-MjM3NTc===\",\"requires\":{\"axios\":\"^2.0.0\"},\"dev\":true},\"chalk\":{\"name\":\"chalk\",\"version\":\"2.3.3\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz\",\"integrity\":\"sha512-MzE2NzY===\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":false},\"commander\":{\"name\":\"commander\",\"version\":\"3.8.0\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-5.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTU===\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":false},\"inquirer\":{\"name\":\"inquirer\",\"version\":\"3.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-6.0.0.tgz\",\"integrity\":\"sha512-NDc1MTQ===\",\"requires\":{\"commander\":\"^2.0.0\"},\"dev\":true},\"ora\":{\"name\":\"ora\",\"version\":\"2.14.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-7.0.0.tgz\",\"integrity\":\"sha512-NTU0MzM===\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":false},\"glob\":{\"name\":\"glob\",\"version\":\"2.5.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-8.0.0.tgz\",\"integrity\":\"sha512-NjMzNTI===\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf\":{\"name\":\"rimraf\",\"version\":\"5.7.3\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-9.0.0.tgz\",\"integrity\":\"sha512-NzEyNzE===\",\"requires\":{\"glob\":\"^3.0.0\"},\"dev\":true},\"mkdirp\":{\"name\":\"mkdirp\",\"version\":\"3.18.4\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-10.0.0.tgz\",\"integrity\":\"sha512-NzkxOTA===\",\"requires\":{\"rimraf\":\"^2.0.0\"},\"dev\":false},\"semver\":{\"name\":\"semver\",\"version\":\"1.9.6\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-11.0.0.tgz\",\"integrity\":\"sha512-ODcxMDk===\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":false},\"uuid\":{\"name\":\"uuid\",\"version\":\"2.1.9\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-12.0.0.tgz\",\"integrity\":\"sha512-OTUwMjg===\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":true},\"dotenv\":{\"name\":\"dotenv\",\"version\":\"1.10.2\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-13.0.0.tgz\",\"integrity\":\"sha512-MTAyOTQ3==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors\":{\"name\":\"cors\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-14.0.0.tgz\",\"integrity\":\"sha512-MTEwODY2==\",\"requires\":{\"dotenv\":\"^3.0.0\"},\"dev\":false},\"helmet\":{\"name\":\"helmet\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-15.0.0.tgz\",\"integrity\":\"sha512-MTE4Nzg1==\",\"requires\":{\"cors\":\"^2.0.0\"},\"dev\":true},\"morgan\":{\"name\":\"morgan\",\"version\":\"3.14.4\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-16.0.0.tgz\",\"integrity\":\"sha512-MTI2NzA0==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston\":{\"name\":\"winston\",\"version\":\"5.19.2\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-17.0.0.tgz\",\"integrity\":\"sha512-MTM0NjIz==\",\"requires\":{\"morgan\":\"^1.0.0\"},\"dev\":false},\"debug\":{\"name\":\"debug\",\"version\":\"3.9.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-18.0.0.tgz\",\"integrity\":\"sha512-MTQyNTQy==\",\"requires\":{\"winston\":\"^3.0.0\"},\"dev\":true},\"yargs\":{\"name\":\"yargs\",\"version\":\"4.18.8\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-19.0.0.tgz\",\"integrity\":\"sha512-MTUwNDYx==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist\":{\"name\":\"minimist\",\"version\":\"2.2.0\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-20.0.0.tgz\",\"integrity\":\"sha512-MTU4Mzgw==\",\"requires\":{\"yargs\":\"^3.0.0\"},\"dev\":false},\"fast-glob\":{\"name\":\"fast-glob\",\"version\":\"4.14.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-21.0.0.tgz\",\"integrity\":\"sha512-MTY2Mjk5==\",\"requires\":{\"minimist\":\"^1.0.0\"},\"dev\":true},\"chokidar\":{\"name\":\"chokidar\",\"version\":\"1.10.3\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-22.0.0.tgz\",\"integrity\":\"sha512-MTc0MjE4==\",\"requires\":{\"fast-glob\":\"^2.0.0\"},\"dev\":false},\"ws\":{\"name\":\"ws\",\"version\":\"5.8.8\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-23.0.0.tgz\",\"integrity\":\"sha512-MTgyMTM3==\",\"requires\":{\"chokidar\":\"^1.0.0\"},\"dev\":false},\"socket.io\":{\"name\":\"socket.io\",\"version\":\"4.1.4\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-24.0.0.tgz\",\"integrity\":\"sha512-MTkwMDU2==\",\"requires\":{\"ws\":\"^3.0.0\"},\"dev\":true},\"express-v1\":{\"name\":\"express-v1\",\"version\":\"5.4.8\",\"resolved\":\"https://registry.npmjs.org/express/-/express-25.0.0.tgz\",\"integrity\":\"sha512-MTk3OTc1==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v1\":{\"name\":\"lodash-v1\",\"version\":\"5.6.0\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-26.0.0.tgz\",\"integrity\":\"sha512-MjA1ODk0==\",\"requires\":{\"express\":\"^3.0.0\"},\"dev\":false},\"axios-v1\":{\"name\":\"axios-v1\",\"version\":\"2.4.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-27.0.0.tgz\",\"integrity\":\"sha512-MjEzODEz==\",\"requires\":{\"lodash\":\"^2.0.0\"},\"dev\":true},\"moment-v1\":{\"name\":\"moment-v1\",\"version\":\"1.2.5\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-28.0.0.tgz\",\"integrity\":\"sha512-MjIxNzMy==\",\"requires\":{\"axios\":\"^1.0.0\"},\"dev\":false},\"chalk-v1\":{\"name\":\"chalk-v1\",\"version\":\"4.9.5\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-29.0.0.tgz\",\"integrity\":\"sha512-MjI5NjUx==\",\"requires\":{\"moment\":\"^2.0.0\"},\"dev\":false},\"commander-v1\":{\"name\":\"commander-v1\",\"version\":\"4.0.6\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-30.0.0.tgz\",\"integrity\":\"sha512-MjM3NTcw==\",\"requires\":{\"chalk\":\"^3.0.0\"},\"dev\":true},\"inquirer-v1\":{\"name\":\"inquirer-v1\",\"version\":\"1.16.6\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-31.0.0.tgz\",\"integrity\":\"sha512-MjQ1NDg5==\",\"requires\":{\"commander\":\"^3.0.0\"},\"dev\":false},\"ora-v1\":{\"name\":\"ora-v1\",\"version\":\"5.16.8\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-32.0.0.tgz\",\"integrity\":\"sha512-MjUzNDA4==\",\"requires\":{\"inquirer\":\"^2.0.0\"},\"dev\":false},\"glob-v1\":{\"name\":\"glob-v1\",\"version\":\"5.17.8\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-33.0.0.tgz\",\"integrity\":\"sha512-MjYxMzI3==\",\"requires\":{\"ora\":\"^3.0.0\"},\"dev\":true},\"rimraf-v1\":{\"name\":\"rimraf-v1\",\"version\":\"1.6.8\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-34.0.0.tgz\",\"integrity\":\"sha512-MjY5MjQ2==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false},\"mkdirp-v1\":{\"name\":\"mkdirp-v1\",\"version\":\"3.14.8\",\"resolved\":\"https://registry.npmjs.org/mkdirp/-/mkdirp-35.0.0.tgz\",\"integrity\":\"sha512-Mjc3MTY1==\",\"requires\":{\"rimraf\":\"^1.0.0\"},\"dev\":false},\"semver-v1\":{\"name\":\"semver-v1\",\"version\":\"1.8.7\",\"resolved\":\"https://registry.npmjs.org/semver/-/semver-36.0.0.tgz\",\"integrity\":\"sha512-Mjg1MDg0==\",\"requires\":{\"mkdirp\":\"^2.0.0\"},\"dev\":true},\"uuid-v1\":{\"name\":\"uuid-v1\",\"version\":\"4.4.4\",\"resolved\":\"https://registry.npmjs.org/uuid/-/uuid-37.0.0.tgz\",\"integrity\":\"sha512-MjkzMDAz==\",\"requires\":{\"semver\":\"^3.0.0\"},\"dev\":false},\"dotenv-v1\":{\"name\":\"dotenv-v1\",\"version\":\"4.5.0\",\"resolved\":\"https://registry.npmjs.org/dotenv/-/dotenv-38.0.0.tgz\",\"integrity\":\"sha512-MzAwOTIy==\",\"requires\":{\"uuid\":\"^1.0.0\"},\"dev\":false},\"cors-v1\":{\"name\":\"cors-v1\",\"version\":\"1.11.3\",\"resolved\":\"https://registry.npmjs.org/cors/-/cors-39.0.0.tgz\",\"integrity\":\"sha512-MzA4ODQx==\",\"requires\":{\"dotenv\":\"^2.0.0\"},\"dev\":true},\"helmet-v1\":{\"name\":\"helmet-v1\",\"version\":\"5.15.6\",\"resolved\":\"https://registry.npmjs.org/helmet/-/helmet-40.0.0.tgz\",\"integrity\":\"sha512-MzE2NzYw==\",\"requires\":{\"cors\":\"^1.0.0\"},\"dev\":false},\"morgan-v1\":{\"name\":\"morgan-v1\",\"version\":\"3.19.5\",\"resolved\":\"https://registry.npmjs.org/morgan/-/morgan-41.0.0.tgz\",\"integrity\":\"sha512-MzI0Njc5==\",\"requires\":{\"helmet\":\"^3.0.0\"},\"dev\":false},\"winston-v1\":{\"name\":\"winston-v1\",\"version\":\"1.19.5\",\"resolved\":\"https://registry.npmjs.org/winston/-/winston-42.0.0.tgz\",\"integrity\":\"sha512-MzMyNTk4==\",\"requires\":{\"morgan\":\"^2.0.0\"},\"dev\":true},\"debug-v1\":{\"name\":\"debug-v1\",\"version\":\"4.2.5\",\"resolved\":\"https://registry.npmjs.org/debug/-/debug-43.0.0.tgz\",\"integrity\":\"sha512-MzQwNTE3==\",\"requires\":{\"winston\":\"^2.0.0\"},\"dev\":false},\"yargs-v1\":{\"name\":\"yargs-v1\",\"version\":\"1.11.7\",\"resolved\":\"https://registry.npmjs.org/yargs/-/yargs-44.0.0.tgz\",\"integrity\":\"sha512-MzQ4NDM2==\",\"requires\":{\"debug\":\"^3.0.0\"},\"dev\":false},\"minimist-v1\":{\"name\":\"minimist-v1\",\"version\":\"1.14.8\",\"resolved\":\"https://registry.npmjs.org/minimist/-/minimist-45.0.0.tgz\",\"integrity\":\"sha512-MzU2MzU1==\",\"requires\":{\"yargs\":\"^1.0.0\"},\"dev\":true},\"fast-glob-v1\":{\"name\":\"fast-glob-v1\",\"version\":\"1.7.2\",\"resolved\":\"https://registry.npmjs.org/fast-glob/-/fast-glob-46.0.0.tgz\",\"integrity\":\"sha512-MzY0Mjc0==\",\"requires\":{\"minimist\":\"^3.0.0\"},\"dev\":false},\"chokidar-v1\":{\"name\":\"chokidar-v1\",\"version\":\"1.18.9\",\"resolved\":\"https://registry.npmjs.org/chokidar/-/chokidar-47.0.0.tgz\",\"integrity\":\"sha512-MzcyMTkz==\",\"requires\":{\"fast-glob\":\"^3.0.0\"},\"dev\":false},\"ws-v1\":{\"name\":\"ws-v1\",\"version\":\"1.1.6\",\"resolved\":\"https://registry.npmjs.org/ws/-/ws-48.0.0.tgz\",\"integrity\":\"sha512-MzgwMTEy==\",\"requires\":{\"chokidar\":\"^2.0.0\"},\"dev\":true},\"socket.io-v1\":{\"name\":\"socket.io-v1\",\"version\":\"4.6.0\",\"resolved\":\"https://registry.npmjs.org/socket.io/-/socket.io-49.0.0.tgz\",\"integrity\":\"sha512-Mzg4MDMx==\",\"requires\":{\"ws\":\"^1.0.0\"},\"dev\":false},\"express-v2\":{\"name\":\"express-v2\",\"version\":\"1.9.2\",\"resolved\":\"https://registry.npmjs.org/express/-/express-50.0.0.tgz\",\"integrity\":\"sha512-Mzk1OTUw==\",\"requires\":{\"socket.io\":\"^2.0.0\"},\"dev\":false},\"lodash-v2\":{\"name\":\"lodash-v2\",\"version\":\"2.1.5\",\"resolved\":\"https://registry.npmjs.org/lodash/-/lodash-51.0.0.tgz\",\"integrity\":\"sha512-NDAzODY5==\",\"requires\":{\"express\":\"^1.0.0\"},\"dev\":true},\"axios-v2\":{\"name\":\"axios-v2\",\"version\":\"2.19.7\",\"resolved\":\"https://registry.npmjs.org/axios/-/axios-52.0.0.tgz\",\"integrity\":\"sha512-NDExNzg4==\",\"requires\":{\"lodash\":\"^1.0.0\"},\"dev\":false},\"moment-v2\":{\"name\":\"moment-v2\",\"version\":\"3.13.6\",\"resolved\":\"https://registry.npmjs.org/moment/-/moment-53.0.0.tgz\",\"integrity\":\"sha512-NDE5NzA3==\",\"requires\":{\"axios\":\"^3.0.0\"},\"dev\":false},\"chalk-v2\":{\"name\":\"chalk-v2\",\"version\":\"5.13.9\",\"resolved\":\"https://registry.npmjs.org/chalk/-/chalk-54.0.0.tgz\",\"integrity\":\"sha512-NDI3NjI2==\",\"requires\":{\"moment\":\"^3.0.0\"},\"dev\":true},\"commander-v2\":{\"name\":\"commander-v2\",\"version\":\"3.14.5\",\"resolved\":\"https://registry.npmjs.org/commander/-/commander-55.0.0.tgz\",\"integrity\":\"sha512-NDM1NTQ1==\",\"requires\":{\"chalk\":\"^2.0.0\"},\"dev\":false},\"inquirer-v2\":{\"name\":\"inquirer-v2\",\"version\":\"4.14.0\",\"resolved\":\"https://registry.npmjs.org/inquirer/-/inquirer-56.0.0.tgz\",\"integrity\":\"sha512-NDQzNDY0==\",\"requires\":{\"commander\":\"^1.0.0\"},\"dev\":false},\"ora-v2\":{\"name\":\"ora-v2\",\"version\":\"3.9.2\",\"resolved\":\"https://registry.npmjs.org/ora/-/ora-57.0.0.tgz\",\"integrity\":\"sha512-NDUxMzgz==\",\"requires\":{\"inquirer\":\"^1.0.0\"},\"dev\":true},\"glob-v2\":{\"name\":\"glob-v2\",\"version\":\"5.16.3\",\"resolved\":\"https://registry.npmjs.org/glob/-/glob-58.0.0.tgz\",\"integrity\":\"sha512-NDU5MzAy==\",\"requires\":{\"ora\":\"^1.0.0\"},\"dev\":false},\"rimraf-v2\":{\"name\":\"rimraf-v2\",\"version\":\"2.4.6\",\"resolved\":\"https://registry.npmjs.org/rimraf/-/rimraf-59.0.0.tgz\",\"integrity\":\"sha512-NDY3MjIx==\",\"requires\":{\"glob\":\"^1.0.0\"},\"dev\":false}}}",
+                "method": "minify",
+                "originalLen": 15973,
+                "compressedLen": 11444,
+                "originalTokens": 5811,
+                "compressedTokens": 4371
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "tabular-data",
+      "name": "Tabular Data (file listing)",
+      "description": "Array of 50 file entries — homogeneous objects ideal for TOON encoding",
+      "expectedCompression": "40-60%",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 3572,
+            "output_tokens": 5,
+            "latency_ms": 3298,
+            "body_bytes": 9109,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 1833,
+            "output_tokens": 5,
+            "latency_ms": 2103,
+            "body_bytes": 3648,
+            "stop_reason": "end_turn",
+            "compression_ms": 55,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "[50]{name,type,size,modified,permissions}:\n  item-000.js,file,7078,\"2025-01-01T10:30:00Z\",rwxr-xr-x\n  item-001.ts,directory,41096,\"2025-02-02T10:30:00Z\",rw-r--r--\n  item-002.json,symlink,33080,\"2025-03-03T10:30:00Z\",rw-r--r--\n  item-003.md,file,31354,\"2025-04-04T10:30:00Z\",rwxr-xr-x\n  item-004.css,directory,458,\"2025-05-05T10:30:00Z\",rw-r--r--\n  item-005.html,symlink,29653,\"2025-06-06T10:30:00Z\",rw-r--r--\n  item-006.yaml,file,11899,\"2025-07-07T10:30:00Z\",rwxr-xr-x\n  item-007.toml,directory,38462,\"2025-08-08T10:30:00Z\",rw-r--r--\n  item-008.js,symlink,36127,\"2025-09-09T10:30:00Z\",rw-r--r--\n  item-009.ts,file,1362,\"2025-10-10T10:30:00Z\",rwxr-xr-x\n  item-010.json,directory,9990,\"2025-11-11T10:30:00Z\",rw-r--r--\n  item-011.md,symlink,10799,\"2025-12-12T10:30:00Z\",rw-r--r--\n  item-012.css,file,26723,\"2025-01-13T10:30:00Z\",rwxr-xr-x\n  item-013.html,directory,24074,\"2025-02-14T10:30:00Z\",rw-r--r--\n  item-014.yaml,symlink,14343,\"2025-03-15T10:30:00Z\",rw-r--r--\n  item-015.toml,file,34432,\"2025-04-16T10:30:00Z\",rwxr-xr-x\n  item-016.js,directory,19020,\"2025-05-17T10:30:00Z\",rw-r--r--\n  item-017.ts,symlink,49246,\"2025-06-18T10:30:00Z\",rw-r--r--\n  item-018.json,file,40342,\"2025-07-19T10:30:00Z\",rwxr-xr-x\n  item-019.md,directory,32610,\"2025-08-20T10:30:00Z\",rw-r--r--\n  item-020.css,symlink,43430,\"2025-09-21T10:30:00Z\",rw-r--r--\n  item-021.html,file,41885,\"2025-10-22T10:30:00Z\",rwxr-xr-x\n  item-022.yaml,directory,922,\"2025-11-23T10:30:00Z\",rw-r--r--\n  item-023.toml,symlink,14985,\"2025-12-24T10:30:00Z\",rw-r--r--\n  item-024.js,file,48071,\"2025-01-25T10:30:00Z\",rwxr-xr-x\n  item-025.ts,directory,7659,\"2025-02-26T10:30:00Z\",rw-r--r--\n  item-026.json,symlink,23702,\"2025-03-27T10:30:00Z\",rw-r--r--\n  item-027.md,file,18373,\"2025-04-28T10:30:00Z\",rwxr-xr-x\n  item-028.css,directory,22533,\"2025-05-01T10:30:00Z\",rw-r--r--\n  item-029.html,symlink,10101,\"2025-06-02T10:30:00Z\",rw-r--r--\n  item-030.yaml,file,30806,\"2025-07-03T10:30:00Z\",rwxr-xr-x\n  item-031.toml,directory,15977,\"2025-08-04T10:30:00Z\",rw-r--r--\n  item-032.js,symlink,20853,\"2025-09-05T10:30:00Z\",rw-r--r--\n  item-033.ts,file,24492,\"2025-10-06T10:30:00Z\",rwxr-xr-x\n  item-034.json,directory,30874,\"2025-11-07T10:30:00Z\",rw-r--r--\n  item-035.md,symlink,269,\"2025-12-08T10:30:00Z\",rw-r--r--\n  item-036.css,file,47832,\"2025-01-09T10:30:00Z\",rwxr-xr-x\n  item-037.html,directory,17255,\"2025-02-10T10:30:00Z\",rw-r--r--\n  item-038.yaml,symlink,25386,\"2025-03-11T10:30:00Z\",rw-r--r--\n  item-039.toml,file,11721,\"2025-04-12T10:30:00Z\",rwxr-xr-x\n  item-040.js,directory,12432,\"2025-05-13T10:30:00Z\",rw-r--r--\n  item-041.ts,symlink,10699,\"2025-06-14T10:30:00Z\",rw-r--r--\n  item-042.json,file,15044,\"2025-07-15T10:30:00Z\",rwxr-xr-x\n  item-043.md,directory,18111,\"2025-08-16T10:30:00Z\",rw-r--r--\n  item-044.css,symlink,2091,\"2025-09-17T10:30:00Z\",rw-r--r--\n  item-045.html,file,28569,\"2025-10-18T10:30:00Z\",rwxr-xr-x\n  item-046.yaml,directory,36908,\"2025-11-19T10:30:00Z\",rw-r--r--\n  item-047.toml,symlink,31594,\"2025-12-20T10:30:00Z\",rw-r--r--\n  item-048.js,file,20837,\"2025-01-21T10:30:00Z\",rwxr-xr-x\n  item-049.ts,directory,41020,\"2025-02-22T10:30:00Z\",rw-r--r--",
+                "method": "toon",
+                "originalLen": 7478,
+                "compressedLen": 3118,
+                "originalTokens": 2978,
+                "compressedTokens": 1616
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 3572,
+            "output_tokens": 10,
+            "latency_ms": 2487,
+            "body_bytes": 9109,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 1833,
+            "output_tokens": 5,
+            "latency_ms": 3167,
+            "body_bytes": 3648,
+            "stop_reason": "end_turn",
+            "compression_ms": 58,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "[50]{name,type,size,modified,permissions}:\n  item-000.js,file,7078,\"2025-01-01T10:30:00Z\",rwxr-xr-x\n  item-001.ts,directory,41096,\"2025-02-02T10:30:00Z\",rw-r--r--\n  item-002.json,symlink,33080,\"2025-03-03T10:30:00Z\",rw-r--r--\n  item-003.md,file,31354,\"2025-04-04T10:30:00Z\",rwxr-xr-x\n  item-004.css,directory,458,\"2025-05-05T10:30:00Z\",rw-r--r--\n  item-005.html,symlink,29653,\"2025-06-06T10:30:00Z\",rw-r--r--\n  item-006.yaml,file,11899,\"2025-07-07T10:30:00Z\",rwxr-xr-x\n  item-007.toml,directory,38462,\"2025-08-08T10:30:00Z\",rw-r--r--\n  item-008.js,symlink,36127,\"2025-09-09T10:30:00Z\",rw-r--r--\n  item-009.ts,file,1362,\"2025-10-10T10:30:00Z\",rwxr-xr-x\n  item-010.json,directory,9990,\"2025-11-11T10:30:00Z\",rw-r--r--\n  item-011.md,symlink,10799,\"2025-12-12T10:30:00Z\",rw-r--r--\n  item-012.css,file,26723,\"2025-01-13T10:30:00Z\",rwxr-xr-x\n  item-013.html,directory,24074,\"2025-02-14T10:30:00Z\",rw-r--r--\n  item-014.yaml,symlink,14343,\"2025-03-15T10:30:00Z\",rw-r--r--\n  item-015.toml,file,34432,\"2025-04-16T10:30:00Z\",rwxr-xr-x\n  item-016.js,directory,19020,\"2025-05-17T10:30:00Z\",rw-r--r--\n  item-017.ts,symlink,49246,\"2025-06-18T10:30:00Z\",rw-r--r--\n  item-018.json,file,40342,\"2025-07-19T10:30:00Z\",rwxr-xr-x\n  item-019.md,directory,32610,\"2025-08-20T10:30:00Z\",rw-r--r--\n  item-020.css,symlink,43430,\"2025-09-21T10:30:00Z\",rw-r--r--\n  item-021.html,file,41885,\"2025-10-22T10:30:00Z\",rwxr-xr-x\n  item-022.yaml,directory,922,\"2025-11-23T10:30:00Z\",rw-r--r--\n  item-023.toml,symlink,14985,\"2025-12-24T10:30:00Z\",rw-r--r--\n  item-024.js,file,48071,\"2025-01-25T10:30:00Z\",rwxr-xr-x\n  item-025.ts,directory,7659,\"2025-02-26T10:30:00Z\",rw-r--r--\n  item-026.json,symlink,23702,\"2025-03-27T10:30:00Z\",rw-r--r--\n  item-027.md,file,18373,\"2025-04-28T10:30:00Z\",rwxr-xr-x\n  item-028.css,directory,22533,\"2025-05-01T10:30:00Z\",rw-r--r--\n  item-029.html,symlink,10101,\"2025-06-02T10:30:00Z\",rw-r--r--\n  item-030.yaml,file,30806,\"2025-07-03T10:30:00Z\",rwxr-xr-x\n  item-031.toml,directory,15977,\"2025-08-04T10:30:00Z\",rw-r--r--\n  item-032.js,symlink,20853,\"2025-09-05T10:30:00Z\",rw-r--r--\n  item-033.ts,file,24492,\"2025-10-06T10:30:00Z\",rwxr-xr-x\n  item-034.json,directory,30874,\"2025-11-07T10:30:00Z\",rw-r--r--\n  item-035.md,symlink,269,\"2025-12-08T10:30:00Z\",rw-r--r--\n  item-036.css,file,47832,\"2025-01-09T10:30:00Z\",rwxr-xr-x\n  item-037.html,directory,17255,\"2025-02-10T10:30:00Z\",rw-r--r--\n  item-038.yaml,symlink,25386,\"2025-03-11T10:30:00Z\",rw-r--r--\n  item-039.toml,file,11721,\"2025-04-12T10:30:00Z\",rwxr-xr-x\n  item-040.js,directory,12432,\"2025-05-13T10:30:00Z\",rw-r--r--\n  item-041.ts,symlink,10699,\"2025-06-14T10:30:00Z\",rw-r--r--\n  item-042.json,file,15044,\"2025-07-15T10:30:00Z\",rwxr-xr-x\n  item-043.md,directory,18111,\"2025-08-16T10:30:00Z\",rw-r--r--\n  item-044.css,symlink,2091,\"2025-09-17T10:30:00Z\",rw-r--r--\n  item-045.html,file,28569,\"2025-10-18T10:30:00Z\",rwxr-xr-x\n  item-046.yaml,directory,36908,\"2025-11-19T10:30:00Z\",rw-r--r--\n  item-047.toml,symlink,31594,\"2025-12-20T10:30:00Z\",rw-r--r--\n  item-048.js,file,20837,\"2025-01-21T10:30:00Z\",rwxr-xr-x\n  item-049.ts,directory,41020,\"2025-02-22T10:30:00Z\",rw-r--r--",
+                "method": "toon",
+                "originalLen": 7478,
+                "compressedLen": 3118,
+                "originalTokens": 2978,
+                "compressedTokens": 1616
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 3572,
+            "output_tokens": 10,
+            "latency_ms": 2849,
+            "body_bytes": 9109,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 1833,
+            "output_tokens": 5,
+            "latency_ms": 2017,
+            "body_bytes": 3648,
+            "stop_reason": "end_turn",
+            "compression_ms": 192,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "[50]{name,type,size,modified,permissions}:\n  item-000.js,file,7078,\"2025-01-01T10:30:00Z\",rwxr-xr-x\n  item-001.ts,directory,41096,\"2025-02-02T10:30:00Z\",rw-r--r--\n  item-002.json,symlink,33080,\"2025-03-03T10:30:00Z\",rw-r--r--\n  item-003.md,file,31354,\"2025-04-04T10:30:00Z\",rwxr-xr-x\n  item-004.css,directory,458,\"2025-05-05T10:30:00Z\",rw-r--r--\n  item-005.html,symlink,29653,\"2025-06-06T10:30:00Z\",rw-r--r--\n  item-006.yaml,file,11899,\"2025-07-07T10:30:00Z\",rwxr-xr-x\n  item-007.toml,directory,38462,\"2025-08-08T10:30:00Z\",rw-r--r--\n  item-008.js,symlink,36127,\"2025-09-09T10:30:00Z\",rw-r--r--\n  item-009.ts,file,1362,\"2025-10-10T10:30:00Z\",rwxr-xr-x\n  item-010.json,directory,9990,\"2025-11-11T10:30:00Z\",rw-r--r--\n  item-011.md,symlink,10799,\"2025-12-12T10:30:00Z\",rw-r--r--\n  item-012.css,file,26723,\"2025-01-13T10:30:00Z\",rwxr-xr-x\n  item-013.html,directory,24074,\"2025-02-14T10:30:00Z\",rw-r--r--\n  item-014.yaml,symlink,14343,\"2025-03-15T10:30:00Z\",rw-r--r--\n  item-015.toml,file,34432,\"2025-04-16T10:30:00Z\",rwxr-xr-x\n  item-016.js,directory,19020,\"2025-05-17T10:30:00Z\",rw-r--r--\n  item-017.ts,symlink,49246,\"2025-06-18T10:30:00Z\",rw-r--r--\n  item-018.json,file,40342,\"2025-07-19T10:30:00Z\",rwxr-xr-x\n  item-019.md,directory,32610,\"2025-08-20T10:30:00Z\",rw-r--r--\n  item-020.css,symlink,43430,\"2025-09-21T10:30:00Z\",rw-r--r--\n  item-021.html,file,41885,\"2025-10-22T10:30:00Z\",rwxr-xr-x\n  item-022.yaml,directory,922,\"2025-11-23T10:30:00Z\",rw-r--r--\n  item-023.toml,symlink,14985,\"2025-12-24T10:30:00Z\",rw-r--r--\n  item-024.js,file,48071,\"2025-01-25T10:30:00Z\",rwxr-xr-x\n  item-025.ts,directory,7659,\"2025-02-26T10:30:00Z\",rw-r--r--\n  item-026.json,symlink,23702,\"2025-03-27T10:30:00Z\",rw-r--r--\n  item-027.md,file,18373,\"2025-04-28T10:30:00Z\",rwxr-xr-x\n  item-028.css,directory,22533,\"2025-05-01T10:30:00Z\",rw-r--r--\n  item-029.html,symlink,10101,\"2025-06-02T10:30:00Z\",rw-r--r--\n  item-030.yaml,file,30806,\"2025-07-03T10:30:00Z\",rwxr-xr-x\n  item-031.toml,directory,15977,\"2025-08-04T10:30:00Z\",rw-r--r--\n  item-032.js,symlink,20853,\"2025-09-05T10:30:00Z\",rw-r--r--\n  item-033.ts,file,24492,\"2025-10-06T10:30:00Z\",rwxr-xr-x\n  item-034.json,directory,30874,\"2025-11-07T10:30:00Z\",rw-r--r--\n  item-035.md,symlink,269,\"2025-12-08T10:30:00Z\",rw-r--r--\n  item-036.css,file,47832,\"2025-01-09T10:30:00Z\",rwxr-xr-x\n  item-037.html,directory,17255,\"2025-02-10T10:30:00Z\",rw-r--r--\n  item-038.yaml,symlink,25386,\"2025-03-11T10:30:00Z\",rw-r--r--\n  item-039.toml,file,11721,\"2025-04-12T10:30:00Z\",rwxr-xr-x\n  item-040.js,directory,12432,\"2025-05-13T10:30:00Z\",rw-r--r--\n  item-041.ts,symlink,10699,\"2025-06-14T10:30:00Z\",rw-r--r--\n  item-042.json,file,15044,\"2025-07-15T10:30:00Z\",rwxr-xr-x\n  item-043.md,directory,18111,\"2025-08-16T10:30:00Z\",rw-r--r--\n  item-044.css,symlink,2091,\"2025-09-17T10:30:00Z\",rw-r--r--\n  item-045.html,file,28569,\"2025-10-18T10:30:00Z\",rwxr-xr-x\n  item-046.yaml,directory,36908,\"2025-11-19T10:30:00Z\",rw-r--r--\n  item-047.toml,symlink,31594,\"2025-12-20T10:30:00Z\",rw-r--r--\n  item-048.js,file,20837,\"2025-01-21T10:30:00Z\",rwxr-xr-x\n  item-049.ts,directory,41020,\"2025-02-22T10:30:00Z\",rw-r--r--",
+                "method": "toon",
+                "originalLen": 7478,
+                "compressedLen": 3118,
+                "originalTokens": 2978,
+                "compressedTokens": 1616
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 3572,
+            "output_tokens": 10,
+            "latency_ms": 2108,
+            "body_bytes": 9109,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 1833,
+            "output_tokens": 5,
+            "latency_ms": 3024,
+            "body_bytes": 3648,
+            "stop_reason": "end_turn",
+            "compression_ms": 52,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "[50]{name,type,size,modified,permissions}:\n  item-000.js,file,7078,\"2025-01-01T10:30:00Z\",rwxr-xr-x\n  item-001.ts,directory,41096,\"2025-02-02T10:30:00Z\",rw-r--r--\n  item-002.json,symlink,33080,\"2025-03-03T10:30:00Z\",rw-r--r--\n  item-003.md,file,31354,\"2025-04-04T10:30:00Z\",rwxr-xr-x\n  item-004.css,directory,458,\"2025-05-05T10:30:00Z\",rw-r--r--\n  item-005.html,symlink,29653,\"2025-06-06T10:30:00Z\",rw-r--r--\n  item-006.yaml,file,11899,\"2025-07-07T10:30:00Z\",rwxr-xr-x\n  item-007.toml,directory,38462,\"2025-08-08T10:30:00Z\",rw-r--r--\n  item-008.js,symlink,36127,\"2025-09-09T10:30:00Z\",rw-r--r--\n  item-009.ts,file,1362,\"2025-10-10T10:30:00Z\",rwxr-xr-x\n  item-010.json,directory,9990,\"2025-11-11T10:30:00Z\",rw-r--r--\n  item-011.md,symlink,10799,\"2025-12-12T10:30:00Z\",rw-r--r--\n  item-012.css,file,26723,\"2025-01-13T10:30:00Z\",rwxr-xr-x\n  item-013.html,directory,24074,\"2025-02-14T10:30:00Z\",rw-r--r--\n  item-014.yaml,symlink,14343,\"2025-03-15T10:30:00Z\",rw-r--r--\n  item-015.toml,file,34432,\"2025-04-16T10:30:00Z\",rwxr-xr-x\n  item-016.js,directory,19020,\"2025-05-17T10:30:00Z\",rw-r--r--\n  item-017.ts,symlink,49246,\"2025-06-18T10:30:00Z\",rw-r--r--\n  item-018.json,file,40342,\"2025-07-19T10:30:00Z\",rwxr-xr-x\n  item-019.md,directory,32610,\"2025-08-20T10:30:00Z\",rw-r--r--\n  item-020.css,symlink,43430,\"2025-09-21T10:30:00Z\",rw-r--r--\n  item-021.html,file,41885,\"2025-10-22T10:30:00Z\",rwxr-xr-x\n  item-022.yaml,directory,922,\"2025-11-23T10:30:00Z\",rw-r--r--\n  item-023.toml,symlink,14985,\"2025-12-24T10:30:00Z\",rw-r--r--\n  item-024.js,file,48071,\"2025-01-25T10:30:00Z\",rwxr-xr-x\n  item-025.ts,directory,7659,\"2025-02-26T10:30:00Z\",rw-r--r--\n  item-026.json,symlink,23702,\"2025-03-27T10:30:00Z\",rw-r--r--\n  item-027.md,file,18373,\"2025-04-28T10:30:00Z\",rwxr-xr-x\n  item-028.css,directory,22533,\"2025-05-01T10:30:00Z\",rw-r--r--\n  item-029.html,symlink,10101,\"2025-06-02T10:30:00Z\",rw-r--r--\n  item-030.yaml,file,30806,\"2025-07-03T10:30:00Z\",rwxr-xr-x\n  item-031.toml,directory,15977,\"2025-08-04T10:30:00Z\",rw-r--r--\n  item-032.js,symlink,20853,\"2025-09-05T10:30:00Z\",rw-r--r--\n  item-033.ts,file,24492,\"2025-10-06T10:30:00Z\",rwxr-xr-x\n  item-034.json,directory,30874,\"2025-11-07T10:30:00Z\",rw-r--r--\n  item-035.md,symlink,269,\"2025-12-08T10:30:00Z\",rw-r--r--\n  item-036.css,file,47832,\"2025-01-09T10:30:00Z\",rwxr-xr-x\n  item-037.html,directory,17255,\"2025-02-10T10:30:00Z\",rw-r--r--\n  item-038.yaml,symlink,25386,\"2025-03-11T10:30:00Z\",rw-r--r--\n  item-039.toml,file,11721,\"2025-04-12T10:30:00Z\",rwxr-xr-x\n  item-040.js,directory,12432,\"2025-05-13T10:30:00Z\",rw-r--r--\n  item-041.ts,symlink,10699,\"2025-06-14T10:30:00Z\",rw-r--r--\n  item-042.json,file,15044,\"2025-07-15T10:30:00Z\",rwxr-xr-x\n  item-043.md,directory,18111,\"2025-08-16T10:30:00Z\",rw-r--r--\n  item-044.css,symlink,2091,\"2025-09-17T10:30:00Z\",rw-r--r--\n  item-045.html,file,28569,\"2025-10-18T10:30:00Z\",rwxr-xr-x\n  item-046.yaml,directory,36908,\"2025-11-19T10:30:00Z\",rw-r--r--\n  item-047.toml,symlink,31594,\"2025-12-20T10:30:00Z\",rw-r--r--\n  item-048.js,file,20837,\"2025-01-21T10:30:00Z\",rwxr-xr-x\n  item-049.ts,directory,41020,\"2025-02-22T10:30:00Z\",rw-r--r--",
+                "method": "toon",
+                "originalLen": 7478,
+                "compressedLen": 3118,
+                "originalTokens": 2978,
+                "compressedTokens": 1616
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 3572,
+            "output_tokens": 5,
+            "latency_ms": 2642,
+            "body_bytes": 9109,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 1833,
+            "output_tokens": 10,
+            "latency_ms": 1966,
+            "body_bytes": 3648,
+            "stop_reason": "max_tokens",
+            "compression_ms": 55,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "[50]{name,type,size,modified,permissions}:\n  item-000.js,file,7078,\"2025-01-01T10:30:00Z\",rwxr-xr-x\n  item-001.ts,directory,41096,\"2025-02-02T10:30:00Z\",rw-r--r--\n  item-002.json,symlink,33080,\"2025-03-03T10:30:00Z\",rw-r--r--\n  item-003.md,file,31354,\"2025-04-04T10:30:00Z\",rwxr-xr-x\n  item-004.css,directory,458,\"2025-05-05T10:30:00Z\",rw-r--r--\n  item-005.html,symlink,29653,\"2025-06-06T10:30:00Z\",rw-r--r--\n  item-006.yaml,file,11899,\"2025-07-07T10:30:00Z\",rwxr-xr-x\n  item-007.toml,directory,38462,\"2025-08-08T10:30:00Z\",rw-r--r--\n  item-008.js,symlink,36127,\"2025-09-09T10:30:00Z\",rw-r--r--\n  item-009.ts,file,1362,\"2025-10-10T10:30:00Z\",rwxr-xr-x\n  item-010.json,directory,9990,\"2025-11-11T10:30:00Z\",rw-r--r--\n  item-011.md,symlink,10799,\"2025-12-12T10:30:00Z\",rw-r--r--\n  item-012.css,file,26723,\"2025-01-13T10:30:00Z\",rwxr-xr-x\n  item-013.html,directory,24074,\"2025-02-14T10:30:00Z\",rw-r--r--\n  item-014.yaml,symlink,14343,\"2025-03-15T10:30:00Z\",rw-r--r--\n  item-015.toml,file,34432,\"2025-04-16T10:30:00Z\",rwxr-xr-x\n  item-016.js,directory,19020,\"2025-05-17T10:30:00Z\",rw-r--r--\n  item-017.ts,symlink,49246,\"2025-06-18T10:30:00Z\",rw-r--r--\n  item-018.json,file,40342,\"2025-07-19T10:30:00Z\",rwxr-xr-x\n  item-019.md,directory,32610,\"2025-08-20T10:30:00Z\",rw-r--r--\n  item-020.css,symlink,43430,\"2025-09-21T10:30:00Z\",rw-r--r--\n  item-021.html,file,41885,\"2025-10-22T10:30:00Z\",rwxr-xr-x\n  item-022.yaml,directory,922,\"2025-11-23T10:30:00Z\",rw-r--r--\n  item-023.toml,symlink,14985,\"2025-12-24T10:30:00Z\",rw-r--r--\n  item-024.js,file,48071,\"2025-01-25T10:30:00Z\",rwxr-xr-x\n  item-025.ts,directory,7659,\"2025-02-26T10:30:00Z\",rw-r--r--\n  item-026.json,symlink,23702,\"2025-03-27T10:30:00Z\",rw-r--r--\n  item-027.md,file,18373,\"2025-04-28T10:30:00Z\",rwxr-xr-x\n  item-028.css,directory,22533,\"2025-05-01T10:30:00Z\",rw-r--r--\n  item-029.html,symlink,10101,\"2025-06-02T10:30:00Z\",rw-r--r--\n  item-030.yaml,file,30806,\"2025-07-03T10:30:00Z\",rwxr-xr-x\n  item-031.toml,directory,15977,\"2025-08-04T10:30:00Z\",rw-r--r--\n  item-032.js,symlink,20853,\"2025-09-05T10:30:00Z\",rw-r--r--\n  item-033.ts,file,24492,\"2025-10-06T10:30:00Z\",rwxr-xr-x\n  item-034.json,directory,30874,\"2025-11-07T10:30:00Z\",rw-r--r--\n  item-035.md,symlink,269,\"2025-12-08T10:30:00Z\",rw-r--r--\n  item-036.css,file,47832,\"2025-01-09T10:30:00Z\",rwxr-xr-x\n  item-037.html,directory,17255,\"2025-02-10T10:30:00Z\",rw-r--r--\n  item-038.yaml,symlink,25386,\"2025-03-11T10:30:00Z\",rw-r--r--\n  item-039.toml,file,11721,\"2025-04-12T10:30:00Z\",rwxr-xr-x\n  item-040.js,directory,12432,\"2025-05-13T10:30:00Z\",rw-r--r--\n  item-041.ts,symlink,10699,\"2025-06-14T10:30:00Z\",rw-r--r--\n  item-042.json,file,15044,\"2025-07-15T10:30:00Z\",rwxr-xr-x\n  item-043.md,directory,18111,\"2025-08-16T10:30:00Z\",rw-r--r--\n  item-044.css,symlink,2091,\"2025-09-17T10:30:00Z\",rw-r--r--\n  item-045.html,file,28569,\"2025-10-18T10:30:00Z\",rwxr-xr-x\n  item-046.yaml,directory,36908,\"2025-11-19T10:30:00Z\",rw-r--r--\n  item-047.toml,symlink,31594,\"2025-12-20T10:30:00Z\",rw-r--r--\n  item-048.js,file,20837,\"2025-01-21T10:30:00Z\",rwxr-xr-x\n  item-049.ts,directory,41020,\"2025-02-22T10:30:00Z\",rw-r--r--",
+                "method": "toon",
+                "originalLen": 7478,
+                "compressedLen": 3118,
+                "originalTokens": 2978,
+                "compressedTokens": 1616
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "source-code",
+      "name": "Source Code (TypeScript)",
+      "description": "Plain TypeScript source — not JSON, should pass through uncompressed",
+      "expectedCompression": "0%",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 1069,
+            "output_tokens": 5,
+            "latency_ms": 2426,
+            "body_bytes": 3562,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 644,
+            "output_tokens": 10,
+            "latency_ms": 2013,
+            "body_bytes": 2232,
+            "stop_reason": "max_tokens",
+            "compression_ms": 772,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "import useState, useEffect, useCallback 'react'\n type User, ApiResponse, PaginationParams '.. /types'\n\n UseUsersOptions\n pageSize? number\n sortBy? keyof User\n sortOrder? 'asc' 'desc'\n\n\n export function useUsers(options\n pageSize 20, sortBy 'createdAt', sortOrder 'desc' options\n, setUsers useState<User\n, setLoading useState(false);\n, setError useState null\n, setPage useState(1)\n [hasMore, useState(true);\n\n fetchUsers useCallback(async PaginationParams\n setLoading(true);\n setError(null);\n\n query URLSearchParams\n String.,\n limit String.,\n{sortBy{sortOrder,\n\n response await fetch(/users?{query\n!response. new Error.\n ApiResponse<User await response.\n setUsers(prev. ?....,....\n setHasMore.. length.\n\nsetError ? Error(String\n\n setLoading\n\n,, sortOrder\n\n useEffect\n fetchUsers page, limit pageSize\n,,, fetchUsers\n\n const loadMore useCallback\n!loading setPage\n, [loading, hasMore\n\n const refresh useCallback\n\n setUsers\n fetchUsers page, limit pageSize\n, [pageSize, fetchUsers\n\n deleteUser useCallback(async string\n const response await fetch/api/users${id, 'DELETE'\n!response. Error'Delete failed');\n setUsers(prev. filter.\n,\n\n const updateUser useCallback(async string, Partial<User\n const response await fetch/api/users${id,\n method 'PATCH',\n headers 'Content-Type' 'application/json',\n JSON. stringify,\n\n!response. new Error'Update failed');\n const data ApiResponse<User await response. json\n setUsers(prev. map. ?.\n return data.\n,\n\n, loading, error,,, refresh,, updateUser\n\n\n export function formatUserName\n. displayName. firstName. lastName.(. email\n\n\n getUserInitials\n name = formatUserName\n return name.' '. map(p. join. toUpperCase(.,\n\n\n isUserActive\n. return false\n threshold = Date. 30 * 24 * 60 * * 1000\n return new Date. lastActiveAt. getTime( > threshold\n\n",
+                "method": "llmlingua",
+                "originalLen": 3099,
+                "compressedLen": 1769,
+                "originalTokens": 890,
+                "compressedTokens": 492
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1069,
+            "output_tokens": 5,
+            "latency_ms": 2590,
+            "body_bytes": 3562,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 644,
+            "output_tokens": 10,
+            "latency_ms": 2464,
+            "body_bytes": 2232,
+            "stop_reason": "max_tokens",
+            "compression_ms": 586,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "import useState, useEffect, useCallback 'react'\n type User, ApiResponse, PaginationParams '.. /types'\n\n UseUsersOptions\n pageSize? number\n sortBy? keyof User\n sortOrder? 'asc' 'desc'\n\n\n export function useUsers(options\n pageSize 20, sortBy 'createdAt', sortOrder 'desc' options\n, setUsers useState<User\n, setLoading useState(false);\n, setError useState null\n, setPage useState(1)\n [hasMore, useState(true);\n\n fetchUsers useCallback(async PaginationParams\n setLoading(true);\n setError(null);\n\n query URLSearchParams\n String.,\n limit String.,\n{sortBy{sortOrder,\n\n response await fetch(/users?{query\n!response. new Error.\n ApiResponse<User await response.\n setUsers(prev. ?....,....\n setHasMore.. length.\n\nsetError ? Error(String\n\n setLoading\n\n,, sortOrder\n\n useEffect\n fetchUsers page, limit pageSize\n,,, fetchUsers\n\n const loadMore useCallback\n!loading setPage\n, [loading, hasMore\n\n const refresh useCallback\n\n setUsers\n fetchUsers page, limit pageSize\n, [pageSize, fetchUsers\n\n deleteUser useCallback(async string\n const response await fetch/api/users${id, 'DELETE'\n!response. Error'Delete failed');\n setUsers(prev. filter.\n,\n\n const updateUser useCallback(async string, Partial<User\n const response await fetch/api/users${id,\n method 'PATCH',\n headers 'Content-Type' 'application/json',\n JSON. stringify,\n\n!response. new Error'Update failed');\n const data ApiResponse<User await response. json\n setUsers(prev. map. ?.\n return data.\n,\n\n, loading, error,,, refresh,, updateUser\n\n\n export function formatUserName\n. displayName. firstName. lastName.(. email\n\n\n getUserInitials\n name = formatUserName\n return name.' '. map(p. join. toUpperCase(.,\n\n\n isUserActive\n. return false\n threshold = Date. 30 * 24 * 60 * * 1000\n return new Date. lastActiveAt. getTime( > threshold\n\n",
+                "method": "llmlingua",
+                "originalLen": 3099,
+                "compressedLen": 1769,
+                "originalTokens": 890,
+                "compressedTokens": 492
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1069,
+            "output_tokens": 5,
+            "latency_ms": 3840,
+            "body_bytes": 3562,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 644,
+            "output_tokens": 10,
+            "latency_ms": 2367,
+            "body_bytes": 2232,
+            "stop_reason": "max_tokens",
+            "compression_ms": 620,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "import useState, useEffect, useCallback 'react'\n type User, ApiResponse, PaginationParams '.. /types'\n\n UseUsersOptions\n pageSize? number\n sortBy? keyof User\n sortOrder? 'asc' 'desc'\n\n\n export function useUsers(options\n pageSize 20, sortBy 'createdAt', sortOrder 'desc' options\n, setUsers useState<User\n, setLoading useState(false);\n, setError useState null\n, setPage useState(1)\n [hasMore, useState(true);\n\n fetchUsers useCallback(async PaginationParams\n setLoading(true);\n setError(null);\n\n query URLSearchParams\n String.,\n limit String.,\n{sortBy{sortOrder,\n\n response await fetch(/users?{query\n!response. new Error.\n ApiResponse<User await response.\n setUsers(prev. ?....,....\n setHasMore.. length.\n\nsetError ? Error(String\n\n setLoading\n\n,, sortOrder\n\n useEffect\n fetchUsers page, limit pageSize\n,,, fetchUsers\n\n const loadMore useCallback\n!loading setPage\n, [loading, hasMore\n\n const refresh useCallback\n\n setUsers\n fetchUsers page, limit pageSize\n, [pageSize, fetchUsers\n\n deleteUser useCallback(async string\n const response await fetch/api/users${id, 'DELETE'\n!response. Error'Delete failed');\n setUsers(prev. filter.\n,\n\n const updateUser useCallback(async string, Partial<User\n const response await fetch/api/users${id,\n method 'PATCH',\n headers 'Content-Type' 'application/json',\n JSON. stringify,\n\n!response. new Error'Update failed');\n const data ApiResponse<User await response. json\n setUsers(prev. map. ?.\n return data.\n,\n\n, loading, error,,, refresh,, updateUser\n\n\n export function formatUserName\n. displayName. firstName. lastName.(. email\n\n\n getUserInitials\n name = formatUserName\n return name.' '. map(p. join. toUpperCase(.,\n\n\n isUserActive\n. return false\n threshold = Date. 30 * 24 * 60 * * 1000\n return new Date. lastActiveAt. getTime( > threshold\n\n",
+                "method": "llmlingua",
+                "originalLen": 3099,
+                "compressedLen": 1769,
+                "originalTokens": 890,
+                "compressedTokens": 492
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1069,
+            "output_tokens": 5,
+            "latency_ms": 2568,
+            "body_bytes": 3562,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 644,
+            "output_tokens": 10,
+            "latency_ms": 2910,
+            "body_bytes": 2232,
+            "stop_reason": "max_tokens",
+            "compression_ms": 588,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "import useState, useEffect, useCallback 'react'\n type User, ApiResponse, PaginationParams '.. /types'\n\n UseUsersOptions\n pageSize? number\n sortBy? keyof User\n sortOrder? 'asc' 'desc'\n\n\n export function useUsers(options\n pageSize 20, sortBy 'createdAt', sortOrder 'desc' options\n, setUsers useState<User\n, setLoading useState(false);\n, setError useState null\n, setPage useState(1)\n [hasMore, useState(true);\n\n fetchUsers useCallback(async PaginationParams\n setLoading(true);\n setError(null);\n\n query URLSearchParams\n String.,\n limit String.,\n{sortBy{sortOrder,\n\n response await fetch(/users?{query\n!response. new Error.\n ApiResponse<User await response.\n setUsers(prev. ?....,....\n setHasMore.. length.\n\nsetError ? Error(String\n\n setLoading\n\n,, sortOrder\n\n useEffect\n fetchUsers page, limit pageSize\n,,, fetchUsers\n\n const loadMore useCallback\n!loading setPage\n, [loading, hasMore\n\n const refresh useCallback\n\n setUsers\n fetchUsers page, limit pageSize\n, [pageSize, fetchUsers\n\n deleteUser useCallback(async string\n const response await fetch/api/users${id, 'DELETE'\n!response. Error'Delete failed');\n setUsers(prev. filter.\n,\n\n const updateUser useCallback(async string, Partial<User\n const response await fetch/api/users${id,\n method 'PATCH',\n headers 'Content-Type' 'application/json',\n JSON. stringify,\n\n!response. new Error'Update failed');\n const data ApiResponse<User await response. json\n setUsers(prev. map. ?.\n return data.\n,\n\n, loading, error,,, refresh,, updateUser\n\n\n export function formatUserName\n. displayName. firstName. lastName.(. email\n\n\n getUserInitials\n name = formatUserName\n return name.' '. map(p. join. toUpperCase(.,\n\n\n isUserActive\n. return false\n threshold = Date. 30 * 24 * 60 * * 1000\n return new Date. lastActiveAt. getTime( > threshold\n\n",
+                "method": "llmlingua",
+                "originalLen": 3099,
+                "compressedLen": 1769,
+                "originalTokens": 890,
+                "compressedTokens": 492
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1069,
+            "output_tokens": 4,
+            "latency_ms": 2753,
+            "body_bytes": 3562,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 644,
+            "output_tokens": 10,
+            "latency_ms": 2009,
+            "body_bytes": 2232,
+            "stop_reason": "max_tokens",
+            "compression_ms": 617,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "import useState, useEffect, useCallback 'react'\n type User, ApiResponse, PaginationParams '.. /types'\n\n UseUsersOptions\n pageSize? number\n sortBy? keyof User\n sortOrder? 'asc' 'desc'\n\n\n export function useUsers(options\n pageSize 20, sortBy 'createdAt', sortOrder 'desc' options\n, setUsers useState<User\n, setLoading useState(false);\n, setError useState null\n, setPage useState(1)\n [hasMore, useState(true);\n\n fetchUsers useCallback(async PaginationParams\n setLoading(true);\n setError(null);\n\n query URLSearchParams\n String.,\n limit String.,\n{sortBy{sortOrder,\n\n response await fetch(/users?{query\n!response. new Error.\n ApiResponse<User await response.\n setUsers(prev. ?....,....\n setHasMore.. length.\n\nsetError ? Error(String\n\n setLoading\n\n,, sortOrder\n\n useEffect\n fetchUsers page, limit pageSize\n,,, fetchUsers\n\n const loadMore useCallback\n!loading setPage\n, [loading, hasMore\n\n const refresh useCallback\n\n setUsers\n fetchUsers page, limit pageSize\n, [pageSize, fetchUsers\n\n deleteUser useCallback(async string\n const response await fetch/api/users${id, 'DELETE'\n!response. Error'Delete failed');\n setUsers(prev. filter.\n,\n\n const updateUser useCallback(async string, Partial<User\n const response await fetch/api/users${id,\n method 'PATCH',\n headers 'Content-Type' 'application/json',\n JSON. stringify,\n\n!response. new Error'Update failed');\n const data ApiResponse<User await response. json\n setUsers(prev. map. ?.\n return data.\n,\n\n, loading, error,,, refresh,, updateUser\n\n\n export function formatUserName\n. displayName. firstName. lastName.(. email\n\n\n getUserInitials\n name = formatUserName\n return name.' '. map(p. join. toUpperCase(.,\n\n\n isUserActive\n. return false\n threshold = Date. 30 * 24 * 60 * * 1000\n return new Date. lastActiveAt. getTime( > threshold\n\n",
+                "method": "llmlingua",
+                "originalLen": 3099,
+                "compressedLen": 1769,
+                "originalTokens": 890,
+                "compressedTokens": 492
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi-turn",
+      "name": "Multi-turn Conversation",
+      "description": "5-turn conversation mixing text and tool_results — only last user msg compressed",
+      "expectedCompression": "mixed",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 1026,
+            "output_tokens": 5,
+            "latency_ms": 3148,
+            "body_bytes": 3516,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 790,
+            "output_tokens": 5,
+            "latency_ms": 2754,
+            "body_bytes": 2869,
+            "stop_reason": "end_turn",
+            "compression_ms": 59,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"routes\":[{\"method\":\"GET\",\"path\":\"/api/users\",\"handler\":\"UserController.list\",\"middleware\":[\"auth\"]},{\"method\":\"POST\",\"path\":\"/api/users\",\"handler\":\"UserController.create\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"GET\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.show\",\"middleware\":[\"auth\"]},{\"method\":\"PUT\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.update\",\"middleware\":[\"auth\"]},{\"method\":\"DELETE\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.delete\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"POST\",\"path\":\"/api/auth/login\",\"handler\":\"AuthController.login\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/register\",\"handler\":\"AuthController.register\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/refresh\",\"handler\":\"AuthController.refresh\",\"middleware\":[\"auth\"]},{\"method\":\"GET\",\"path\":\"/api/health\",\"handler\":\"HealthController.check\",\"middleware\":[]},{\"method\":\"GET\",\"path\":\"/api/metrics\",\"handler\":\"MetricsController.summary\",\"middleware\":[\"auth\",\"admin\"]}]}",
+                "method": "minify",
+                "originalLen": 1560,
+                "compressedLen": 993,
+                "originalTokens": 426,
+                "compressedTokens": 242
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1026,
+            "output_tokens": 10,
+            "latency_ms": 1914,
+            "body_bytes": 3516,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 790,
+            "output_tokens": 10,
+            "latency_ms": 1953,
+            "body_bytes": 2869,
+            "stop_reason": "max_tokens",
+            "compression_ms": 50,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"routes\":[{\"method\":\"GET\",\"path\":\"/api/users\",\"handler\":\"UserController.list\",\"middleware\":[\"auth\"]},{\"method\":\"POST\",\"path\":\"/api/users\",\"handler\":\"UserController.create\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"GET\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.show\",\"middleware\":[\"auth\"]},{\"method\":\"PUT\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.update\",\"middleware\":[\"auth\"]},{\"method\":\"DELETE\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.delete\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"POST\",\"path\":\"/api/auth/login\",\"handler\":\"AuthController.login\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/register\",\"handler\":\"AuthController.register\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/refresh\",\"handler\":\"AuthController.refresh\",\"middleware\":[\"auth\"]},{\"method\":\"GET\",\"path\":\"/api/health\",\"handler\":\"HealthController.check\",\"middleware\":[]},{\"method\":\"GET\",\"path\":\"/api/metrics\",\"handler\":\"MetricsController.summary\",\"middleware\":[\"auth\",\"admin\"]}]}",
+                "method": "minify",
+                "originalLen": 1560,
+                "compressedLen": 993,
+                "originalTokens": 426,
+                "compressedTokens": 242
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1026,
+            "output_tokens": 10,
+            "latency_ms": 2328,
+            "body_bytes": 3516,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 790,
+            "output_tokens": 10,
+            "latency_ms": 2346,
+            "body_bytes": 2869,
+            "stop_reason": "max_tokens",
+            "compression_ms": 50,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"routes\":[{\"method\":\"GET\",\"path\":\"/api/users\",\"handler\":\"UserController.list\",\"middleware\":[\"auth\"]},{\"method\":\"POST\",\"path\":\"/api/users\",\"handler\":\"UserController.create\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"GET\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.show\",\"middleware\":[\"auth\"]},{\"method\":\"PUT\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.update\",\"middleware\":[\"auth\"]},{\"method\":\"DELETE\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.delete\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"POST\",\"path\":\"/api/auth/login\",\"handler\":\"AuthController.login\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/register\",\"handler\":\"AuthController.register\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/refresh\",\"handler\":\"AuthController.refresh\",\"middleware\":[\"auth\"]},{\"method\":\"GET\",\"path\":\"/api/health\",\"handler\":\"HealthController.check\",\"middleware\":[]},{\"method\":\"GET\",\"path\":\"/api/metrics\",\"handler\":\"MetricsController.summary\",\"middleware\":[\"auth\",\"admin\"]}]}",
+                "method": "minify",
+                "originalLen": 1560,
+                "compressedLen": 993,
+                "originalTokens": 426,
+                "compressedTokens": 242
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1026,
+            "output_tokens": 10,
+            "latency_ms": 2104,
+            "body_bytes": 3516,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 790,
+            "output_tokens": 10,
+            "latency_ms": 2255,
+            "body_bytes": 2869,
+            "stop_reason": "max_tokens",
+            "compression_ms": 53,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"routes\":[{\"method\":\"GET\",\"path\":\"/api/users\",\"handler\":\"UserController.list\",\"middleware\":[\"auth\"]},{\"method\":\"POST\",\"path\":\"/api/users\",\"handler\":\"UserController.create\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"GET\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.show\",\"middleware\":[\"auth\"]},{\"method\":\"PUT\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.update\",\"middleware\":[\"auth\"]},{\"method\":\"DELETE\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.delete\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"POST\",\"path\":\"/api/auth/login\",\"handler\":\"AuthController.login\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/register\",\"handler\":\"AuthController.register\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/refresh\",\"handler\":\"AuthController.refresh\",\"middleware\":[\"auth\"]},{\"method\":\"GET\",\"path\":\"/api/health\",\"handler\":\"HealthController.check\",\"middleware\":[]},{\"method\":\"GET\",\"path\":\"/api/metrics\",\"handler\":\"MetricsController.summary\",\"middleware\":[\"auth\",\"admin\"]}]}",
+                "method": "minify",
+                "originalLen": 1560,
+                "compressedLen": 993,
+                "originalTokens": 426,
+                "compressedTokens": 242
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 1026,
+            "output_tokens": 10,
+            "latency_ms": 2303,
+            "body_bytes": 3516,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 790,
+            "output_tokens": 5,
+            "latency_ms": 2790,
+            "body_bytes": 2869,
+            "stop_reason": "end_turn",
+            "compression_ms": 55,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "{\"routes\":[{\"method\":\"GET\",\"path\":\"/api/users\",\"handler\":\"UserController.list\",\"middleware\":[\"auth\"]},{\"method\":\"POST\",\"path\":\"/api/users\",\"handler\":\"UserController.create\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"GET\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.show\",\"middleware\":[\"auth\"]},{\"method\":\"PUT\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.update\",\"middleware\":[\"auth\"]},{\"method\":\"DELETE\",\"path\":\"/api/users/:id\",\"handler\":\"UserController.delete\",\"middleware\":[\"auth\",\"admin\"]},{\"method\":\"POST\",\"path\":\"/api/auth/login\",\"handler\":\"AuthController.login\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/register\",\"handler\":\"AuthController.register\",\"middleware\":[]},{\"method\":\"POST\",\"path\":\"/api/auth/refresh\",\"handler\":\"AuthController.refresh\",\"middleware\":[\"auth\"]},{\"method\":\"GET\",\"path\":\"/api/health\",\"handler\":\"HealthController.check\",\"middleware\":[]},{\"method\":\"GET\",\"path\":\"/api/metrics\",\"handler\":\"MetricsController.summary\",\"middleware\":[\"auth\",\"admin\"]}]}",
+                "method": "minify",
+                "originalLen": 1560,
+                "compressedLen": 993,
+                "originalTokens": 426,
+                "compressedTokens": 242
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "line-numbered",
+      "name": "Line-Numbered Output",
+      "description": "Read tool output with line number prefixes — strip + minify",
+      "expectedCompression": "15-30%",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 473,
+            "output_tokens": 10,
+            "latency_ms": 3425,
+            "body_bytes": 1465,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 323,
+            "output_tokens": 10,
+            "latency_ms": 2580,
+            "body_bytes": 1050,
+            "stop_reason": "max_tokens",
+            "compression_ms": 48,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "compilerOptions:\n  target: ES2022\n  module: ESNext\n  moduleResolution: bundler\n  strict: true\n  esModuleInterop: true\n  skipLibCheck: true\n  forceConsistentCasingInFileNames: true\n  resolveJsonModule: true\n  declaration: true\n  declarationMap: true\n  sourceMap: true\n  outDir: ./dist\n  rootDir: ./src\n  baseUrl: .\n  paths:\n    \"@/*\"[1]: ./src/*\n    \"@components/*\"[1]: ./src/components/*\n    \"@utils/*\"[1]: ./src/utils/*\n    \"@types/*\"[1]: ./src/types/*\n  lib[3]: ES2022,DOM,DOM.Iterable\n  jsx: react-jsx\n  incremental: true\n  tsBuildInfoFile: ./dist/.tsbuildinfo\ninclude[2]: src/**/*.ts,src/**/*.tsx\nexclude[3]: node_modules,dist,**/*.test.ts",
+                "method": "toon",
+                "originalLen": 939,
+                "compressedLen": 643,
+                "originalTokens": 328,
+                "compressedTokens": 200
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 473,
+            "output_tokens": 5,
+            "latency_ms": 2898,
+            "body_bytes": 1465,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 323,
+            "output_tokens": 5,
+            "latency_ms": 2309,
+            "body_bytes": 1050,
+            "stop_reason": "end_turn",
+            "compression_ms": 46,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "compilerOptions:\n  target: ES2022\n  module: ESNext\n  moduleResolution: bundler\n  strict: true\n  esModuleInterop: true\n  skipLibCheck: true\n  forceConsistentCasingInFileNames: true\n  resolveJsonModule: true\n  declaration: true\n  declarationMap: true\n  sourceMap: true\n  outDir: ./dist\n  rootDir: ./src\n  baseUrl: .\n  paths:\n    \"@/*\"[1]: ./src/*\n    \"@components/*\"[1]: ./src/components/*\n    \"@utils/*\"[1]: ./src/utils/*\n    \"@types/*\"[1]: ./src/types/*\n  lib[3]: ES2022,DOM,DOM.Iterable\n  jsx: react-jsx\n  incremental: true\n  tsBuildInfoFile: ./dist/.tsbuildinfo\ninclude[2]: src/**/*.ts,src/**/*.tsx\nexclude[3]: node_modules,dist,**/*.test.ts",
+                "method": "toon",
+                "originalLen": 939,
+                "compressedLen": 643,
+                "originalTokens": 328,
+                "compressedTokens": 200
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 473,
+            "output_tokens": 5,
+            "latency_ms": 3048,
+            "body_bytes": 1465,
+            "stop_reason": "end_turn"
+          },
+          "treatment": {
+            "input_tokens": 323,
+            "output_tokens": 10,
+            "latency_ms": 3341,
+            "body_bytes": 1050,
+            "stop_reason": "max_tokens",
+            "compression_ms": 45,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "compilerOptions:\n  target: ES2022\n  module: ESNext\n  moduleResolution: bundler\n  strict: true\n  esModuleInterop: true\n  skipLibCheck: true\n  forceConsistentCasingInFileNames: true\n  resolveJsonModule: true\n  declaration: true\n  declarationMap: true\n  sourceMap: true\n  outDir: ./dist\n  rootDir: ./src\n  baseUrl: .\n  paths:\n    \"@/*\"[1]: ./src/*\n    \"@components/*\"[1]: ./src/components/*\n    \"@utils/*\"[1]: ./src/utils/*\n    \"@types/*\"[1]: ./src/types/*\n  lib[3]: ES2022,DOM,DOM.Iterable\n  jsx: react-jsx\n  incremental: true\n  tsBuildInfoFile: ./dist/.tsbuildinfo\ninclude[2]: src/**/*.ts,src/**/*.tsx\nexclude[3]: node_modules,dist,**/*.test.ts",
+                "method": "toon",
+                "originalLen": 939,
+                "compressedLen": 643,
+                "originalTokens": 328,
+                "compressedTokens": 200
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 473,
+            "output_tokens": 10,
+            "latency_ms": 3200,
+            "body_bytes": 1465,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 323,
+            "output_tokens": 10,
+            "latency_ms": 2144,
+            "body_bytes": 1050,
+            "stop_reason": "max_tokens",
+            "compression_ms": 51,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "compilerOptions:\n  target: ES2022\n  module: ESNext\n  moduleResolution: bundler\n  strict: true\n  esModuleInterop: true\n  skipLibCheck: true\n  forceConsistentCasingInFileNames: true\n  resolveJsonModule: true\n  declaration: true\n  declarationMap: true\n  sourceMap: true\n  outDir: ./dist\n  rootDir: ./src\n  baseUrl: .\n  paths:\n    \"@/*\"[1]: ./src/*\n    \"@components/*\"[1]: ./src/components/*\n    \"@utils/*\"[1]: ./src/utils/*\n    \"@types/*\"[1]: ./src/types/*\n  lib[3]: ES2022,DOM,DOM.Iterable\n  jsx: react-jsx\n  incremental: true\n  tsBuildInfoFile: ./dist/.tsbuildinfo\ninclude[2]: src/**/*.ts,src/**/*.tsx\nexclude[3]: node_modules,dist,**/*.test.ts",
+                "method": "toon",
+                "originalLen": 939,
+                "compressedLen": 643,
+                "originalTokens": 328,
+                "compressedTokens": 200
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 473,
+            "output_tokens": 10,
+            "latency_ms": 2457,
+            "body_bytes": 1465,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 323,
+            "output_tokens": 10,
+            "latency_ms": 2196,
+            "body_bytes": 1050,
+            "stop_reason": "max_tokens",
+            "compression_ms": 51,
+            "compress_stats": [
+              {
+                "index": 0,
+                "text": "compilerOptions:\n  target: ES2022\n  module: ESNext\n  moduleResolution: bundler\n  strict: true\n  esModuleInterop: true\n  skipLibCheck: true\n  forceConsistentCasingInFileNames: true\n  resolveJsonModule: true\n  declaration: true\n  declarationMap: true\n  sourceMap: true\n  outDir: ./dist\n  rootDir: ./src\n  baseUrl: .\n  paths:\n    \"@/*\"[1]: ./src/*\n    \"@components/*\"[1]: ./src/components/*\n    \"@utils/*\"[1]: ./src/utils/*\n    \"@types/*\"[1]: ./src/types/*\n  lib[3]: ES2022,DOM,DOM.Iterable\n  jsx: react-jsx\n  incremental: true\n  tsBuildInfoFile: ./dist/.tsbuildinfo\ninclude[2]: src/**/*.ts,src/**/*.tsx\nexclude[3]: node_modules,dist,**/*.test.ts",
+                "method": "toon",
+                "originalLen": 939,
+                "compressedLen": 643,
+                "originalTokens": 328,
+                "compressedTokens": 200
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "error-result",
+      "name": "Error Result",
+      "description": "is_error: true tool_result — should be skipped entirely",
+      "expectedCompression": "0%",
+      "runs": [
+        {
+          "control": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2181,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2156,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens",
+            "compression_ms": 0,
+            "compress_stats": [
+              {
+                "index": 0,
+                "skipped": "error"
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2089,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 3012,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens",
+            "compression_ms": 0,
+            "compress_stats": [
+              {
+                "index": 0,
+                "skipped": "error"
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2710,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2070,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens",
+            "compression_ms": 0,
+            "compress_stats": [
+              {
+                "index": 0,
+                "skipped": "error"
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2694,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2083,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens",
+            "compression_ms": 0,
+            "compress_stats": [
+              {
+                "index": 0,
+                "skipped": "error"
+              }
+            ]
+          }
+        },
+        {
+          "control": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2548,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens"
+          },
+          "treatment": {
+            "input_tokens": 167,
+            "output_tokens": 10,
+            "latency_ms": 2265,
+            "body_bytes": 647,
+            "stop_reason": "max_tokens",
+            "compression_ms": 0,
+            "compress_stats": [
+              {
+                "index": 0,
+                "skipped": "error"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

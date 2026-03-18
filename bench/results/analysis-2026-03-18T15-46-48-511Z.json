@@ -1,0 +1,423 @@
+{
+  "meta": {
+    "timestamp": "2026-03-18T15:41:34.084Z",
+    "model": "anthropic/claude-sonnet-4-20250514",
+    "pricing": {
+      "input_per_mtok": 3,
+      "output_per_mtok": 15
+    },
+    "runs": 5,
+    "analysis_timestamp": "2026-03-18T15:46:48.510Z",
+    "source_file": "bench/results/raw-2026-03-18T15-46-10-785Z.json"
+  },
+  "scenarios": [
+    {
+      "id": "small-json",
+      "name": "Small JSON (package.json)",
+      "expectedCompression": "15-25%",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 315,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 7.8,
+          "std": 3.0331501776206204
+        },
+        "body_bytes": {
+          "mean": 1004
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 246,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 6,
+          "std": 2.23606797749979
+        },
+        "body_bytes": {
+          "mean": 792
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 69,
+          "std": 0,
+          "ci_95": [
+            69,
+            69
+          ]
+        },
+        "pct": {
+          "mean": 21.904761904761905,
+          "std": 0,
+          "ci_95": [
+            21.904761904761905,
+            21.904761904761905
+          ]
+        }
+      },
+      "char_compression_ratio": 0.7888446215139442,
+      "dollar_saved_per_request": 0.00020700000000000002,
+      "compression_ms": {
+        "mean": 52.8,
+        "std": 5.761944116355173
+      },
+      "semantic_check": "PASS"
+    },
+    {
+      "id": "large-json",
+      "name": "Large JSON (dependency tree)",
+      "expectedCompression": "20-35%",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 6773,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 6,
+          "std": 2.23606797749979
+        },
+        "body_bytes": {
+          "mean": 18511
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 4855,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 7,
+          "std": 2.7386127875258306
+        },
+        "body_bytes": {
+          "mean": 13382
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 1918,
+          "std": 0,
+          "ci_95": [
+            1918,
+            1918
+          ]
+        },
+        "pct": {
+          "mean": 28.318322752103946,
+          "std": 3.972054645195637e-15,
+          "ci_95": [
+            28.318322752103942,
+            28.31832275210395
+          ]
+        }
+      },
+      "char_compression_ratio": 0.7229215061314894,
+      "dollar_saved_per_request": 0.0057540000000000004,
+      "compression_ms": {
+        "mean": 56.6,
+        "std": 5.727128425310542
+      },
+      "semantic_check": "PASS"
+    },
+    {
+      "id": "tabular-data",
+      "name": "Tabular Data (file listing)",
+      "expectedCompression": "40-60%",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 3572,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 8,
+          "std": 2.7386127875258306
+        },
+        "body_bytes": {
+          "mean": 9109
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 1833,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 6,
+          "std": 2.23606797749979
+        },
+        "body_bytes": {
+          "mean": 3648
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 1739,
+          "std": 0,
+          "ci_95": [
+            1739,
+            1739
+          ]
+        },
+        "pct": {
+          "mean": 48.68421052631579,
+          "std": 0,
+          "ci_95": [
+            48.68421052631579,
+            48.68421052631579
+          ]
+        }
+      },
+      "char_compression_ratio": 0.4004830387528818,
+      "dollar_saved_per_request": 0.005217,
+      "compression_ms": {
+        "mean": 82.4,
+        "std": 61.30497532827168
+      },
+      "semantic_check": "PASS"
+    },
+    {
+      "id": "source-code",
+      "name": "Source Code (TypeScript)",
+      "expectedCompression": "0%",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 1069,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 4.8,
+          "std": 0.4472135954999579
+        },
+        "body_bytes": {
+          "mean": 3562
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 644,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 10,
+          "std": 0
+        },
+        "body_bytes": {
+          "mean": 2232
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 425,
+          "std": 0,
+          "ci_95": [
+            425,
+            425
+          ]
+        },
+        "pct": {
+          "mean": 39.75678203928905,
+          "std": 0,
+          "ci_95": [
+            39.75678203928905,
+            39.75678203928905
+          ]
+        }
+      },
+      "char_compression_ratio": 0.626614261650758,
+      "dollar_saved_per_request": 0.001275,
+      "compression_ms": {
+        "mean": 636.6,
+        "std": 77.32270041844116
+      },
+      "semantic_check": "WARN"
+    },
+    {
+      "id": "multi-turn",
+      "name": "Multi-turn Conversation",
+      "expectedCompression": "mixed",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 1026,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 9,
+          "std": 2.23606797749979
+        },
+        "body_bytes": {
+          "mean": 3516
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 790,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 8,
+          "std": 2.7386127875258306
+        },
+        "body_bytes": {
+          "mean": 2869
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 236,
+          "std": 0,
+          "ci_95": [
+            236,
+            236
+          ]
+        },
+        "pct": {
+          "mean": 23.00194931773879,
+          "std": 0,
+          "ci_95": [
+            23.00194931773879,
+            23.00194931773879
+          ]
+        }
+      },
+      "char_compression_ratio": 0.8159840728100114,
+      "dollar_saved_per_request": 0.000708,
+      "compression_ms": {
+        "mean": 53.4,
+        "std": 3.7815340802378072
+      },
+      "semantic_check": "PASS"
+    },
+    {
+      "id": "line-numbered",
+      "name": "Line-Numbered Output",
+      "expectedCompression": "15-30%",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 473,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 8,
+          "std": 2.7386127875258306
+        },
+        "body_bytes": {
+          "mean": 1465
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 323,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 9,
+          "std": 2.23606797749979
+        },
+        "body_bytes": {
+          "mean": 1050
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 150,
+          "std": 0,
+          "ci_95": [
+            150,
+            150
+          ]
+        },
+        "pct": {
+          "mean": 31.712473572938688,
+          "std": 3.972054645195637e-15,
+          "ci_95": [
+            31.712473572938684,
+            31.71247357293869
+          ]
+        }
+      },
+      "char_compression_ratio": 0.7167235494880546,
+      "dollar_saved_per_request": 0.00045,
+      "compression_ms": {
+        "mean": 48.2,
+        "std": 2.7748873851023212
+      },
+      "semantic_check": "PASS"
+    },
+    {
+      "id": "error-result",
+      "name": "Error Result",
+      "expectedCompression": "0%",
+      "n": 5,
+      "control": {
+        "input_tokens": {
+          "mean": 167,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 10,
+          "std": 0
+        },
+        "body_bytes": {
+          "mean": 647
+        }
+      },
+      "treatment": {
+        "input_tokens": {
+          "mean": 167,
+          "std": 0
+        },
+        "output_tokens": {
+          "mean": 10,
+          "std": 0
+        },
+        "body_bytes": {
+          "mean": 647
+        }
+      },
+      "savings": {
+        "tokens": {
+          "mean": 0,
+          "std": 0,
+          "ci_95": [
+            0,
+            0
+          ]
+        },
+        "pct": {
+          "mean": 0,
+          "std": 0,
+          "ci_95": [
+            0,
+            0
+          ]
+        }
+      },
+      "char_compression_ratio": 1,
+      "dollar_saved_per_request": 0,
+      "compression_ms": {
+        "mean": 0,
+        "std": 0
+      },
+      "semantic_check": "PASS"
+    }
+  ],
+  "aggregate": {
+    "weighted_pct_reduction": 33.87084733109369,
+    "session_projection": {
+      "requests_per_session": 200,
+      "compressible_rate": 0.6,
+      "tokens_saved_per_session": 77777,
+      "dollars_saved_per_session": 0.23333142857142858
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Tamp
 
-**Token compression proxy for coding agents.** 33.9% fewer input tokens, zero code changes. Works with Claude Code, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
+**Token compression proxy for coding agents.** 33.9% fewer input tokens, zero code changes. Works with Claude Code, Codex, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
 
 ```
 npx @sliday/tamp
@@ -19,6 +19,7 @@ Tamp auto-detects your agent's API format and compresses tool result blocks befo
 ```
 Claude Code ──► Tamp (localhost:7778) ──► Anthropic API
 Aider/Cursor ──►          │          ──► OpenAI API
+Codex CLI ─────►          │          ──► OpenAI API
 Gemini CLI ────►          │          ──► Google AI API
                           │
                           ├─ JSON → minify whitespace
@@ -34,6 +35,7 @@ Gemini CLI ────►          │          ──► Google AI API
 |--------|----------|--------|
 | Anthropic Messages | `POST /v1/messages` | Claude Code |
 | OpenAI Chat Completions | `POST /v1/chat/completions` | Aider, Cursor, Cline, Windsurf, OpenCode |
+| OpenAI Responses | `POST /v1/responses` | Codex CLI |
 | Google Gemini | `POST .../generateContent` | Gemini CLI |
 
 ### Compression Stages
@@ -81,6 +83,12 @@ export OPENAI_API_BASE=http://localhost:7778
 aider
 ```
 
+**Codex CLI:**
+Add to `~/.codex/config.toml`:
+```toml
+openai_base_url = "http://localhost:7778"
+```
+
 **Cursor / Cline / Windsurf:**
 Set the API base URL to `http://localhost:7778` in your editor's settings.
 
@@ -96,7 +104,7 @@ All configuration via environment variables:
 | `TAMP_UPSTREAM` | `https://api.anthropic.com` | Default upstream API URL |
 | `TAMP_UPSTREAM_OPENAI` | `https://api.openai.com` | Upstream for OpenAI-format requests |
 | `TAMP_UPSTREAM_GEMINI` | `https://generativelanguage.googleapis.com` | Upstream for Gemini-format requests |
-| `TAMP_STAGES` | `minify` | Comma-separated compression stages |
+| `TAMP_STAGES` | `minify,toon` | Comma-separated compression stages |
 | `TAMP_MIN_SIZE` | `200` | Minimum content size (chars) to attempt compression |
 | `TAMP_LOG` | `true` | Enable request logging to stderr |
 | `TAMP_LOG_FILE` | _(none)_ | Write logs to file |

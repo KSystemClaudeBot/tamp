@@ -1,6 +1,7 @@
 import { describe, it, before, after } from 'node:test'
 import assert from 'node:assert/strict'
 import http from 'node:http'
+import zlib from 'node:zlib'
 import { createProxy } from '../index.js'
 
 let mockUpstream, mockPort, proxy, proxyPort
@@ -128,6 +129,93 @@ describe('proxy integration', () => {
     const res = await request(proxyPort, 'POST', '/v1/messages', body, { 'Content-Type': 'application/json' })
     const received = JSON.parse(res.body.toString())
     assert.equal(received.messages[0].content[0].content, historicalContent)
+  })
+
+  it('decompresses gzip request body and compresses content', async () => {
+    const jsonBody = JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      messages: [{
+        role: 'user',
+        content: [{
+          type: 'tool_result',
+          tool_use_id: 'tu_gz',
+          content: JSON.stringify({ name: 'tamp', version: '0.1.0', type: 'module', main: 'index.js' }, null, 2),
+        }],
+      }],
+    })
+    const gzipped = zlib.gzipSync(Buffer.from(jsonBody))
+
+    const res = await request(proxyPort, 'POST', '/v1/messages', gzipped, {
+      'Content-Type': 'application/json',
+      'Content-Encoding': 'gzip',
+    })
+    assert.equal(res.status, 200)
+    const received = JSON.parse(res.body.toString())
+    const content = received.messages[0].content[0].content
+    assert.ok(!content.includes('\n'), 'gzipped tool_result should be minified')
+  })
+
+  it('decompresses deflate request body', async () => {
+    const jsonBody = JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      messages: [{
+        role: 'user',
+        content: [{
+          type: 'tool_result',
+          tool_use_id: 'tu_df',
+          content: JSON.stringify({ key: 'value', description: 'deflated content for testing purposes' }, null, 2),
+        }],
+      }],
+    })
+    const deflated = zlib.deflateSync(Buffer.from(jsonBody))
+
+    const res = await request(proxyPort, 'POST', '/v1/messages', deflated, {
+      'Content-Type': 'application/json',
+      'Content-Encoding': 'deflate',
+    })
+    assert.equal(res.status, 200)
+    const received = JSON.parse(res.body.toString())
+    const content = received.messages[0].content[0].content
+    assert.ok(!content.includes('\n'), 'deflated tool_result should be minified')
+  })
+
+  it('passes through gzip body unchanged when not valid JSON inside', async () => {
+    const gzipped = zlib.gzipSync(Buffer.from('this is not json {'))
+
+    const res = await request(proxyPort, 'POST', '/v1/messages', gzipped, {
+      'Content-Type': 'application/json',
+      'Content-Encoding': 'gzip',
+    })
+    assert.equal(res.status, 200)
+    // Original gzipped body passed through unchanged
+    assert.deepEqual(res.body, gzipped)
+  })
+
+  it('routes /v1/responses to openai upstream', async () => {
+    const body = JSON.stringify({ model: 'gpt-4', input: 'hello' })
+    const res = await request(proxyPort, 'POST', '/v1/responses', body, { 'Content-Type': 'application/json' })
+    assert.equal(res.status, 200)
+    assert.equal(res.headers['x-echo'], 'true')
+  })
+
+  it('routes /responses (no /v1) to openai upstream', async () => {
+    const body = JSON.stringify({ model: 'gpt-4', input: 'hello' })
+    const res = await request(proxyPort, 'POST', '/responses', body, { 'Content-Type': 'application/json' })
+    assert.equal(res.status, 200)
+    assert.equal(res.headers['x-echo'], 'true')
+  })
+
+  it('routes /v1/chat/completions to openai upstream', async () => {
+    const body = JSON.stringify({
+      model: 'gpt-4',
+      messages: [
+        { role: 'assistant', tool_calls: [{ id: 'call_1', type: 'function', function: { name: 'read', arguments: '{}' } }] },
+        { role: 'tool', tool_call_id: 'call_1', content: JSON.stringify({ file: 'data', extra: 'fields for length padding' }, null, 2) },
+      ],
+    })
+    const res = await request(proxyPort, 'POST', '/v1/chat/completions', body, { 'Content-Type': 'application/json' })
+    assert.equal(res.status, 200)
+    assert.equal(res.headers['x-echo'], 'true')
   })
 
   it('streams SSE responses through', async () => {

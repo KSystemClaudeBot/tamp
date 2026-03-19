@@ -30,6 +30,14 @@ describe('detectProvider', () => {
   it('returns openai for POST /chat/completions (no /v1 prefix)', () => {
     assert.equal(detectProvider('POST', '/chat/completions').name, 'openai')
   })
+
+  it('returns openai for POST /v1/responses', () => {
+    assert.equal(detectProvider('POST', '/v1/responses').name, 'openai')
+  })
+
+  it('returns openai for POST /responses (no /v1 prefix)', () => {
+    assert.equal(detectProvider('POST', '/responses').name, 'openai')
+  })
 })
 
 describe('openai normalizeUrl', () => {
@@ -39,6 +47,14 @@ describe('openai normalizeUrl', () => {
 
   it('keeps /v1 prefix as-is', () => {
     assert.equal(openai.normalizeUrl('/v1/chat/completions'), '/v1/chat/completions')
+  })
+
+  it('prepends /v1 to /responses', () => {
+    assert.equal(openai.normalizeUrl('/responses'), '/v1/responses')
+  })
+
+  it('keeps /v1/responses as-is', () => {
+    assert.equal(openai.normalizeUrl('/v1/responses'), '/v1/responses')
   })
 })
 

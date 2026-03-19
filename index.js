@@ -1,5 +1,6 @@
 import http from 'node:http'
 import https from 'node:https'
+import zlib from 'node:zlib'
 import { loadConfig } from './config.js'
 import { compressRequest } from './compress.js'
 import { detectProvider } from './providers.js'
@@ -138,10 +139,29 @@ return http.createServer(async (req, res) => {
   const headers = { ...req.headers }
   delete headers.host
 
+  // Decompress gzip/deflate/br if needed
+  const encoding = (req.headers['content-encoding'] || '').toLowerCase()
+  let textBody
   try {
-    const parsed = JSON.parse(rawBody.toString('utf-8'))
+    if (encoding === 'gzip') {
+      textBody = zlib.gunzipSync(rawBody)
+    } else if (encoding === 'deflate') {
+      textBody = zlib.inflateSync(rawBody)
+    } else if (encoding === 'br') {
+      textBody = zlib.brotliDecompressSync(rawBody)
+    } else {
+      textBody = rawBody
+    }
+  } catch {
+    textBody = rawBody
+  }
+
+  try {
+    const parsed = JSON.parse(textBody.toString('utf-8'))
     const { body, stats } = await compressRequest(parsed, config, provider)
     finalBody = Buffer.from(JSON.stringify(body), 'utf-8')
+    // Send uncompressed — simpler and content-length is accurate
+    delete headers['content-encoding']
 
     if (config.log && stats.length) {
       session.record(stats)

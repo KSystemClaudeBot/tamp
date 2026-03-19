@@ -7,7 +7,7 @@ describe('loadConfig', () => {
     const cfg = loadConfig({})
     assert.equal(cfg.port, 7778)
     assert.equal(cfg.upstream, 'https://api.anthropic.com')
-    assert.deepEqual(cfg.stages, ['minify'])
+    assert.deepEqual(cfg.stages, ['minify', 'toon'])
     assert.equal(cfg.minSize, 200)
     assert.equal(cfg.log, true)
     assert.equal(cfg.maxBody, 10_485_760)

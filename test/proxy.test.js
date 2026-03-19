@@ -45,6 +45,7 @@ describe('proxy integration', () => {
       upstream: `http://127.0.0.1:${mockPort}`,
       log: false,
       minSize: 50,
+      stages: ['minify'],
     })
     proxy = server
     await new Promise(resolve => {

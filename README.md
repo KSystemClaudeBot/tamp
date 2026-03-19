@@ -44,7 +44,7 @@ Gemini CLI ────►          │          ──► Google AI API
 | `toon` | Columnar [TOON encoding](https://github.com/nicholasgasior/toon-format) | Homogeneous arrays (file listings, routes, deps) |
 | `llmlingua` | Neural text compression via [LLMLingua](https://github.com/microsoft/LLMLingua) sidecar | Natural language text (requires sidecar) |
 
-Only `minify` is enabled by default. Enable more with `TAMP_STAGES=minify,toon`.
+`minify` and `toon` are enabled by default. Add LLMLingua with `TAMP_STAGES=minify,toon,llmlingua`.
 
 ## Quick Start
 
@@ -107,7 +107,7 @@ All configuration via environment variables:
 
 ```bash
 # Maximum compression
-TAMP_STAGES=minify,toon npx @sliday/tamp
+TAMP_STAGES=minify,toon,llmlingua TAMP_LLMLINGUA_URL=http://localhost:8788 npx @sliday/tamp
 ```
 
 ## Installation Methods

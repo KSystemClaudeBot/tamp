@@ -59,12 +59,12 @@ function printBanner(config) {
 }
 
 // --- Auto-start LLMLingua-2 sidecar if needed ---
-const needsSidecar = config.stages.includes('llmlingua') && !config.llmLinguaUrl
+let { config: finalConfig, server: finalServer } = createProxy()
+
+const needsSidecar = finalConfig.stages.includes('llmlingua') && !finalConfig.llmLinguaUrl
 const venvPython = join(root, 'sidecar', '.venv', 'bin', 'python')
 const serverPy = join(root, 'sidecar', 'server.py')
 const hasSidecar = existsSync(venvPython) && existsSync(serverPy)
-
-let { config: finalConfig, server: finalServer } = createProxy()
 
 if (needsSidecar && hasSidecar) {
   const sidecarPort = 8788

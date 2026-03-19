@@ -8,111 +8,128 @@ REPO="https://github.com/sliday/tamp.git"
 DIR="${TAMP_DIR:-$HOME/.tamp}"
 PORT="${TAMP_PORT:-7778}"
 
+# Colors
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'
+BLUE='\033[0;34m'; MAGENTA='\033[0;35m'; CYAN='\033[0;36m'
+BOLD='\033[1m'; DIM='\033[2m'; RESET='\033[0m'
+
+ok()   { echo -e "  ${GREEN}✓${RESET} $1"; }
+warn() { echo -e "  ${YELLOW}→${RESET} $1"; }
+fail() { echo -e "  ${RED}✗${RESET} $1"; }
+step() { echo -e "\n  ${CYAN}${BOLD}$1${RESET}"; }
+
 echo ""
-echo "  ┌─────────────────────────────────┐"
-echo "  │         Tamp Setup              │"
-echo "  │  Token compression for agents   │"
-echo "  └─────────────────────────────────┘"
-echo ""
+echo -e "  ${CYAN}${BOLD}┌─────────────────────────────────┐${RESET}"
+echo -e "  ${CYAN}│${RESET}       ${BOLD}  Tamp Setup  ${RESET}           ${CYAN}│${RESET}"
+echo -e "  ${CYAN}│${RESET}  ${DIM}Token compression for agents${RESET}   ${CYAN}│${RESET}"
+echo -e "  ${CYAN}${BOLD}└─────────────────────────────────┘${RESET}"
 
 # Check deps
-command -v node >/dev/null 2>&1 || { echo "  ✗ Error: node is required. Install from https://nodejs.org"; exit 1; }
-command -v git >/dev/null 2>&1 || { echo "  ✗ Error: git is required."; exit 1; }
-echo "  ✓ node $(node --version)"
-echo "  ✓ git found"
+step "Checking dependencies"
+command -v node >/dev/null 2>&1 || { fail "node is required. Install from https://nodejs.org"; exit 1; }
+command -v git >/dev/null 2>&1 || { fail "git is required."; exit 1; }
+ok "node $(node --version)"
+ok "git found"
 
 # Clone or update
+step "Installing Tamp"
 if [ -d "$DIR" ]; then
-  echo ""
-  echo "  → Updating existing install in $DIR"
+  warn "Updating existing install in ${DIM}$DIR${RESET}"
   cd "$DIR" && git pull --quiet
-  echo "  ✓ Updated"
+  ok "Updated to latest"
 else
-  echo ""
-  echo "  → Cloning to $DIR ..."
+  warn "Cloning to ${DIM}$DIR${RESET}"
   git clone --quiet --depth 1 "$REPO" "$DIR"
-  echo "  ✓ Cloned"
+  ok "Cloned"
 fi
 
 cd "$DIR"
 
-# Install deps (this is the slow part)
-echo ""
-echo "  → Installing dependencies (this may take a moment) ..."
+# Install Node deps
+step "Node dependencies"
+SPINNER="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 npm install --silent 2>/dev/null &
 NPM_PID=$!
-SPINNER="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 i=0
 while kill -0 $NPM_PID 2>/dev/null; do
-  printf "\r  %s Installing ..." "${SPINNER:$((i % ${#SPINNER})):1}"
+  printf "\r  ${YELLOW}%s${RESET} Installing ..." "${SPINNER:$((i % ${#SPINNER})):1}"
   i=$((i + 1))
   sleep 0.1
 done
 wait $NPM_PID
-printf "\r  ✓ Dependencies installed       \n"
+printf "\r  ${GREEN}✓${RESET} Dependencies installed       \n"
 
-# --- LLMLingua-2 setup ---
-echo ""
-echo "  ┌─ Compression Stages ─────────────────────┐"
-echo "  │                                           │"
-echo "  │  minify  — strip JSON whitespace (fast)   │"
-echo "  │  toon    — columnar encoding (fast)       │"
-echo "  │  llmlingua — neural text compression      │"
-echo "  │              (requires Python sidecar)     │"
-echo "  │                                           │"
-echo "  └───────────────────────────────────────────┘"
-echo ""
-
+# --- LLMLingua-2 sidecar setup ---
+step "LLMLingua-2 Neural Compression"
 STAGES="minify,toon"
+HAS_LLMLINGUA=false
 
-# Check if we can prompt interactively
-if [ -t 0 ]; then
-  printf "  Enable LLMLingua-2 neural compression? [y/N] "
-  read -r LLMLINGUA_ANSWER
-  if [ "${LLMLINGUA_ANSWER:-n}" = "y" ] || [ "${LLMLINGUA_ANSWER:-n}" = "Y" ]; then
-    STAGES="minify,toon,llmlingua"
-    LLMLINGUA_PORT=8788
+if command -v python3 >/dev/null 2>&1; then
+  ok "python3 $(python3 --version 2>&1 | awk '{print $2}')"
 
-    echo ""
-    echo "  → Setting up LLMLingua-2 sidecar ..."
+  SIDECAR_DIR="$DIR/sidecar"
+  VENV_DIR="$SIDECAR_DIR/.venv"
+  REQ_FILE="$SIDECAR_DIR/requirements.txt"
 
-    if command -v python3 >/dev/null 2>&1; then
-      echo "  ✓ python3 found"
+  if [ -f "$REQ_FILE" ]; then
+    if [ -d "$VENV_DIR" ] && "$VENV_DIR/bin/python" -c "from llmlingua import PromptCompressor" 2>/dev/null; then
+      ok "LLMLingua-2 already installed"
+      HAS_LLMLINGUA=true
+    else
+      echo ""
+      echo -e "  ${MAGENTA}${BOLD}LLMLingua-2${RESET} compresses source code, markdown, and"
+      echo -e "  logs using a neural model — ${GREEN}up to 50% extra savings${RESET}."
+      echo -e "  Runs ${BOLD}locally${RESET} as a Python sidecar, auto-starts with tamp."
+      echo ""
 
-      SIDECAR_DIR="$DIR/sidecar"
-      if [ ! -d "$SIDECAR_DIR/venv" ]; then
-        echo "  → Creating Python virtual environment ..."
-        python3 -m venv "$SIDECAR_DIR/venv"
-        echo "  ✓ Virtual environment created"
+      INSTALL_LLMLINGUA=y
+      if [ -t 0 ]; then
+        printf "  Install LLMLingua-2? ${DIM}(~500MB, recommended)${RESET} [${GREEN}Y${RESET}/n] "
+        read -r INSTALL_LLMLINGUA
+        INSTALL_LLMLINGUA="${INSTALL_LLMLINGUA:-y}"
+      fi
 
-        echo "  → Installing LLMLingua-2 (this takes a while) ..."
-        "$SIDECAR_DIR/venv/bin/pip" install llmlingua flask --quiet 2>/dev/null &
+      if [ "$INSTALL_LLMLINGUA" = "y" ] || [ "$INSTALL_LLMLINGUA" = "Y" ]; then
+        warn "Creating Python virtual environment"
+        python3 -m venv "$VENV_DIR"
+        ok "Virtual environment created"
+
+        echo ""
+        "$VENV_DIR/bin/pip" install -r "$REQ_FILE" --quiet 2>/dev/null &
         PIP_PID=$!
         i=0
         while kill -0 $PIP_PID 2>/dev/null; do
-          printf "\r  %s Installing LLMLingua-2 ..." "${SPINNER:$((i % ${#SPINNER})):1}"
+          printf "\r  ${YELLOW}%s${RESET} Installing LLMLingua-2 ${DIM}(1-2 min)${RESET} ..." "${SPINNER:$((i % ${#SPINNER})):1}"
           i=$((i + 1))
           sleep 0.1
         done
         if wait $PIP_PID; then
-          printf "\r  ✓ LLMLingua-2 installed          \n"
+          printf "\r  ${GREEN}✓${RESET} LLMLingua-2 installed                           \n"
+          HAS_LLMLINGUA=true
         else
-          printf "\r  ✗ LLMLingua-2 install failed      \n"
-          echo "  → Falling back to minify,toon only"
-          STAGES="minify,toon"
+          printf "\r  ${RED}✗${RESET} LLMLingua-2 install failed                      \n"
+          warn "Continuing without LLMLingua-2"
         fi
-      else
-        echo "  ✓ LLMLingua-2 already installed"
       fi
-    else
-      echo "  ✗ python3 not found — skipping LLMLingua-2"
-      echo "  → Using minify,toon only"
-      STAGES="minify,toon"
     fi
   fi
 else
-  echo "  → Non-interactive install: using minify,toon"
-  echo "  → To enable LLMLingua-2 later, set TAMP_STAGES=minify,toon,llmlingua"
+  warn "python3 not found — LLMLingua-2 unavailable"
+  echo -e "    ${DIM}Install Python 3 to enable neural compression${RESET}"
+fi
+
+if [ "$HAS_LLMLINGUA" = true ]; then
+  STAGES="minify,toon,llmlingua"
+fi
+
+# Summary
+step "Compression pipeline"
+echo -e "    ${GREEN}▸${RESET} ${CYAN}minify${RESET}    — JSON whitespace removal"
+echo -e "    ${GREEN}▸${RESET} ${CYAN}toon${RESET}      — TOON columnar encoding"
+if [ "$HAS_LLMLINGUA" = true ]; then
+  echo -e "    ${GREEN}▸${RESET} ${MAGENTA}llmlingua${RESET} — neural text compression ${GREEN}(auto-starts)${RESET}"
+else
+  echo -e "    ${DIM}○ llmlingua — not installed${RESET}"
 fi
 
 # Detect shell
@@ -130,98 +147,68 @@ case "$SHELL_NAME" in
   *)    PROFILE="$HOME/.profile" ;;
 esac
 
-echo ""
-echo "  → Configuring shell ($(basename "$PROFILE")) ..."
+step "Shell configuration ($(basename "$PROFILE"))"
 
 # Claude Code: ANTHROPIC_BASE_URL
 ANTHROPIC_LINE="export ANTHROPIC_BASE_URL=http://localhost:$PORT"
-if [ "$SHELL_NAME" = "fish" ]; then
-  ANTHROPIC_LINE="set -gx ANTHROPIC_BASE_URL http://localhost:$PORT"
-fi
+[ "$SHELL_NAME" = "fish" ] && ANTHROPIC_LINE="set -gx ANTHROPIC_BASE_URL http://localhost:$PORT"
 
 if [ -f "$PROFILE" ] && grep -qF "ANTHROPIC_BASE_URL" "$PROFILE" 2>/dev/null; then
-  echo "  ✓ ANTHROPIC_BASE_URL already set"
+  ok "ANTHROPIC_BASE_URL already set"
 else
   echo "" >> "$PROFILE"
   echo "# Tamp proxy — Claude Code" >> "$PROFILE"
   echo "$ANTHROPIC_LINE" >> "$PROFILE"
-  echo "  ✓ Added ANTHROPIC_BASE_URL (Claude Code)"
+  ok "Added ANTHROPIC_BASE_URL ${DIM}(Claude Code)${RESET}"
 fi
 
 # Aider / Cursor / Cline: OPENAI_API_BASE
 OPENAI_LINE="export OPENAI_API_BASE=http://localhost:$PORT"
-if [ "$SHELL_NAME" = "fish" ]; then
-  OPENAI_LINE="set -gx OPENAI_API_BASE http://localhost:$PORT"
-fi
+[ "$SHELL_NAME" = "fish" ] && OPENAI_LINE="set -gx OPENAI_API_BASE http://localhost:$PORT"
 
 if [ -f "$PROFILE" ] && grep -qF "OPENAI_API_BASE" "$PROFILE" 2>/dev/null; then
-  echo "  ✓ OPENAI_API_BASE already set"
+  ok "OPENAI_API_BASE already set"
 else
   echo "# Tamp proxy — Aider / Cursor / Cline" >> "$PROFILE"
   echo "$OPENAI_LINE" >> "$PROFILE"
-  echo "  ✓ Added OPENAI_API_BASE (Aider, Cursor, Cline)"
+  ok "Added OPENAI_API_BASE ${DIM}(Aider, Cursor, Cline)${RESET}"
 fi
 
 # Set TAMP_STAGES
 STAGES_LINE="export TAMP_STAGES=$STAGES"
-if [ "$SHELL_NAME" = "fish" ]; then
-  STAGES_LINE="set -gx TAMP_STAGES $STAGES"
-fi
+[ "$SHELL_NAME" = "fish" ] && STAGES_LINE="set -gx TAMP_STAGES $STAGES"
 
 if [ -f "$PROFILE" ] && grep -qF "TAMP_STAGES" "$PROFILE" 2>/dev/null; then
-  # Update existing stages line
   sed -i.bak "s|export TAMP_STAGES=.*|export TAMP_STAGES=$STAGES|" "$PROFILE" 2>/dev/null || true
   rm -f "$PROFILE.bak"
-  echo "  ✓ Updated TAMP_STAGES=$STAGES"
+  ok "Updated TAMP_STAGES=${BOLD}$STAGES${RESET}"
 else
   echo "$STAGES_LINE" >> "$PROFILE"
-  echo "  ✓ Added TAMP_STAGES=$STAGES"
-fi
-
-# Set LLMLingua URL if enabled
-if echo "$STAGES" | grep -q "llmlingua"; then
-  LINGUA_LINE="export TAMP_LLMLINGUA_URL=http://localhost:${LLMLINGUA_PORT:-8788}"
-  if [ "$SHELL_NAME" = "fish" ]; then
-    LINGUA_LINE="set -gx TAMP_LLMLINGUA_URL http://localhost:${LLMLINGUA_PORT:-8788}"
-  fi
-  if [ -f "$PROFILE" ] && grep -qF "TAMP_LLMLINGUA_URL" "$PROFILE" 2>/dev/null; then
-    echo "  ✓ TAMP_LLMLINGUA_URL already set"
-  else
-    echo "$LINGUA_LINE" >> "$PROFILE"
-    echo "  ✓ Added TAMP_LLMLINGUA_URL"
-  fi
+  ok "Added TAMP_STAGES=${BOLD}$STAGES${RESET}"
 fi
 
 # Create/update tamp alias
 ALIAS_LINE="alias tamp='cd $DIR && node bin/tamp.js'"
-if [ "$SHELL_NAME" = "fish" ]; then
-  ALIAS_LINE="alias tamp 'cd $DIR; and node bin/tamp.js'"
-fi
+[ "$SHELL_NAME" = "fish" ] && ALIAS_LINE="alias tamp 'cd $DIR; and node bin/tamp.js'"
 
 if grep -qF "alias tamp" "$PROFILE" 2>/dev/null; then
-  # Update existing alias (might be old node index.js version)
   sed -i.bak "s|alias tamp=.*|alias tamp='cd $DIR \&\& node bin/tamp.js'|" "$PROFILE" 2>/dev/null || true
   rm -f "$PROFILE.bak"
-  echo "  ✓ Updated 'tamp' alias"
+  ok "Updated ${BOLD}tamp${RESET} alias"
 else
   echo "$ALIAS_LINE" >> "$PROFILE"
-  echo "  ✓ Added 'tamp' alias"
+  ok "Added ${BOLD}tamp${RESET} alias"
 fi
 
 echo ""
-echo "  ┌─────────────────────────────────────────┐"
-echo "  │  ✓ Done! Restart your shell, then:      │"
-echo "  │                                         │"
-echo "  │  tamp         # start the proxy         │"
-echo "  │                                         │"
-echo "  │  Then in another terminal:              │"
-echo "  │  claude       # Claude Code             │"
-echo "  │  aider        # Aider                   │"
-echo "  │  cursor       # Cursor (set base URL)   │"
-echo "  └─────────────────────────────────────────┘"
-if echo "$STAGES" | grep -q "llmlingua"; then
-echo ""
-echo "  Note: Start the LLMLingua sidecar before tamp:"
-echo "    $DIR/sidecar/venv/bin/python -m llmlingua.server --port ${LLMLINGUA_PORT:-8788}"
-fi
+echo -e "  ${GREEN}${BOLD}┌─────────────────────────────────────────────────┐${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}  ${GREEN}✓ All done!${RESET} Restart your shell, then:          ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}                                                 ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}  ${CYAN}${BOLD}tamp${RESET}         ${DIM}# starts proxy + LLMLingua-2${RESET}      ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}                                                 ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}  Then in another terminal:                      ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}  ${YELLOW}claude${RESET}       ${DIM}# Claude Code${RESET}                     ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}  ${YELLOW}aider${RESET}        ${DIM}# Aider${RESET}                           ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}│${RESET}  ${YELLOW}cursor${RESET}       ${DIM}# set base URL in prefs${RESET}           ${GREEN}${BOLD}│${RESET}"
+echo -e "  ${GREEN}${BOLD}└─────────────────────────────────────────────────┘${RESET}"
 echo ""

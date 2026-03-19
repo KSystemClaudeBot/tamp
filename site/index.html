@@ -445,6 +445,38 @@ size[3]{1024|2048|512}</div>
     </div>
 </section>
 
+<!-- Sample Output -->
+<section>
+    <div class="section-inner">
+        <h2 class="db-h2" style="text-align: center;">Live Output</h2>
+        <p class="db-body" style="text-align: center; opacity: 0.7; margin-top: 0.5rem;">
+            Every request shows compression stats, token savings, and cumulative $ saved.
+        </p>
+        <div style="margin-top: 1.5rem; background: #1d2021; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.25rem; overflow-x: auto;">
+<pre style="margin: 0; font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 0.8rem; line-height: 1.6; color: #ebdbb2; white-space: pre; overflow-x: auto;"><span style="color:#83a598;font-weight:bold;">┌─ Tamp v0.2.8 ───────────────────────────────┐</span>
+<span style="color:#83a598;">│</span>  Proxy: <span style="color:#b8bb26;font-weight:bold;">http://localhost:7778</span>              <span style="color:#83a598;">│</span>
+<span style="color:#83a598;">│</span>  Status: <span style="background:#b8bb26;color:#1d2021;font-weight:bold;"> ● READY </span>                     <span style="color:#83a598;">│</span>
+<span style="color:#83a598;">└──────────────────────────────────────────────┘</span>
+
+<span style="color:#83a598;">anthropic</span> /v1/messages <span style="color:#928374;">45.2k</span> <span style="color:#b8bb26;">— 3 compressed, -34.2%</span>
+  <span style="color:#928374;">block[0]</span> 12.5k→8.2k <span style="color:#b8bb26;">-34.4%</span> <span style="color:#928374;">3340→2201 tok</span> <span style="color:#928374;">[toon]</span>
+  <span style="color:#928374;">block[1]</span> 2.1k→1.4k <span style="color:#b8bb26;">-33.3%</span> <span style="color:#928374;">560→374 tok</span> <span style="color:#928374;">[minify]</span>
+  <span style="color:#928374;">block[2]</span> 890→534 <span style="color:#b8bb26;">-40.0%</span> <span style="color:#928374;">237→142 tok</span> <span style="color:#928374;">[minify]</span>
+  <span style="color:#d3869b;">session</span> 5.3k chars, 1420 tokens saved across 3 blocks <span style="color:#928374;">(34.2% avg)</span> <span style="color:#b8bb26;">$0.0043 saved</span> <span style="color:#928374;">@ $3/Mtok</span>
+
+<span style="color:#83a598;">anthropic</span> /v1/messages <span style="color:#928374;">128.7k</span> <span style="color:#b8bb26;">— 5 compressed, -41.8%</span>
+  <span style="color:#928374;">block[0]</span> 48.2k→27.1k <span style="color:#b8bb26;">-43.8%</span> <span style="color:#928374;">12840→7213 tok</span> <span style="color:#928374;">[toon]</span>
+  <span style="color:#928374;">block[1]</span> 8.4k→5.1k <span style="color:#b8bb26;">-39.3%</span> <span style="color:#928374;">2240→1360 tok</span> <span style="color:#928374;">[minify]</span>
+  <span style="color:#928374;">block[2]</span> 3.2k→1.9k <span style="color:#b8bb26;">-40.6%</span> <span style="color:#928374;">853→507 tok</span> <span style="color:#928374;">[minify]</span>
+  <span style="color:#928374;">block[3] skipped (error)</span>
+  <span style="color:#928374;">block[4]</span> 1.1k→712 <span style="color:#b8bb26;">-35.3%</span> <span style="color:#928374;">293→190 tok</span> <span style="color:#928374;">[minify]</span>
+  <span style="color:#d3869b;">session</span> 31.4k chars, 8686 tokens saved across 8 blocks <span style="color:#928374;">(39.1% avg)</span> <span style="color:#b8bb26;">$0.0261 saved</span> <span style="color:#928374;">@ $3/Mtok</span>
+
+<span style="color:#83a598;">anthropic</span> /v1/messages <span style="color:#928374;">2.1k</span> <span style="color:#928374;">— no tool blocks</span></pre>
+        </div>
+    </div>
+</section>
+
 <div class="section-inner"><div class="db-separator"></div></div>
 
 <!-- ============================

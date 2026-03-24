@@ -129,7 +129,7 @@ console.log(`  savings: ${tabularData.length} -> ${compressed2.length} chars (-$
 // ============================================================
 // Test 3: Historical messages untouched (Option B)
 // ============================================================
-console.log('Test 3: Historical messages preserved')
+console.log('Test 3: All messages compressed (including historical)')
 const histContent = JSON.stringify({ old: 'data', key: 'value', nested: { a: 1, b: 2 } }, null, 2)
 const body3 = JSON.stringify({
   model: 'test', max_tokens: 10,
@@ -143,7 +143,8 @@ const body3 = JSON.stringify({
 lastUpstreamBody = null
 await request(proxyPort, 'POST', '/v1/messages', body3, { 'Content-Type': 'application/json' })
 const upstream3 = JSON.parse(lastUpstreamBody)
-check('historical tool_result byte-identical', upstream3.messages[0].content[0].content === histContent)
+check('historical tool_result compressed', upstream3.messages[0].content[0].content.length < histContent.length,
+  `compressed=${upstream3.messages[0].content[0].content.length} vs original=${histContent.length}`)
 const latest3 = upstream3.messages[2].content[0].content
 const latestOriginal = JSON.stringify({ fresh: 'data', extra: 'fields', description: 'this needs to be long enough to compress' }, null, 2)
 check('latest tool_result compressed', latest3.length < latestOriginal.length,

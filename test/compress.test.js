@@ -2,7 +2,7 @@ import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import http from 'node:http'
-import { compressText, compressMessages, compressRequest } from '../compress.js'
+import { compressText, compressMessages, compressRequest, clearCache } from '../compress.js'
 import { openai } from '../providers.js'
 
 const fixtures = JSON.parse(readFileSync(new URL('./fixtures/sample-messages.json', import.meta.url), 'utf-8'))
@@ -75,13 +75,14 @@ describe('compressText', () => {
 const msgConfig = { minSize: 50, stages: ['minify'], llmLinguaUrl: null }
 
 describe('compressMessages', () => {
-  it('compresses last user message tool_result JSON', async () => {
+  it('compresses ALL user message tool_result JSON including historical', async () => {
     const body = JSON.parse(JSON.stringify(fixtures.multiTurn))
     const oldContent = body.messages[0].content[1].content
     const { body: compressed, stats } = await compressMessages(body, msgConfig)
-    // Historical message untouched
-    assert.equal(compressed.messages[0].content[1].content, oldContent)
-    // Last user message compressed
+    // Historical message now compressed too
+    assert.ok(compressed.messages[0].content[1].content.length < oldContent.length, 'historical should be compressed')
+    assert.ok(!compressed.messages[0].content[1].content.includes('\n'), 'historical should be minified')
+    // Last user message also compressed
     const lastContent = compressed.messages[2].content[0].content
     assert.ok(!lastContent.includes('\n'), 'should be minified (no newlines)')
     assert.ok(stats.length > 0)
@@ -163,6 +164,7 @@ describe('compressMessages with llmlingua', () => {
   }
 
   it('routes text content to LLMLingua when enabled', async () => {
+    clearCache()
     await startMock()
     try {
       const cfg = { minSize: 10, stages: ['minify', 'llmlingua'], llmLinguaUrl: `http://localhost:${mockPort}` }
@@ -188,57 +190,13 @@ describe('compressMessages with llmlingua', () => {
   })
 
   it('falls back on LLMLingua failure', async () => {
+    clearCache()
     // Use a port that nothing listens on
     const cfg = { minSize: 10, stages: ['minify', 'llmlingua'], llmLinguaUrl: 'http://localhost:1' }
     const body = JSON.parse(JSON.stringify(fixtures.textContent))
     const original = body.messages[0].content[0].content
     const { body: compressed } = await compressMessages(body, cfg)
     assert.equal(compressed.messages[0].content[0].content, original)
-  })
-})
-
-describe('compressRequest with OpenAI Responses API format', () => {
-  const cfg = { minSize: 50, stages: ['minify'], llmLinguaUrl: null }
-
-  it('compresses function_call_output in Responses API body', async () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [
-        { role: 'user', content: 'check the output' },
-        { type: 'function_call_output', call_id: 'call_abc', output: JSON.stringify({ name: 'tamp', version: '0.1.0', type: 'module', main: 'index.js', scripts: { start: 'node index.js' } }, null, 2) },
-      ],
-    }
-    const { body: compressed, stats } = await compressRequest(body, cfg, openai)
-    assert.ok(stats.some(s => s.method === 'minify'))
-    assert.ok(!compressed.input[1].output.includes('\n'), 'should be minified')
-    assert.equal(JSON.parse(compressed.input[1].output).name, 'tamp')
-  })
-
-  it('returns empty stats when no function_call_output in Responses API body', async () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [{ role: 'user', content: 'hello' }],
-    }
-    const { stats } = await compressRequest(body, cfg, openai)
-    assert.equal(stats.length, 0)
-  })
-
-  it('compresses input_text in message content parts', async () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [
-        { type: 'message', role: 'developer', content: [
-          { type: 'input_text', text: JSON.stringify({ tools: ['read', 'write', 'edit'], config: { minSize: 50, stages: ['minify'] } }, null, 2) },
-        ]},
-        { type: 'message', role: 'user', content: [
-          { type: 'input_text', text: 'run the tests' },
-        ]},
-      ],
-    }
-    const { body: compressed, stats } = await compressRequest(body, cfg, openai)
-    assert.ok(stats.some(s => s.method === 'minify'))
-    assert.ok(!compressed.input[0].content[0].text.includes('\n'), 'developer content should be minified')
-    assert.equal(compressed.input[1].content[0].text, 'run the tests', 'user text unchanged')
   })
 })
 

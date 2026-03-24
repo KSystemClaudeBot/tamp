@@ -1,6 +1,6 @@
 # Tamp
 
-**Token compression proxy for coding agents.** 33.9% fewer input tokens, zero code changes. Works with Claude Code, Codex, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
+**Token compression proxy for coding agents.** 33.9% fewer input tokens, zero code changes. Works with Claude Code, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
 
 ```
 npx @sliday/tamp
@@ -19,7 +19,6 @@ Tamp auto-detects your agent's API format and compresses tool result blocks befo
 ```
 Claude Code ──► Tamp (localhost:7778) ──► Anthropic API
 Aider/Cursor ──►          │          ──► OpenAI API
-Codex CLI ─────►          │          ──► OpenAI API
 Gemini CLI ────►          │          ──► Google AI API
                           │
                           ├─ JSON → minify whitespace
@@ -35,8 +34,9 @@ Gemini CLI ────►          │          ──► Google AI API
 |--------|----------|--------|
 | Anthropic Messages | `POST /v1/messages` | Claude Code |
 | OpenAI Chat Completions | `POST /v1/chat/completions` | Aider, Cursor, Cline, Windsurf, OpenCode |
-| OpenAI Responses | `POST /v1/responses` | Codex CLI |
 | Google Gemini | `POST .../generateContent` | Gemini CLI |
+
+> **Why not Codex?** Codex CLI uses OpenAI's Responses API (`POST /v1/responses`), which has a different request shape than Chat Completions — `input[]` with `function_call_output` items instead of `messages[]` with `role: tool`. We had early support but pulled it because the Responses API is still evolving and Codex sends zstd-compressed bodies that add another layer of complexity. We'll revisit once the format stabilizes.
 
 ### Compression Stages
 
@@ -81,12 +81,6 @@ claude
 ```bash
 export OPENAI_API_BASE=http://localhost:7778
 aider
-```
-
-**Codex CLI:**
-Add to `~/.codex/config.toml`:
-```toml
-openai_base_url = "http://localhost:7778"
 ```
 
 **Cursor / Cline / Windsurf:**
@@ -151,7 +145,7 @@ The installer clones to `~/.tamp`, adds `ANTHROPIC_BASE_URL` to your shell profi
 
 ## What Gets Compressed
 
-Tamp only compresses the **last user message** in each request (the most recent `tool_result` blocks). Historical messages are left untouched to avoid redundant recompression.
+Tamp compresses `tool_result` blocks in **all messages** — not just the latest. Since each API call re-sends the full conversation history uncompressed, this compounds savings with every turn. An in-memory cache ensures identical content is only compressed once per session.
 
 | Content Type | Action | Example |
 |-------------|--------|---------|
@@ -159,7 +153,7 @@ Tamp only compresses the **last user message** in each request (the most recent 
 | JSON with line numbers | Strip prefixes + minify | Read tool output (`  1→{...}`) |
 | Homogeneous JSON arrays | TOON encode | File listings, route tables, dependencies |
 | Already-minified JSON | Skip | Single-line JSON |
-| Source code (text) | Passthrough | `.ts`, `.py`, `.rs` files |
+| Source code (text) | Strip line numbers + normalize whitespace | `.ts`, `.py`, `.rs` files |
 | `is_error: true` results | Skip entirely | Error tool results |
 | TOON-encoded content | Skip | Already compressed |
 

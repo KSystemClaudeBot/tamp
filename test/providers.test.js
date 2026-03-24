@@ -31,13 +31,6 @@ describe('detectProvider', () => {
     assert.equal(detectProvider('POST', '/chat/completions').name, 'openai')
   })
 
-  it('returns openai for POST /v1/responses', () => {
-    assert.equal(detectProvider('POST', '/v1/responses').name, 'openai')
-  })
-
-  it('returns openai for POST /responses (no /v1 prefix)', () => {
-    assert.equal(detectProvider('POST', '/responses').name, 'openai')
-  })
 })
 
 describe('openai normalizeUrl', () => {
@@ -49,17 +42,10 @@ describe('openai normalizeUrl', () => {
     assert.equal(openai.normalizeUrl('/v1/chat/completions'), '/v1/chat/completions')
   })
 
-  it('prepends /v1 to /responses', () => {
-    assert.equal(openai.normalizeUrl('/responses'), '/v1/responses')
-  })
-
-  it('keeps /v1/responses as-is', () => {
-    assert.equal(openai.normalizeUrl('/v1/responses'), '/v1/responses')
-  })
 })
 
 describe('anthropic adapter', () => {
-  it('extracts tool_result string content from last user message', () => {
+  it('extracts tool_result from ALL user messages', () => {
     const body = {
       messages: [
         { role: 'user', content: [{ type: 'tool_result', tool_use_id: 'tu_1', content: '{"a":1}' }] },
@@ -68,9 +54,11 @@ describe('anthropic adapter', () => {
       ],
     }
     const targets = anthropic.extract(body)
-    assert.equal(targets.length, 1)
-    assert.equal(targets[0].text, '{"b":2}')
-    assert.deepEqual(targets[0].path, ['messages', 2, 'content', 0, 'content'])
+    assert.equal(targets.length, 2)
+    assert.equal(targets[0].text, '{"a":1}')
+    assert.deepEqual(targets[0].path, ['messages', 0, 'content', 0, 'content'])
+    assert.equal(targets[1].text, '{"b":2}')
+    assert.deepEqual(targets[1].path, ['messages', 2, 'content', 0, 'content'])
   })
 
   it('extracts nested text blocks from array content', () => {
@@ -128,12 +116,14 @@ describe('anthropic adapter', () => {
 })
 
 describe('openai adapter', () => {
-  it('extracts tool messages after last assistant with tool_calls', () => {
+  it('extracts ALL tool messages across conversation', () => {
     const body = {
       messages: [
         { role: 'user', content: 'read file.js' },
         { role: 'assistant', content: null, tool_calls: [{ id: 'call_1', type: 'function', function: { name: 'read', arguments: '{}' } }] },
         { role: 'tool', tool_call_id: 'call_1', content: '{"file":"contents"}' },
+        { role: 'user', content: 'now read other.js' },
+        { role: 'assistant', content: null, tool_calls: [{ id: 'call_2', type: 'function', function: { name: 'read', arguments: '{}' } }] },
         { role: 'tool', tool_call_id: 'call_2', content: '{"other":"data"}' },
       ],
     }
@@ -143,19 +133,7 @@ describe('openai adapter', () => {
     assert.equal(targets[1].text, '{"other":"data"}')
   })
 
-  it('stops at non-tool message', () => {
-    const body = {
-      messages: [
-        { role: 'assistant', tool_calls: [{ id: 'call_1' }] },
-        { role: 'tool', tool_call_id: 'call_1', content: '{"a":1}' },
-        { role: 'user', content: 'next question' },
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 1)
-  })
-
-  it('returns empty when no assistant with tool_calls', () => {
+  it('returns empty when no tool messages', () => {
     const body = {
       messages: [
         { role: 'user', content: 'hello' },
@@ -235,170 +213,6 @@ describe('gemini adapter', () => {
     }]
     gemini.apply(body, targets)
     assert.equal(body.contents[0].parts[0].functionResponse.response, 'not json')
-  })
-})
-
-describe('openai adapter — Responses API (body.input)', () => {
-  it('extracts function_call_output items from input array', () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [
-        { role: 'user', content: 'read the file' },
-        { type: 'function_call_output', call_id: 'call_abc', output: '{"file":"contents","lines":100}' },
-        { type: 'function_call_output', call_id: 'call_def', output: '{"other":"data"}' },
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 2)
-    assert.equal(targets[0].text, '{"file":"contents","lines":100}')
-    assert.deepEqual(targets[0].path, ['input', 1, 'output'])
-    assert.equal(targets[1].text, '{"other":"data"}')
-    assert.deepEqual(targets[1].path, ['input', 2, 'output'])
-  })
-
-  it('returns empty when no extractable content in input', () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [
-        { role: 'user', content: 'hello' },
-      ],
-    }
-    assert.deepEqual(openai.extract(body), [])
-  })
-
-  it('returns empty for missing input', () => {
-    assert.deepEqual(openai.extract({}), [])
-    assert.deepEqual(openai.extract({ input: [] }), [])
-  })
-
-  it('skips non-string output fields', () => {
-    const body = {
-      input: [
-        { type: 'function_call_output', call_id: 'call_1', output: 123 },
-        { type: 'function_call_output', call_id: 'call_2', output: '{"valid":"json"}' },
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 1)
-    assert.equal(targets[0].text, '{"valid":"json"}')
-  })
-
-  it('extracts input_text from message content parts', () => {
-    const body = {
-      input: [
-        { type: 'message', role: 'developer', content: [
-          { type: 'input_text', text: '{"config": "value"}' },
-          { type: 'input_text', text: '{"tools": ["read", "write"]}' },
-        ]},
-        { type: 'message', role: 'user', content: [
-          { type: 'input_text', text: 'do the thing' },
-        ]},
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 3)
-    assert.deepEqual(targets[0].path, ['input', 0, 'content', 0, 'text'])
-    assert.equal(targets[0].text, '{"config": "value"}')
-    assert.deepEqual(targets[1].path, ['input', 0, 'content', 1, 'text'])
-    assert.deepEqual(targets[2].path, ['input', 1, 'content', 0, 'text'])
-  })
-
-  it('extracts output_text from assistant message content', () => {
-    const body = {
-      input: [
-        { type: 'message', role: 'assistant', content: [
-          { type: 'output_text', text: '{"result": "data"}' },
-        ]},
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 1)
-    assert.deepEqual(targets[0].path, ['input', 0, 'content', 0, 'text'])
-  })
-
-  it('extracts both function_call_output and message content', () => {
-    const body = {
-      input: [
-        { type: 'message', role: 'developer', content: [
-          { type: 'input_text', text: '{"system": "prompt"}' },
-        ]},
-        { type: 'function_call_output', call_id: 'call_1', output: '{"file": "data"}' },
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 2)
-    assert.deepEqual(targets[0].path, ['input', 0, 'content', 0, 'text'])
-    assert.deepEqual(targets[1].path, ['input', 1, 'output'])
-  })
-
-  it('skips non-text content parts', () => {
-    const body = {
-      input: [
-        { type: 'message', role: 'user', content: [
-          { type: 'input_image', image_url: 'data:image/png;base64,...' },
-          { type: 'input_text', text: 'describe this' },
-        ]},
-      ],
-    }
-    const targets = openai.extract(body)
-    assert.equal(targets.length, 1)
-    assert.equal(targets[0].text, 'describe this')
-  })
-
-  it('apply replaces output field via path', () => {
-    const body = {
-      input: [
-        { role: 'user', content: 'hi' },
-        { type: 'function_call_output', call_id: 'call_abc', output: 'original' },
-      ],
-    }
-    const targets = [{ path: ['input', 1, 'output'], compressed: 'compressed' }]
-    openai.apply(body, targets)
-    assert.equal(body.input[1].output, 'compressed')
-  })
-
-  it('apply replaces message content text via path', () => {
-    const body = {
-      input: [
-        { type: 'message', role: 'developer', content: [
-          { type: 'input_text', text: 'original' },
-        ]},
-      ],
-    }
-    const targets = [{ path: ['input', 0, 'content', 0, 'text'], compressed: 'compressed' }]
-    openai.apply(body, targets)
-    assert.equal(body.input[0].content[0].text, 'compressed')
-  })
-})
-
-describe('openai adapter — Responses API round-trip', () => {
-  it('function_call_output: extract, compress, apply', () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [
-        { role: 'user', content: 'check the output' },
-        { type: 'function_call_output', call_id: 'call_1', output: '{\n  "result": "ok",\n  "data": "value"\n}' },
-      ],
-    }
-    const targets = openai.extract(body)
-    for (const t of targets) { if (!t.skip) t.compressed = '{"result":"ok","data":"value"}' }
-    openai.apply(body, targets)
-    assert.equal(body.input[1].output, '{"result":"ok","data":"value"}')
-  })
-
-  it('message content: extract, compress, apply', () => {
-    const body = {
-      model: 'gpt-4.1',
-      input: [
-        { type: 'message', role: 'developer', content: [
-          { type: 'input_text', text: '{\n  "tools": [\n    "read",\n    "write"\n  ]\n}' },
-        ]},
-      ],
-    }
-    const targets = openai.extract(body)
-    for (const t of targets) { if (!t.skip) t.compressed = '{"tools":["read","write"]}' }
-    openai.apply(body, targets)
-    assert.equal(body.input[0].content[0].text, '{"tools":["read","write"]}')
   })
 })
 

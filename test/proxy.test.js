@@ -120,8 +120,8 @@ describe('proxy integration', () => {
     assert.equal(res.body.toString(), body)
   })
 
-  it('does not modify historical messages', async () => {
-    const historicalContent = JSON.stringify({ old: 'data', value: 'should not be touched at all' }, null, 2)
+  it('compresses ALL messages including historical', async () => {
+    const historicalContent = JSON.stringify({ old: 'data', value: 'should be compressed now too' }, null, 2)
     const body = JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       messages: [
@@ -133,7 +133,8 @@ describe('proxy integration', () => {
 
     const res = await request(proxyPort, 'POST', '/v1/messages', body, { 'Content-Type': 'application/json' })
     const received = JSON.parse(res.body.toString())
-    assert.equal(received.messages[0].content[0].content, historicalContent)
+    assert.ok(received.messages[0].content[0].content.length < historicalContent.length, 'historical message should be compressed')
+    assert.ok(received.messages[0].content[0].content.length > 0, 'historical message should not be empty')
   })
 
   it('decompresses gzip request body and compresses content', async () => {
@@ -283,21 +284,6 @@ describe('proxy integration', () => {
     assert.ok(!toolContent.includes('\n'), 'gzipped OpenAI tool content should be minified')
   })
 
-  it('passes through gzip body for /responses endpoint', async () => {
-    const jsonBody = JSON.stringify({ model: 'gpt-4', input: 'hello from codex' })
-    const gzipped = zlib.gzipSync(Buffer.from(jsonBody))
-
-    const res = await request(proxyPort, 'POST', '/v1/responses', gzipped, {
-      'Content-Type': 'application/json',
-      'Content-Encoding': 'gzip',
-    })
-    assert.equal(res.status, 200)
-    // Should decompress and parse, but no tool content to compress — passthrough
-    const received = JSON.parse(res.body.toString())
-    assert.equal(received.model, 'gpt-4')
-    assert.equal(received.input, 'hello from codex')
-  })
-
   it('decompresses zstd request body and compresses content', async () => {
     const jsonBody = JSON.stringify({
       model: 'claude-sonnet-4-20250514',
@@ -320,34 +306,6 @@ describe('proxy integration', () => {
     const received = JSON.parse(res.body.toString())
     const content = received.messages[0].content[0].content
     assert.ok(!content.includes('\n'), 'zstd tool_result should be minified')
-  })
-
-  it('decompresses zstd for /responses endpoint', async () => {
-    const jsonBody = JSON.stringify({ model: 'gpt-4', input: 'hello from codex via zstd' })
-    const compressed = zstdCompress(Buffer.from(jsonBody))
-
-    const res = await request(proxyPort, 'POST', '/v1/responses', compressed, {
-      'Content-Type': 'application/json',
-      'Content-Encoding': 'zstd',
-    })
-    assert.equal(res.status, 200)
-    const received = JSON.parse(res.body.toString())
-    assert.equal(received.model, 'gpt-4')
-    assert.equal(received.input, 'hello from codex via zstd')
-  })
-
-  it('routes /v1/responses to openai upstream', async () => {
-    const body = JSON.stringify({ model: 'gpt-4', input: 'hello' })
-    const res = await request(proxyPort, 'POST', '/v1/responses', body, { 'Content-Type': 'application/json' })
-    assert.equal(res.status, 200)
-    assert.equal(res.headers['x-echo'], 'true')
-  })
-
-  it('routes /responses (no /v1) to openai upstream', async () => {
-    const body = JSON.stringify({ model: 'gpt-4', input: 'hello' })
-    const res = await request(proxyPort, 'POST', '/responses', body, { 'Content-Type': 'application/json' })
-    assert.equal(res.status, 200)
-    assert.equal(res.headers['x-echo'], 'true')
   })
 
   it('routes /v1/chat/completions to openai upstream', async () => {

@@ -3,16 +3,45 @@ import { countTokens } from '@anthropic-ai/tokenizer'
 import { tryParseJSON, classifyContent, stripLineNumbers } from './detect.js'
 import { anthropic } from './providers.js'
 
+const cache = new Map()
+const MAX_CACHE = 500
+
+function cacheKey(text) {
+  if (text.length < 128) return text
+  return `${text.length}:${text.slice(0, 64)}:${text.slice(-64)}`
+}
+
+export function clearCache() { cache.clear() }
+
+function normalizeWhitespace(text) {
+  return text
+    .replace(/[ \t]+$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+}
+
 export function compressText(text, config) {
   if (text.length < config.minSize) return null
   const cls = classifyContent(text)
   if (cls === 'toon') return null
+
   if (cls === 'text') {
+    let processed = text
+    if (config.stages.includes('strip-lines')) {
+      const stripped = stripLineNumbers(text)
+      if (stripped !== text) processed = stripped
+    }
+    if (config.stages.includes('whitespace')) {
+      processed = normalizeWhitespace(processed)
+    }
+    if (processed.length < text.length * 0.9) {
+      return { text: processed, method: 'normalize', originalLen: text.length, compressedLen: processed.length, originalTokens: countTokens(text), compressedTokens: countTokens(processed) }
+    }
     if (config.stages.includes('llmlingua') && config.llmLinguaUrl) {
-      return { async: true, text, cls }
+      return { async: true, text: processed, cls }
     }
     return null
   }
+
   if (cls !== 'json' && cls !== 'json-lined') return null
 
   const raw = cls === 'json-lined' ? stripLineNumbers(text) : text
@@ -56,11 +85,23 @@ async function compressWithLLMLingua(text, config) {
 }
 
 async function compressBlock(text, config) {
+  const key = cacheKey(text)
+  if (cache.has(key)) return cache.get(key)
+
   const sync = compressText(text, config)
+  let result
   if (sync && sync.async) {
-    return compressWithLLMLingua(text, config)
+    result = await compressWithLLMLingua(sync.text, config)
+  } else {
+    result = sync
   }
-  return sync
+
+  if (cache.size >= MAX_CACHE) {
+    const firstKey = cache.keys().next().value
+    cache.delete(firstKey)
+  }
+  cache.set(key, result)
+  return result
 }
 
 export async function compressRequest(body, config, provider) {

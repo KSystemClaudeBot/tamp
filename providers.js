@@ -7,29 +7,26 @@ const anthropic = {
     const targets = []
     if (!body?.messages?.length) return targets
 
-    let lastUserIdx = -1
-    for (let i = body.messages.length - 1; i >= 0; i--) {
-      if (body.messages[i].role === 'user') { lastUserIdx = i; break }
-    }
-    if (lastUserIdx === -1) return targets
+    for (let mi = 0; mi < body.messages.length; mi++) {
+      const msg = body.messages[mi]
+      if (msg.role !== 'user') continue
 
-    const msg = body.messages[lastUserIdx]
+      if (typeof msg.content === 'string') {
+        targets.push({ path: ['messages', mi, 'content'], text: msg.content })
+      } else if (Array.isArray(msg.content)) {
+        for (let i = 0; i < msg.content.length; i++) {
+          const block = msg.content[i]
+          if (block.type !== 'tool_result') continue
+          if (block.is_error) { targets.push({ skip: 'error', index: i }); continue }
 
-    if (typeof msg.content === 'string') {
-      targets.push({ path: ['messages', lastUserIdx, 'content'], text: msg.content })
-    } else if (Array.isArray(msg.content)) {
-      for (let i = 0; i < msg.content.length; i++) {
-        const block = msg.content[i]
-        if (block.type !== 'tool_result') continue
-        if (block.is_error) { targets.push({ skip: 'error', index: i }); continue }
-
-        if (typeof block.content === 'string') {
-          targets.push({ path: ['messages', lastUserIdx, 'content', i, 'content'], text: block.content, index: i })
-        } else if (Array.isArray(block.content)) {
-          for (let j = 0; j < block.content.length; j++) {
-            const sub = block.content[j]
-            if (sub.type === 'text') {
-              targets.push({ path: ['messages', lastUserIdx, 'content', i, 'content', j, 'text'], text: sub.text, index: i })
+          if (typeof block.content === 'string') {
+            targets.push({ path: ['messages', mi, 'content', i, 'content'], text: block.content, index: i })
+          } else if (Array.isArray(block.content)) {
+            for (let j = 0; j < block.content.length; j++) {
+              const sub = block.content[j]
+              if (sub.type === 'text') {
+                targets.push({ path: ['messages', mi, 'content', i, 'content', j, 'text'], text: sub.text, index: i })
+              }
             }
           }
         }
@@ -64,7 +61,7 @@ const openai = {
   extract(body) {
     const targets = []
 
-    // Responses API format: body.input array
+    // Responses API format: body.input array (Codex CLI)
     if (body?.input?.length) {
       for (let i = 0; i < body.input.length; i++) {
         const item = body.input[i]
@@ -87,20 +84,9 @@ const openai = {
     // Chat Completions format
     if (!body?.messages?.length) return targets
 
-    // Find last assistant message with tool_calls
-    let lastAssistantIdx = -1
-    for (let i = body.messages.length - 1; i >= 0; i--) {
-      if (body.messages[i].role === 'assistant' && body.messages[i].tool_calls?.length) {
-        lastAssistantIdx = i
-        break
-      }
-    }
-    if (lastAssistantIdx === -1) return targets
-
-    // Collect all subsequent role:tool messages
-    for (let i = lastAssistantIdx + 1; i < body.messages.length; i++) {
+    for (let i = 0; i < body.messages.length; i++) {
       const msg = body.messages[i]
-      if (msg.role !== 'tool') break
+      if (msg.role !== 'tool') continue
       if (typeof msg.content === 'string') {
         targets.push({ path: ['messages', i, 'content'], text: msg.content, index: i })
       }
@@ -127,8 +113,7 @@ const gemini = {
     const targets = []
     if (!body?.contents?.length) return targets
 
-    // Find last content with functionResponse parts
-    for (let ci = body.contents.length - 1; ci >= 0; ci--) {
+    for (let ci = 0; ci < body.contents.length; ci++) {
       const content = body.contents[ci]
       if (!content.parts?.length) continue
       for (let pi = 0; pi < content.parts.length; pi++) {
@@ -143,7 +128,6 @@ const gemini = {
           wasObject: typeof resp !== 'string',
         })
       }
-      if (targets.length) break
     }
     return targets
   },
@@ -153,7 +137,6 @@ const gemini = {
       let obj = body
       const path = t.path
       for (let i = 0; i < path.length - 1; i++) obj = obj[path[i]]
-      // If original was object, try to parse compressed back to object
       if (t.wasObject) {
         try {
           obj[path[path.length - 1]] = JSON.parse(t.compressed)

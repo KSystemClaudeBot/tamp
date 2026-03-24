@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 import { createProxy } from '../index.js'
 import { existsSync, readFileSync } from 'node:fs'
-import { spawn } from 'node:child_process'
+import { spawn, execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { checkbox } from '@inquirer/prompts'
+import http from 'node:http'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'))
 
-// ANSI colors
 const c = {
   reset: '\x1b[0m',
   bold: '\x1b[1m',
@@ -20,12 +21,146 @@ const c = {
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
   bgGreen: '\x1b[42m',
-  bgYellow: '\x1b[43m',
 }
 
 function log(msg = '') { console.error(msg) }
 
-function printBanner(config) {
+const STAGE_INFO = {
+  minify:       'Strip JSON whitespace (lossless)',
+  toon:         'Columnar array encoding (lossless)',
+  'strip-lines':'Remove line-number prefixes from Read output',
+  whitespace:   'Collapse blank lines, trim trailing spaces',
+  llmlingua:    'Neural text compression via LLMLingua-2',
+}
+
+// --- Determine stages ---
+const skipPrompt = process.argv.includes('-y') || process.argv.includes('--no-interactive') || !process.stdin.isTTY
+let selectedStages
+
+if (process.env.TAMP_STAGES) {
+  selectedStages = process.env.TAMP_STAGES.split(',').map(s => s.trim()).filter(Boolean)
+} else if (skipPrompt) {
+  selectedStages = Object.keys(STAGE_INFO)
+} else {
+  log('')
+  log(`  ${c.bold}${c.cyan}Tamp${c.reset} ${c.dim}v${pkg.version}${c.reset} — Token compression proxy`)
+  log('')
+  selectedStages = await checkbox({
+    message: 'Compression methods (space to toggle, enter to confirm):',
+    choices: Object.entries(STAGE_INFO).map(([value, desc]) => ({
+      name: `${value.padEnd(12)} ${c.dim}— ${desc}${c.reset}`,
+      value,
+      checked: true,
+    })),
+  })
+  if (selectedStages.length === 0) {
+    log(`  ${c.yellow}No methods selected — running as passthrough proxy.${c.reset}`)
+  }
+}
+
+process.env.TAMP_STAGES = selectedStages.join(',')
+
+// --- Sidecar startup ---
+let sidecarProc = null
+
+async function checkPort(port) {
+  return new Promise(resolve => {
+    const req = http.get(`http://127.0.0.1:${port}/health`, (res) => {
+      res.resume()
+      resolve(res.statusCode === 200)
+    })
+    req.on('error', () => resolve(false))
+    req.setTimeout(1000, () => { req.destroy(); resolve(false) })
+  })
+}
+
+function hasCommand(cmd) {
+  try { execFileSync('which', [cmd], { stdio: 'ignore' }); return true } catch { return false }
+}
+
+async function startSidecar() {
+  const sidecarPort = 8788
+  const sidecarDir = join(root, 'sidecar')
+  const serverPy = join(sidecarDir, 'server.py')
+
+  // 1. Already running?
+  if (await checkPort(sidecarPort)) {
+    log(`  ${c.green}✓${c.reset} LLMLingua-2 sidecar already running on port ${sidecarPort}`)
+    return `http://localhost:${sidecarPort}`
+  }
+
+  if (!existsSync(serverPy)) {
+    return null
+  }
+
+  log(`  ${c.yellow}→${c.reset} Starting LLMLingua-2 sidecar ...`)
+
+  // 2. Try uv run (no venv needed)
+  if (hasCommand('uv')) {
+    try {
+      const proc = spawn('uv', [
+        'run', '--with', 'fastapi,uvicorn,llmlingua',
+        'uvicorn', 'server:app', '--host', '127.0.0.1', '--port', String(sidecarPort),
+      ], { cwd: sidecarDir, stdio: ['ignore', 'pipe', 'pipe'] })
+
+      const url = await waitForSidecar(proc, sidecarPort)
+      if (url) { sidecarProc = proc; return url }
+      proc.kill()
+    } catch { /* try next */ }
+  }
+
+  // 3. Try existing venv
+  const venvPython = join(sidecarDir, '.venv', 'bin', 'python')
+  if (existsSync(venvPython)) {
+    try {
+      const proc = spawn(venvPython, [
+        '-m', 'uvicorn', 'server:app', '--host', '127.0.0.1', '--port', String(sidecarPort),
+      ], { cwd: sidecarDir, stdio: ['ignore', 'pipe', 'pipe'] })
+
+      const url = await waitForSidecar(proc, sidecarPort)
+      if (url) { sidecarProc = proc; return url }
+      proc.kill()
+    } catch { /* fall through */ }
+  }
+
+  return null
+}
+
+function waitForSidecar(proc, port, timeout = 30000) {
+  return new Promise(resolve => {
+    const timer = setTimeout(() => resolve(null), timeout)
+    proc.stderr.on('data', (d) => {
+      if (d.toString().includes('Uvicorn running')) {
+        clearTimeout(timer)
+        log(`  ${c.green}✓${c.reset} LLMLingua-2 sidecar ready on port ${c.bold}${port}${c.reset}`)
+        resolve(`http://localhost:${port}`)
+      }
+    })
+    proc.on('exit', () => { clearTimeout(timer); resolve(null) })
+  })
+}
+
+// Start sidecar if llmlingua is in selected stages
+if (selectedStages.includes('llmlingua')) {
+  const sidecarUrl = await startSidecar()
+  if (sidecarUrl) {
+    process.env.TAMP_LLMLINGUA_URL = sidecarUrl
+  } else {
+    log(`  ${c.yellow}!${c.reset} LLMLingua-2 sidecar not available`)
+    if (!hasCommand('uv')) {
+      log(`    Install uv: ${c.cyan}curl -LsSf https://astral.sh/uv/install.sh | sh${c.reset}`)
+    }
+    log(`    Continuing without neural compression.`)
+    log('')
+    selectedStages = selectedStages.filter(s => s !== 'llmlingua')
+    process.env.TAMP_STAGES = selectedStages.join(',')
+  }
+}
+
+// --- Start proxy ---
+const { config, server } = createProxy()
+
+function printBanner() {
   const url = `http://localhost:${config.port}`
 
   log('')
@@ -48,66 +183,19 @@ function printBanner(config) {
   log('')
 
   log(`  ${c.bold}Compression:${c.reset}`)
-  for (const stage of config.stages) {
-    const icon = stage === 'llmlingua' ? `${c.green}▸${c.reset}` : `${c.green}▸${c.reset}`
-    const label = stage === 'minify' ? 'JSON whitespace removal'
-      : stage === 'toon' ? 'TOON columnar encoding'
-      : stage === 'llmlingua' ? `LLMLingua-2 neural compression ${c.dim}(${config.llmLinguaUrl})${c.reset}`
-      : stage
-    log(`    ${icon} ${c.cyan}${stage}${c.reset} — ${label}`)
+  for (const [stage, desc] of Object.entries(STAGE_INFO)) {
+    const active = config.stages.includes(stage)
+    const icon = active ? `${c.green}✓${c.reset}` : `${c.dim}✗${c.reset}`
+    const extra = stage === 'llmlingua' && active && config.llmLinguaUrl ? ` ${c.dim}(${config.llmLinguaUrl})${c.reset}` : ''
+    log(`    ${icon} ${active ? c.cyan : c.dim}${stage}${c.reset} — ${active ? desc : c.dim + desc + c.reset}${extra}`)
   }
   log('')
 }
 
-// --- Auto-start LLMLingua-2 sidecar if needed ---
-let { config: finalConfig, server: finalServer } = createProxy()
-
-const needsSidecar = finalConfig.stages.includes('llmlingua') && !finalConfig.llmLinguaUrl
-const venvPython = join(root, 'sidecar', '.venv', 'bin', 'python')
-const serverPy = join(root, 'sidecar', 'server.py')
-const hasSidecar = existsSync(venvPython) && existsSync(serverPy)
-
-if (needsSidecar && hasSidecar) {
-  const sidecarPort = 8788
-  process.env.TAMP_LLMLINGUA_URL = `http://localhost:${sidecarPort}`
-  const refreshed = createProxy()
-  finalConfig = refreshed.config
-  finalServer = refreshed.server
-
-  log('')
-  log(`  ${c.yellow}→${c.reset} Starting LLMLingua-2 sidecar ...`)
-
-  const sidecar = spawn(venvPython, ['-m', 'uvicorn', 'server:app', '--host', '127.0.0.1', '--port', String(sidecarPort)], {
-    cwd: join(root, 'sidecar'),
-    stdio: ['ignore', 'pipe', 'pipe'],
-  })
-
-  let ready = false
-  sidecar.stderr.on('data', (d) => {
-    const line = d.toString()
-    if (!ready && line.includes('Uvicorn running')) {
-      ready = true
-      log(`  ${c.green}✓${c.reset} LLMLingua-2 sidecar ready on ${c.bold}port ${sidecarPort}${c.reset}`)
-    }
-  })
-
-  sidecar.on('exit', (code) => {
-    if (code !== null && code !== 0) {
-      log(`  ${c.yellow}✗${c.reset} LLMLingua-2 sidecar exited (code ${code})`)
-    }
-  })
-
-  process.on('exit', () => { sidecar?.kill() })
-  process.on('SIGINT', () => { sidecar?.kill(); process.exit() })
-  process.on('SIGTERM', () => { sidecar?.kill(); process.exit() })
-} else if (needsSidecar && !hasSidecar) {
-  log('')
-  log(`  ${c.yellow}✗${c.reset} LLMLingua-2 sidecar not installed`)
-  log(`    Run: ${c.cyan}curl -fsSL tamp.dev/setup.sh | bash${c.reset}`)
-}
-
-const { config: cfg, server: srv } = { config: finalConfig, server: finalServer }
-
-srv.listen(cfg.port, () => {
-  printBanner(cfg)
+server.listen(config.port, () => {
+  printBanner()
 })
+
+process.on('exit', () => sidecarProc?.kill())
+process.on('SIGINT', () => { sidecarProc?.kill(); process.exit() })
+process.on('SIGTERM', () => { sidecarProc?.kill(); process.exit() })

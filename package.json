@@ -39,6 +39,7 @@
   "homepage": "https://github.com/sliday/tamp",
   "dependencies": {
     "@anthropic-ai/tokenizer": "^0.0.4",
+    "@inquirer/prompts": "^8.3.2",
     "@toon-format/toon": "^2.1.0",
     "fzstd": "^0.1.1"
   }

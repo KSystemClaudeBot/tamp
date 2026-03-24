@@ -44,9 +44,11 @@ Gemini CLI ────►          │          ──► Google AI API
 |-------|-------------|-----------------|
 | `minify` | Strips JSON whitespace | Pretty-printed JSON objects/arrays |
 | `toon` | Columnar [TOON encoding](https://github.com/nicholasgasior/toon-format) | Homogeneous arrays (file listings, routes, deps) |
-| `llmlingua` | Neural text compression via [LLMLingua](https://github.com/microsoft/LLMLingua) sidecar | Natural language text (requires sidecar) |
+| `strip-lines` | Removes line-number prefixes | Read tool output (`  1→...`) |
+| `whitespace` | Collapses blank lines, trims trailing spaces | CLI output, source code |
+| `llmlingua` | Neural text compression via [LLMLingua-2](https://github.com/microsoft/LLMLingua) | Natural language text (auto-starts sidecar) |
 
-`minify` and `toon` are enabled by default. Add LLMLingua with `TAMP_STAGES=minify,toon,llmlingua`.
+All 5 stages enabled by default. On first launch, an interactive prompt lets you toggle methods. Use `-y` to skip the prompt.
 
 ## Quick Start
 
@@ -98,7 +100,7 @@ All configuration via environment variables:
 | `TAMP_UPSTREAM` | `https://api.anthropic.com` | Default upstream API URL |
 | `TAMP_UPSTREAM_OPENAI` | `https://api.openai.com` | Upstream for OpenAI-format requests |
 | `TAMP_UPSTREAM_GEMINI` | `https://generativelanguage.googleapis.com` | Upstream for Gemini-format requests |
-| `TAMP_STAGES` | `minify,toon` | Comma-separated compression stages |
+| `TAMP_STAGES` | `minify,toon,strip-lines,whitespace,llmlingua` | Comma-separated compression stages |
 | `TAMP_MIN_SIZE` | `200` | Minimum content size (chars) to attempt compression |
 | `TAMP_LOG` | `true` | Enable request logging to stderr |
 | `TAMP_LOG_FILE` | _(none)_ | Write logs to file |
@@ -108,8 +110,14 @@ All configuration via environment variables:
 ### Recommended setup
 
 ```bash
-# Maximum compression
-TAMP_STAGES=minify,toon,llmlingua TAMP_LLMLINGUA_URL=http://localhost:8788 npx @sliday/tamp
+# All stages enabled by default — just run:
+npx @sliday/tamp
+
+# Skip interactive prompt (CI/scripts):
+npx @sliday/tamp -y
+
+# Without LLMLingua (no Python needed):
+TAMP_STAGES=minify,toon,strip-lines,whitespace npx @sliday/tamp -y
 ```
 
 ## Installation Methods

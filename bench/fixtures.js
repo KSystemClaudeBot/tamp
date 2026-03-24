@@ -121,9 +121,9 @@ const tabularData = {
 const sourceCode = {
   id: 'source-code',
   name: 'Source Code (TypeScript)',
-  description: 'Plain TypeScript source — not JSON, should pass through uncompressed',
+  description: 'Plain TypeScript source — text content, may benefit from whitespace normalization or LLMLingua',
   contentType: 'text',
-  expectedCompression: '0%',
+  expectedCompression: '0-50%',
   body: makeBody(toolFlow('tu_src', `import { useState, useEffect, useCallback } from 'react';
 import type { User, ApiResponse, PaginationParams } from '../types';
 
@@ -218,7 +218,7 @@ export function isUserActive(user: User): boolean {
 const multiTurn = {
   id: 'multi-turn',
   name: 'Multi-turn Conversation',
-  description: '5-turn conversation mixing text and tool_results — only last user msg compressed',
+  description: '5-turn conversation mixing text and tool_results — all messages compressed',
   contentType: 'mixed',
   expectedCompression: 'mixed',
   body: makeBody([
@@ -329,4 +329,121 @@ const errorResult = {
   }, null, 2), { is_error: true })),
 }
 
-export const scenarios = [smallJson, largeJson, tabularData, sourceCode, multiTurn, lineNumbered, errorResult]
+// 8. Line-numbered source code (non-JSON text) — tests strip-lines on text content
+const lineNumberedSource = {
+  id: 'line-numbered-source',
+  name: 'Line-Numbered Source Code',
+  description: 'Read tool output with line number prefixes containing TypeScript (not JSON) — tests strip-lines stage on text',
+  contentType: 'text',
+  expectedCompression: '10-20%',
+  body: makeBody(toolFlow('tu_lns', [
+    '  1→import express from \'express\';\n',
+    '  2→import cors from \'cors\';\n',
+    '  3→import helmet from \'helmet\';\n',
+    '  4→\n',
+    '  5→const app = express();\n',
+    '  6→\n',
+    '  7→// Middleware\n',
+    '  8→app.use(cors({ origin: \'*\' }));\n',
+    '  9→app.use(helmet());\n',
+    ' 10→app.use(express.json());\n',
+    ' 11→\n',
+    ' 12→// Routes\n',
+    ' 13→app.get(\'/api/health\', (req, res) => {\n',
+    ' 14→  res.json({ status: \'ok\', uptime: process.uptime() });\n',
+    ' 15→});\n',
+    ' 16→\n',
+    ' 17→app.get(\'/api/users\', async (req, res) => {\n',
+    ' 18→  const { page = 1, limit = 20 } = req.query;\n',
+    ' 19→  const users = await db.users.findMany({\n',
+    ' 20→    skip: (page - 1) * limit,\n',
+    ' 21→    take: Number(limit),\n',
+    ' 22→    orderBy: { createdAt: \'desc\' },\n',
+    ' 23→  });\n',
+    ' 24→  res.json({ data: users, page: Number(page) });\n',
+    ' 25→});\n',
+    ' 26→\n',
+    ' 27→app.post(\'/api/users\', async (req, res) => {\n',
+    ' 28→  const { name, email, role } = req.body;\n',
+    ' 29→  const user = await db.users.create({ data: { name, email, role } });\n',
+    ' 30→  res.status(201).json({ data: user });\n',
+    ' 31→});\n',
+    ' 32→\n',
+    ' 33→app.listen(3000, () => {\n',
+    ' 34→  console.log(\'Server running on port 3000\');\n',
+    ' 35→});\n',
+  ].join(''))),
+}
+
+// 9. Whitespace-heavy CLI output — tests whitespace normalization
+const whitespaceHeavy = {
+  id: 'whitespace-heavy',
+  name: 'Whitespace-Heavy CLI Output',
+  description: 'Command output with excessive blank lines and trailing spaces — tests whitespace normalization stage',
+  contentType: 'text',
+  expectedCompression: '10-15%',
+  body: makeBody(toolFlow('tu_ws', [
+    'Running tests...   \n',
+    '\n',
+    '\n',
+    '\n',
+    '  PASS  src/utils/format.test.ts    \n',
+    '    ✓ formats currency correctly (3ms)   \n',
+    '    ✓ handles negative values    \n',
+    '    ✓ respects locale settings   \n',
+    '\n',
+    '\n',
+    '\n',
+    '  PASS  src/utils/validate.test.ts    \n',
+    '    ✓ validates email format (1ms)    \n',
+    '    ✓ rejects invalid emails    \n',
+    '    ✓ validates phone numbers    \n',
+    '    ✓ handles edge cases    \n',
+    '\n',
+    '\n',
+    '\n',
+    '  PASS  src/components/UserList.test.tsx    \n',
+    '    ✓ renders user list (12ms)   \n',
+    '    ✓ handles empty state    \n',
+    '    ✓ pagination works    \n',
+    '    ✓ search filters correctly (5ms)    \n',
+    '    ✓ sort toggles direction    \n',
+    '\n',
+    '\n',
+    '\n',
+    'Test Suites: 3 passed, 3 total    \n',
+    'Tests:       12 passed, 12 total    \n',
+    'Snapshots:   0 total    \n',
+    'Time:        2.847s    \n',
+    '\n',
+    '\n',
+    '\n',
+  ].join(''))),
+}
+
+// 10. All-message multi-turn — tests compression of historical messages
+const allMessageMultiTurn = {
+  id: 'all-message-multi-turn',
+  name: 'All-Message Multi-turn (10 turns)',
+  description: '10-turn conversation with tool_results in every turn — tests all-message compression benefit',
+  contentType: 'mixed',
+  expectedCompression: '25-40%',
+  body: (() => {
+    const messages = []
+    for (let i = 0; i < 10; i++) {
+      const id = `tu_am${i}`
+      messages.push({ role: 'user', content: `Read file ${i}` })
+      messages.push({ role: 'assistant', content: [{ type: 'text', text: `Reading file ${i}.` }, toolUse(id)] })
+      messages.push({ role: 'user', content: [toolResult(id, JSON.stringify({
+        filename: `src/module-${i}.ts`,
+        lines: 50 + i * 10,
+        imports: [`../utils/helper-${i}`, `../types/model-${i}`, `../config/settings`],
+        exports: [`function process${i}()`, `interface Config${i}`, `const DEFAULT_${i}`],
+        dependencies: { lodash: '^4.17.21', zod: '^3.22.0', prisma: '^5.7.0' },
+      }, null, 2))] })
+    }
+    return makeBody(messages)
+  })(),
+}
+
+export const scenarios = [smallJson, largeJson, tabularData, sourceCode, multiTurn, lineNumbered, errorResult, lineNumberedSource, whitespaceHeavy, allMessageMultiTurn]

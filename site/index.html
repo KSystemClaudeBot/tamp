@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamp — Token compression proxy for coding agents</title>
-    <meta name="description" content="Tamp is a token compression proxy for coding agents. Works with Claude Code, Aider, Cursor, Cline, Windsurf. 33.9% fewer input tokens, zero behavior change.">
+    <meta name="description" content="Tamp is a token compression proxy for coding agents. Works with Claude Code, Aider, Cursor, Cline, Windsurf. 32.0% fewer input tokens, zero behavior change.">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" href="tamper-icon.png" type="image/png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -272,7 +272,7 @@
             Token compression proxy for coding agents.
         </p>
         <p class="db-body" style="margin-top: 0.5rem; font-size: 1.25rem;">
-            33.9% fewer input tokens. Zero code changes.
+            32.0% fewer input tokens. Zero code changes.
         </p>
 
         <div class="install-card db-card db-surface--raised" style="margin-top: 2rem;">
@@ -484,15 +484,15 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="benchmark">
     <div class="section-inner">
-        <h2 class="db-h2">Measured: 33.9% fewer tokens</h2>
+        <h2 class="db-h2">Measured: 32.0% fewer tokens</h2>
         <p class="db-body" style="margin-top: 0.5rem; opacity: 0.7;">
-            A/B tested via OpenRouter with Claude Sonnet 4. Seven scenarios, five runs each, 70 API calls total.
+            A/B tested via OpenRouter with Claude Sonnet 4. Ten scenarios, five runs each, 100 API calls total.
         </p>
 
         <!-- DAUB native bar chart -->
         <div class="tamp-chart-wrap" style="margin-top: 2rem;">
             <div class="db-chart" style="height:280px;">
-                <div class="db-chart__bar" style="height:44.9%;">
+                <div class="db-chart__bar" style="height:45.0%;">
                     <span class="bar-value">21.9%</span>
                 </div>
                 <div class="db-chart__bar" style="height:58.1%;">
@@ -504,20 +504,28 @@ size[3]{1024|2048|512}</div>
                 <div class="db-chart__bar db-chart__bar--secondary" style="height:81.7%;">
                     <span class="bar-value">39.8%</span>
                 </div>
-                <div class="db-chart__bar" style="height:47.2%;">
-                    <span class="bar-value">23.0%</span>
+                <div class="db-chart__bar" style="height:65.5%;">
+                    <span class="bar-value">31.9%</span>
                 </div>
                 <div class="db-chart__bar" style="height:65.1%;">
                     <span class="bar-value">31.7%</span>
+                </div>
+                <div class="db-chart__bar" style="height:45.2%;">
+                    <span class="bar-value">22.0%</span>
+                </div>
+                <div class="db-chart__bar" style="height:46.4%;">
+                    <span class="bar-value">22.6%</span>
                 </div>
             </div>
             <div class="db-chart__labels">
                 <span>Small JSON</span>
                 <span>Large JSON</span>
-                <span>Tabular Data</span>
+                <span>Tabular</span>
                 <span>Source Code</span>
                 <span>Multi-turn</span>
                 <span>Line-Num</span>
+                <span>LN Source</span>
+                <span>All-Msg 10t</span>
             </div>
         </div>
 
@@ -552,22 +560,40 @@ size[3]{1024|2048|512}</div>
                         <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-48.7%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Source Code <span class="db-caption">(TypeScript)</span></td>
+                        <td style="padding: 8px 12px;">Source Code <span class="db-caption">(TypeScript + LLMLingua-2)</span></td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,069</td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">644</td>
                         <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-39.8%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Multi-turn <span class="db-caption">(5-turn conversation)</span></td>
+                        <td style="padding: 8px 12px;">Multi-turn <span class="db-caption">(5-turn, all messages)</span></td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,026</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">790</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-23.0%</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">699</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.9%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Line-Numbered <span class="db-caption">(Read tool output)</span></td>
+                        <td style="padding: 8px 12px;">Line-Numbered JSON <span class="db-caption">(Read tool output)</span></td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">473</td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">323</td>
                         <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.7%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
+                        <td style="padding: 8px 12px;">Line-Numbered Source <span class="db-caption">(strip-lines on text)</span></td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">505</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">394</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-22.0%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
+                        <td style="padding: 8px 12px;">Whitespace-Heavy <span class="db-caption">(CLI output)</span></td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">321</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">301</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-6.2%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
+                        <td style="padding: 8px 12px;">All-Message 10-turn <span class="db-caption">(historical compression)</span></td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">2,217</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,717</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-22.6%</td>
                     </tr>
                     <tr>
                         <td style="padding: 8px 12px;">Error Result <span class="db-caption">(is_error: true)</span> <span style="font-style: italic; opacity: 0.5;">&mdash; skipped by design</span></td>
@@ -593,7 +619,7 @@ size[3]{1024|2048|512}</div>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--db-color-accent, currentColor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 </div>
                 <p class="db-body" style="font-weight: 600; margin-bottom: 0.25rem;">What compresses</p>
-                <p class="db-caption">Pretty JSON (minify), arrays (TOON columnar), line-numbered output (strip), text (LLMLingua-2 neural).</p>
+                <p class="db-caption">5 stages: JSON minify, TOON columnar, line-number stripping, whitespace normalization, LLMLingua-2 neural compression.</p>
             </div>
             <div class="db-card" style="padding: 1.25rem;">
                 <div style="margin-bottom: 0.75rem;">
@@ -624,31 +650,31 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="savings">
     <div class="section-inner" style="text-align: center;">
-        <h2 class="db-h2">~$35/month saved per developer</h2>
+        <h2 class="db-h2">~$28/month saved per developer</h2>
         <p class="db-body" style="margin-top: 0.75rem; max-width: 640px; margin-left: auto; margin-right: auto; opacity: 0.7;">
-            At Sonnet 4 pricing ($3/Mtok input), Tamp saves ~$0.23 per 200-request session.
-            Heavy users running 5 sessions/day see ~$35/month. For a 10-person team: ~$4,200/year.
+            At Sonnet 4 pricing ($3/Mtok input), Tamp saves ~$0.19 per 200-request session (63K tokens).
+            Heavy users running 5 sessions/day see ~$28/month. For a 10-person team: ~$3,400/year.
         </p>
 
         <div class="db-grid db-grid--3 db-gap-4" style="max-width: 720px; margin: var(--db-space-5) auto 0;">
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Session</span>
-                    <span class="db-stat__value">$0.23</span>
+                    <span class="db-stat__value">$0.19</span>
                     <span class="db-stat__change">200 requests</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Developer</span>
-                    <span class="db-stat__value">$35/mo</span>
+                    <span class="db-stat__value">$28/mo</span>
                     <span class="db-stat__change">5 sessions/day</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">10-Person Team</span>
-                    <span class="db-stat__value">$4,200/yr</span>
+                    <span class="db-stat__value">$3,400/yr</span>
                     <span class="db-stat__change">free and open source</span>
                 </div>
             </div>

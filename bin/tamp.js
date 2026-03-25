@@ -99,7 +99,7 @@ async function startSidecar() {
   if (hasCommand('uv')) {
     try {
       const proc = spawn('uv', [
-        'run', '--with', 'fastapi,uvicorn,llmlingua',
+        'run', '--with', 'fastapi', '--with', 'uvicorn', '--with', 'llmlingua', '--with', 'mlx',
         'uvicorn', 'server:app', '--host', '127.0.0.1', '--port', String(sidecarPort),
       ], { cwd: sidecarDir, stdio: ['ignore', 'pipe', 'pipe'] })
 

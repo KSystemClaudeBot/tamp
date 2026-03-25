@@ -69,10 +69,10 @@ async function main() {
   const total = scenarios.length * RUNS * 2
   let call = 0
   const config = loadConfig({
-    TOONA_STAGES: 'minify,toon,llmlingua',
-    TOONA_LLMLINGUA_URL: 'http://localhost:5001',
-    TOONA_MIN_SIZE: '50',
-    TOONA_LOG: 'false',
+    TAMP_STAGES: 'minify,toon,strip-lines,whitespace,llmlingua',
+    TAMP_LLMLINGUA_URL: 'http://localhost:8788',
+    TAMP_MIN_SIZE: '50',
+    TAMP_LOG: 'false',
   })
 
   const results = {

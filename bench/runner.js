@@ -69,7 +69,7 @@ async function main() {
   const total = scenarios.length * RUNS * 2
   let call = 0
   const config = loadConfig({
-    TAMP_STAGES: 'minify,toon,strip-lines,whitespace,llmlingua',
+    TAMP_STAGES: 'minify,toon,strip-lines,whitespace,llmlingua,dedup,diff,prune',
     TAMP_LLMLINGUA_URL: 'http://localhost:8788',
     TAMP_MIN_SIZE: '50',
     TAMP_LOG: 'false',

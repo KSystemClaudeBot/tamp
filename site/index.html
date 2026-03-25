@@ -272,7 +272,7 @@
             Token compression proxy for coding agents.
         </p>
         <p class="db-body" style="margin-top: 0.5rem; font-size: 1.25rem;">
-            32.0% fewer input tokens. Zero code changes.
+            50.5% fewer input tokens. Zero code changes.
         </p>
 
         <div class="install-card db-card db-surface--raised" style="margin-top: 2rem;">
@@ -480,48 +480,44 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="benchmark">
     <div class="section-inner">
-        <h2 class="db-h2">Measured: 32.0% fewer tokens</h2>
+        <h2 class="db-h2">Measured: 50.5% fewer tokens</h2>
         <p class="db-body" style="margin-top: 0.5rem; opacity: 0.7;">
-            A/B tested via OpenRouter with Claude Sonnet 4.6. Ten scenarios, five runs each, 100 API calls total.
+            A/B tested via OpenRouter with Claude Sonnet 4.6. Twelve scenarios, five runs each, 120 API calls total.
         </p>
 
         <!-- DAUB native bar chart -->
         <div class="tamp-chart-wrap" style="margin-top: 2rem;">
             <div class="db-chart" style="height:280px;">
-                <div class="db-chart__bar" style="height:45.0%;">
-                    <span class="bar-value">21.9%</span>
+                <div class="db-chart__bar" style="height:26.8%;">
+                    <span class="bar-value">21.8%</span>
                 </div>
-                <div class="db-chart__bar" style="height:58.1%;">
-                    <span class="bar-value">28.3%</span>
+                <div class="db-chart__bar" style="height:79.7%;">
+                    <span class="bar-value">64.9%</span>
+                </div>
+                <div class="db-chart__bar" style="height:59.7%;">
+                    <span class="bar-value">48.6%</span>
+                </div>
+                <div class="db-chart__bar" style="height:39.0%;">
+                    <span class="bar-value">31.8%</span>
+                </div>
+                <div class="db-chart__bar" style="height:38.8%;">
+                    <span class="bar-value">31.6%</span>
                 </div>
                 <div class="db-chart__bar" style="height:100%;">
-                    <span class="bar-value">48.7%</span>
+                    <span class="bar-value">81.4%</span>
                 </div>
-                <div class="db-chart__bar db-chart__bar--secondary" style="height:81.7%;">
-                    <span class="bar-value">39.8%</span>
-                </div>
-                <div class="db-chart__bar" style="height:65.5%;">
-                    <span class="bar-value">31.9%</span>
-                </div>
-                <div class="db-chart__bar" style="height:65.1%;">
-                    <span class="bar-value">31.7%</span>
-                </div>
-                <div class="db-chart__bar" style="height:45.2%;">
-                    <span class="bar-value">22.0%</span>
-                </div>
-                <div class="db-chart__bar" style="height:46.4%;">
-                    <span class="bar-value">22.6%</span>
+                <div class="db-chart__bar db-chart__bar--secondary" style="height:45.5%;">
+                    <span class="bar-value">37.1%</span>
                 </div>
             </div>
             <div class="db-chart__labels">
                 <span>Small JSON</span>
                 <span>Large JSON</span>
                 <span>Tabular</span>
-                <span>Source Code</span>
                 <span>Multi-turn</span>
                 <span>Line-Num</span>
-                <span>LN Source</span>
-                <span>All-Msg 10t</span>
+                <span>Lockfile</span>
+                <span>Dedup Read</span>
             </div>
         </div>
 
@@ -544,10 +540,10 @@ size[3]{1024|2048|512}</div>
                         <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-21.9%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Large JSON <span class="db-caption">(dependency tree)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">6,773</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">4,855</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-28.3%</td>
+                        <td style="padding: 8px 12px;">Large JSON <span class="db-caption">(dependency tree + prune)</span></td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">6,774</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">2,380</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-64.9%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Tabular Data <span class="db-caption">(file listing)</span></td>
@@ -556,16 +552,10 @@ size[3]{1024|2048|512}</div>
                         <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-48.7%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Source Code <span class="db-caption">(TypeScript + LLMLingua-2)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,069</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">644</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-39.8%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Multi-turn <span class="db-caption">(5-turn, all messages)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,026</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">699</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.9%</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,027</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">700</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.8%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Line-Numbered JSON <span class="db-caption">(Read tool output)</span></td>
@@ -574,22 +564,22 @@ size[3]{1024|2048|512}</div>
                         <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.7%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Line-Numbered Source <span class="db-caption">(strip-lines on text)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">505</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">394</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-22.0%</td>
+                        <td style="padding: 8px 12px;">Lockfile <span class="db-caption">(npm deps + prune)</span></td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">3,444</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">640</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-81.4%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Whitespace-Heavy <span class="db-caption">(CLI output)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">321</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">301</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-6.2%</td>
+                        <td style="padding: 8px 12px;">Duplicate Read <span class="db-caption">(same file twice + dedup)</span></td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">490</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">308</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-37.1%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">All-Message 10-turn <span class="db-caption">(historical compression)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">2,217</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,717</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-22.6%</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">2,218</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,718</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-22.5%</td>
                     </tr>
                     <tr>
                         <td style="padding: 8px 12px;">Error Result <span class="db-caption">(is_error: true)</span> <span style="font-style: italic; opacity: 0.5;">&mdash; skipped by design</span></td>
@@ -615,7 +605,7 @@ size[3]{1024|2048|512}</div>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--db-color-accent, currentColor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 </div>
                 <p class="db-body" style="font-weight: 600; margin-bottom: 0.25rem;">What compresses</p>
-                <p class="db-caption">5 stages: JSON minify, TOON columnar, line-number stripping, whitespace normalization, LLMLingua-2 neural compression.</p>
+                <p class="db-caption">8 stages: minify, TOON, strip-lines, whitespace, LLMLingua-2, dedup, diff, field pruning.</p>
             </div>
             <div class="db-card" style="padding: 1.25rem;">
                 <div style="margin-bottom: 0.75rem;">
@@ -646,38 +636,38 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="savings">
     <div class="section-inner" style="text-align: center;">
-        <h2 class="db-h2">~$28/month saved per developer</h2>
+        <h2 class="db-h2">~$46/month saved per developer</h2>
         <p class="db-body" style="margin-top: 0.75rem; max-width: 640px; margin-left: auto; margin-right: auto; opacity: 0.7;">
-            At Sonnet 4 pricing ($3/Mtok input), Tamp saves ~$0.19 per 200-request session (63K tokens).
-            Heavy users running 5 sessions/day see ~$28/month. For a 10-person team: ~$3,400/year.
+            At Sonnet 4.6 pricing ($3/Mtok input), Tamp saves ~$0.31 per 200-request session (103K tokens).
+            Heavy users running 5 sessions/day see ~$46/month. For a 10-person team: ~$5,500/year.
         </p>
 
         <div class="db-grid db-grid--3 db-gap-4" style="max-width: 720px; margin: var(--db-space-5) auto 0;">
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Session</span>
-                    <span class="db-stat__value">$0.19</span>
+                    <span class="db-stat__value">$0.31</span>
                     <span class="db-stat__change">200 requests</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Developer</span>
-                    <span class="db-stat__value">$28/mo</span>
+                    <span class="db-stat__value">$46/mo</span>
                     <span class="db-stat__change">5 sessions/day</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">10-Person Team</span>
-                    <span class="db-stat__value">$3,400/yr</span>
+                    <span class="db-stat__value">$5,500/yr</span>
                     <span class="db-stat__change">free and open source</span>
                 </div>
             </div>
         </div>
 
         <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4;">
-            Based on Sonnet 4.6 ($3/Mtok) with 60% compressible traffic. Opus 4.6 ($5/Mtok) saves ~$48/dev/month.
+            Based on Sonnet 4.6 ($3/Mtok) with 60% compressible traffic. Opus 4.6 ($5/Mtok) saves ~$77/dev/month.
         </p>
     </div>
 </section>
@@ -689,7 +679,7 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="max-plan">
     <div class="section-inner" style="text-align: center;">
-        <h2 class="db-h2">Claude Max? Last 47% longer.</h2>
+        <h2 class="db-h2">Claude Max? Last 2&times; longer.</h2>
         <p class="db-body" style="margin-top: 0.75rem; max-width: 640px; margin-left: auto; margin-right: auto; opacity: 0.7;">
             Max subscribers have a fixed token budget per session. Tamp compresses input tokens
             before they count against your limit &mdash; same work, fewer tokens consumed.
@@ -701,18 +691,18 @@ size[3]{1024|2048|512}</div>
                 <p style="margin-top: 0.5rem;">
                     <span style="font-size: 1.25rem; opacity: 0.4; text-decoration: line-through;">5&times;</span>
                     <span style="font-size: 1.5rem; margin-left: 0.5rem;">&rarr;</span>
-                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">7.4&times;</span>
+                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">10.1&times;</span>
                 </p>
-                <p class="db-caption" style="margin-top: 0.25rem; color: #51cf66;">+47% more usage</p>
+                <p class="db-caption" style="margin-top: 0.25rem; color: #51cf66;">+2&times; more usage</p>
             </div>
             <div class="db-card" style="padding: 1.5rem; text-align: center;">
                 <p class="db-caption" style="opacity: 0.5;">Max 20&times; &mdash; $200/mo</p>
                 <p style="margin-top: 0.5rem;">
                     <span style="font-size: 1.25rem; opacity: 0.4; text-decoration: line-through;">20&times;</span>
                     <span style="font-size: 1.5rem; margin-left: 0.5rem;">&rarr;</span>
-                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">29.4&times;</span>
+                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">40.4&times;</span>
                 </p>
-                <p class="db-caption" style="margin-top: 0.25rem; color: #51cf66;">+47% more usage</p>
+                <p class="db-caption" style="margin-top: 0.25rem; color: #51cf66;">+2&times; more usage</p>
             </div>
         </div>
 
@@ -731,30 +721,30 @@ size[3]{1024|2048|512}</div>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Sonnet 4.6</td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$3</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.19</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$28</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$3,400</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.31</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$46</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$5,500</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Opus 4.6</td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$5</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.32</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$48</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$5,760</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.52</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$77</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$9,200</td>
                     </tr>
                     <tr>
                         <td style="padding: 8px 12px;">Opus 4.6 <span class="db-caption">(extended &gt;200k)</span></td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$10</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.64</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$96</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$11,520</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$1.03</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$155</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$18,500</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4;">
-            Math: 32% fewer input tokens &rarr; 1/(1&minus;0.32) = 1.47&times; more requests per budget. 5 sessions/day assumed.
+            Math: 50.5% fewer input tokens &rarr; 1/(1&minus;0.505) = 2.02&times; more requests per budget. 5 sessions/day assumed.
         </p>
     </div>
 </section>

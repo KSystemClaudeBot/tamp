@@ -446,4 +446,56 @@ const allMessageMultiTurn = {
   })(),
 }
 
-export const scenarios = [smallJson, largeJson, tabularData, sourceCode, multiTurn, lineNumbered, errorResult, lineNumberedSource, whitespaceHeavy, allMessageMultiTurn]
+// 11. Lockfile content — tests field pruning (integrity, resolved, shasum)
+function makeLockDeps(count) {
+  const names = ['express', 'lodash', 'axios', 'moment', 'chalk', 'commander', 'debug', 'semver', 'uuid', 'dotenv']
+  const deps = {}
+  for (let i = 0; i < count; i++) {
+    const name = names[i % names.length] + (i >= names.length ? `-v${Math.floor(i / names.length)}` : '')
+    deps[name] = {
+      version: `${(i % 5) + 1}.${i % 20}.${i % 10}`,
+      resolved: `https://registry.npmjs.org/${name}/-/${name}-${(i % 5) + 1}.${i % 20}.${i % 10}.tgz`,
+      integrity: `sha512-${Buffer.from(String(i * 7919)).toString('base64')}==`,
+      shasum: `a${String(i * 31337).slice(0, 8)}b`,
+      _id: `${name}@${(i % 5) + 1}.${i % 20}.${i % 10}`,
+      _from: `${name}@^${(i % 5) + 1}.0.0`,
+      _nodeVersion: '18.19.0',
+      _npmVersion: '10.2.3',
+      requires: i > 0 ? { [names[(i - 1) % names.length]]: `^${(i % 3) + 1}.0.0` } : {},
+    }
+  }
+  return deps
+}
+
+const lockfileContent = {
+  id: 'lockfile',
+  name: 'Lockfile (npm dependencies)',
+  description: 'package-lock.json with integrity hashes and registry URLs — tests field pruning',
+  contentType: 'json',
+  expectedCompression: '60-80%',
+  body: makeBody(toolFlow('tu_lock', JSON.stringify({
+    name: 'my-project', version: '1.0.0', lockfileVersion: 3,
+    dependencies: makeLockDeps(20),
+  }, null, 2))),
+}
+
+// 12. Duplicate file read — tests dedup stage
+const dupFileContent = JSON.stringify({
+  name: 'tamp', version: '0.3.0', type: 'module', main: 'index.js',
+  scripts: { start: 'node bin/tamp.js', test: 'node --test test/*.test.js', lint: 'eslint .' },
+  dependencies: { '@toon-format/toon': '^2.1.0', fzstd: '^0.1.1', '@anthropic-ai/tokenizer': '^0.0.4', diff: '^7.0.0' },
+}, null, 2)
+
+const duplicateRead = {
+  id: 'duplicate-read',
+  name: 'Duplicate File Read (same file twice)',
+  description: 'Same file read in two turns — tests dedup stage replacing second with reference',
+  contentType: 'json',
+  expectedCompression: '40-50%',
+  body: makeBody([
+    ...toolFlow('tu_dup1', dupFileContent),
+    ...toolFlow('tu_dup2', dupFileContent),
+  ]),
+}
+
+export const scenarios = [smallJson, largeJson, tabularData, sourceCode, multiTurn, lineNumbered, errorResult, lineNumberedSource, whitespaceHeavy, allMessageMultiTurn, lockfileContent, duplicateRead]

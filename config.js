@@ -15,6 +15,10 @@ export function loadConfig(env = process.env) {
     maxBody: parseInt(env.TAMP_MAX_BODY, 10) || 10_485_760,
     cacheSafe: true,
     llmLinguaUrl: env.TAMP_LLMLINGUA_URL || null,
+    textpressOllamaUrl: env.TAMP_TEXTPRESS_OLLAMA_URL || 'http://localhost:11434',
+    textpressOllamaModel: env.TAMP_TEXTPRESS_OLLAMA_MODEL || 'qwen3.5:0.8b',
+    textpressModel: env.TAMP_TEXTPRESS_MODEL || 'google/gemini-3.1-flash-lite-preview',
+    textpressApiKey: env.TAMP_TEXTPRESS_API_KEY || env.OPENROUTER_API_KEY || null,
     tokenCost: parseFloat(env.TAMP_TOKEN_COST) || 3,
   })
 }

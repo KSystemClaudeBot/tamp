@@ -113,6 +113,67 @@ function stripComments(text) {
     .replace(/\n\s*\n\s*\n/g, '\n\n')    // collapse resulting blank lines
 }
 
+// --- Stage: textpress (opt-in, uses Ollama or OpenRouter free model) ---
+const TEXTPRESS_PROMPT = 'You are an expert at making text more concise without changing its meaning. Don\'t reword, don\'t improve. Find ways to combine and shorten. Keep ALL names, versions, paths, function signatures, numbers. Return ONLY the shortened text. No explanations.'
+
+async function textpressCompress(text, config) {
+  if (text.length < 200) return null
+
+  // Try Ollama first (local, free, no rate limits)
+  const ollamaUrl = config.textpressOllamaUrl || 'http://localhost:11434'
+  const ollamaModel = config.textpressOllamaModel || 'qwen3.5:0.8b'
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 15000)
+    const res = await fetch(`${ollamaUrl}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: ollamaModel,
+        messages: [{ role: 'system', content: TEXTPRESS_PROMPT }, { role: 'user', content: text }],
+        stream: false,
+        options: { temperature: 0, num_predict: Math.ceil(text.length * 0.7) },
+        think: false,
+      }),
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
+    if (res.ok) {
+      const data = await res.json()
+      const output = (data.message?.content || '').trim()
+      if (output.length > 0 && output.length < text.length * 0.9) return output
+    }
+  } catch { /* Ollama not available, try OpenRouter */ }
+
+  // Fallback: OpenRouter free model
+  const orKey = config.textpressApiKey || process.env.OPENROUTER_API_KEY
+  if (!orKey) return null
+  const orModel = config.textpressModel || 'google/gemini-3.1-flash-lite-preview'
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 10000)
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${orKey}` },
+      body: JSON.stringify({
+        model: orModel,
+        messages: [{ role: 'system', content: TEXTPRESS_PROMPT }, { role: 'user', content: text }],
+        max_tokens: Math.ceil(text.length * 0.5),
+        temperature: 0,
+      }),
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
+    if (res.ok) {
+      const data = await res.json()
+      const output = (data.choices?.[0]?.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim()
+      if (output.length > 0 && output.length < text.length * 0.9) return output
+    }
+  } catch { /* OpenRouter not available */ }
+
+  return null
+}
+
 // --- Core compression ---
 export function compressText(text, config) {
   if (text.length < config.minSize) return null
@@ -135,7 +196,10 @@ export function compressText(text, config) {
       return { text: processed, method: 'normalize', originalLen: text.length, compressedLen: processed.length, originalTokens: countTokens(text), compressedTokens: countTokens(processed) }
     }
     if (config.stages.includes('llmlingua') && config.llmLinguaUrl) {
-      return { async: true, text: processed, cls }
+      return { async: true, asyncMethod: 'llmlingua', text: processed, cls }
+    }
+    if (config.stages.includes('textpress')) {
+      return { async: true, asyncMethod: 'textpress', text: processed, cls }
     }
     return null
   }
@@ -196,7 +260,12 @@ async function compressBlock(text, config) {
   const sync = compressText(text, config)
   let result
   if (sync && sync.async) {
-    result = await compressWithLLMLingua(sync.text, config)
+    if (sync.asyncMethod === 'textpress') {
+      const compressed = await textpressCompress(sync.text, config)
+      result = compressed ? { text: compressed, method: 'textpress', originalLen: text.length, compressedLen: compressed.length, originalTokens: countTokens(text), compressedTokens: countTokens(compressed) } : null
+    } else {
+      result = await compressWithLLMLingua(sync.text, config)
+    }
   } else {
     result = sync
   }

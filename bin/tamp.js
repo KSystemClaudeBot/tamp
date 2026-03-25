@@ -35,6 +35,7 @@ const STAGE_INFO = {
   diff:         'Replace similar re-reads with unified diffs',
   prune:        'Strip lockfile hashes, registry URLs, npm metadata',
   'strip-comments': 'Remove code comments (lossy, opt-in)',
+  textpress:        'LLM semantic compression via Ollama/OpenRouter (opt-in)',
 }
 
 // --- Determine stages ---
@@ -44,7 +45,7 @@ let selectedStages
 if (process.env.TAMP_STAGES) {
   selectedStages = process.env.TAMP_STAGES.split(',').map(s => s.trim()).filter(Boolean)
 } else if (skipPrompt) {
-  selectedStages = Object.keys(STAGE_INFO).filter(s => s !== 'strip-comments')
+  selectedStages = Object.keys(STAGE_INFO).filter(s => s !== 'strip-comments' && s !== 'textpress')
 } else {
   log('')
   log(`  ${c.bold}${c.cyan}Tamp${c.reset} ${c.dim}v${pkg.version}${c.reset} — Token compression proxy`)
@@ -54,7 +55,7 @@ if (process.env.TAMP_STAGES) {
     choices: Object.entries(STAGE_INFO).map(([value, desc]) => ({
       name: `${value.padEnd(12)} ${c.dim}— ${desc}${c.reset}`,
       value,
-      checked: value !== 'strip-comments',
+      checked: value !== 'strip-comments' && value !== 'textpress',
     })),
   })
   if (selectedStages.length === 0) {

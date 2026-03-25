@@ -31,6 +31,9 @@ const STAGE_INFO = {
   'strip-lines':'Remove line-number prefixes from Read output',
   whitespace:   'Collapse blank lines, trim trailing spaces',
   llmlingua:    'Neural text compression via LLMLingua-2',
+  dedup:        'Replace duplicate tool_results with references',
+  diff:         'Replace similar re-reads with unified diffs',
+  prune:        'Strip lockfile hashes, registry URLs, npm metadata',
 }
 
 // --- Determine stages ---

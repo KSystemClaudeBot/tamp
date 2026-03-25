@@ -1,5 +1,5 @@
 export function loadConfig(env = process.env) {
-  const stages = (env.TAMP_STAGES || 'minify,toon,strip-lines,whitespace,llmlingua').split(',').map(s => s.trim()).filter(Boolean)
+  const stages = (env.TAMP_STAGES || 'minify,toon,strip-lines,whitespace,llmlingua,dedup,diff,prune').split(',').map(s => s.trim()).filter(Boolean)
   return Object.freeze({
     port: parseInt(env.TAMP_PORT, 10) || 7778,
     upstream: env.TAMP_UPSTREAM || 'https://api.anthropic.com',

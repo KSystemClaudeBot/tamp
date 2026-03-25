@@ -1,6 +1,6 @@
 # Tamp
 
-**Token compression proxy for coding agents.** 50.5% fewer input tokens, zero code changes. Works with Claude Code, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
+**Token compression proxy for coding agents.** 52.6% fewer input tokens, zero code changes. Works with Claude Code, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
 
 ```
 npx @sliday/tamp

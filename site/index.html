@@ -272,7 +272,7 @@
             Token compression proxy for coding agents.
         </p>
         <p class="db-body" style="margin-top: 0.5rem; font-size: 1.25rem;">
-            50.5% fewer input tokens. Zero code changes.
+            52.6% fewer input tokens. Zero code changes.
         </p>
 
         <div class="install-card db-card db-surface--raised" style="margin-top: 2rem;">
@@ -362,7 +362,7 @@
      ============================ -->
 <section id="how-it-works">
     <div class="section-inner">
-        <h2 class="db-h2" style="text-align: center;">5-Stage Compression Pipeline</h2>
+        <h2 class="db-h2" style="text-align: center;">Compression Pipeline</h2>
 
         <div class="flow-diagram" style="margin-top: 1.5rem;">
             <span class="db-chip">Claude Code / Aider / Cursor / Cline</span>
@@ -445,6 +445,55 @@ size[3]{1024|2048|512}</div>
     </div>
 </section>
 
+<!-- ============================
+     3b. LLM OPTIMIZATION — Lossy (opt-in)
+     ============================ -->
+<section>
+    <div class="section-inner">
+        <h2 class="db-h2" style="text-align: center;">LLM-Powered Optimization <span class="db-caption" style="opacity: 0.5;">(opt-in, lossy)</span></h2>
+        <p class="db-body" style="text-align: center; opacity: 0.7; margin-top: 0.5rem; max-width: 640px; margin-left: auto; margin-right: auto;">
+            For aggressive compression, Tamp can use a local or remote LLM to semantically shorten text &mdash;
+            keeping all facts while removing redundant wording. Inspired by <a href="https://github.com/sliday/textpress" style="color: var(--db-accent, #8B6914);">Textpress</a>.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;" class="grid-2">
+            <div class="db-card" style="padding: 1.25rem;">
+                <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <span class="db-badge">1</span>
+                    <p class="db-body" style="font-weight: 600;">strip-comments</p>
+                </div>
+                <p class="db-caption">Removes <code>//</code>, <code>/* */</code>, <code>#</code>, and <code>&lt;!-- --&gt;</code> comments from source code. Fast, regex-based, no external service needed.</p>
+                <p class="db-body" style="margin-top: 0.5rem; font-family: monospace;">
+                    <span style="color: #ff6b6b;">342</span> tok &rarr;
+                    <span style="color: #51cf66;">222</span> tok
+                    <span style="opacity: 0.5;">&mdash; -35%</span>
+                </p>
+            </div>
+            <div class="db-card" style="padding: 1.25rem;">
+                <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <span class="db-badge">2</span>
+                    <p class="db-body" style="font-weight: 600;">textpress</p>
+                </div>
+                <p class="db-caption">LLM semantic compression via <strong>Ollama</strong> (local, free) or <strong>OpenRouter</strong> (cloud fallback). Shortens text while keeping all names, versions, paths.</p>
+                <p class="db-body" style="margin-top: 0.5rem; font-family: monospace;">
+                    <span style="color: #ff6b6b;">152</span> tok &rarr;
+                    <span style="color: #51cf66;">28</span> tok
+                    <span style="opacity: 0.5;">&mdash; -82%</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="install-card" style="margin-top: 1.5rem;">
+            <pre style="position: relative;"><span class="comment"># Enable lossy stages</span>
+<span class="prompt">$</span> <span class="cmd">TAMP_STAGES=minify,toon,strip-lines,whitespace,llmlingua,dedup,diff,prune,strip-comments,textpress npx @sliday/tamp -y</span></pre>
+        </div>
+
+        <p class="db-caption" style="margin-top: 0.75rem; opacity: 0.5; text-align: center;">
+            Both stages are opt-in &mdash; not enabled by default. The interactive prompt lets you toggle them on launch.
+        </p>
+    </div>
+</section>
+
 <!-- Sample Output -->
 <section>
     <div class="section-inner">
@@ -480,7 +529,7 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="benchmark">
     <div class="section-inner">
-        <h2 class="db-h2">Measured: 50.5% fewer tokens</h2>
+        <h2 class="db-h2">Measured: 52.6% fewer tokens</h2>
         <p class="db-body" style="margin-top: 0.5rem; opacity: 0.7;">
             A/B tested via OpenRouter with Claude Sonnet 4.6. Twelve scenarios, five runs each, 120 API calls total.
         </p>
@@ -636,38 +685,38 @@ size[3]{1024|2048|512}</div>
      ============================ -->
 <section id="savings">
     <div class="section-inner" style="text-align: center;">
-        <h2 class="db-h2">~$46/month saved per developer</h2>
+        <h2 class="db-h2">~$48/month saved per developer</h2>
         <p class="db-body" style="margin-top: 0.75rem; max-width: 640px; margin-left: auto; margin-right: auto; opacity: 0.7;">
-            At Sonnet 4.6 pricing ($3/Mtok input), Tamp saves ~$0.31 per 200-request session (103K tokens).
-            Heavy users running 5 sessions/day see ~$46/month. For a 10-person team: ~$5,500/year.
+            At Sonnet 4.6 pricing ($3/Mtok input), Tamp saves ~$0.32 per 200-request session (107K tokens).
+            Heavy users running 5 sessions/day see ~$48/month. For a 10-person team: ~$5,800/year.
         </p>
 
         <div class="db-grid db-grid--3 db-gap-4" style="max-width: 720px; margin: var(--db-space-5) auto 0;">
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Session</span>
-                    <span class="db-stat__value">$0.31</span>
+                    <span class="db-stat__value">$0.32</span>
                     <span class="db-stat__change">200 requests</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Developer</span>
-                    <span class="db-stat__value">$46/mo</span>
+                    <span class="db-stat__value">$48/mo</span>
                     <span class="db-stat__change">5 sessions/day</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">10-Person Team</span>
-                    <span class="db-stat__value">$5,500/yr</span>
+                    <span class="db-stat__value">$5,800/yr</span>
                     <span class="db-stat__change">free and open source</span>
                 </div>
             </div>
         </div>
 
         <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4;">
-            Based on Sonnet 4.6 ($3/Mtok) with 60% compressible traffic. Opus 4.6 ($5/Mtok) saves ~$77/dev/month.
+            Based on Sonnet 4.6 ($3/Mtok) with 60% compressible traffic. Opus 4.6 ($5/Mtok) saves ~$80/dev/month.
         </p>
     </div>
 </section>
@@ -744,7 +793,7 @@ size[3]{1024|2048|512}</div>
         </div>
 
         <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4;">
-            Math: 50.5% fewer input tokens &rarr; 1/(1&minus;0.505) = 2.02&times; more requests per budget. 5 sessions/day assumed.
+            Math: 52.6% fewer input tokens &rarr; 1/(1&minus;0.526) = 2.11&times; more requests per budget. 5 sessions/day assumed.
         </p>
     </div>
 </section>

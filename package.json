@@ -20,7 +20,8 @@
     "start": "node bin/tamp.js",
     "test": "node --test test/*.test.js",
     "test:sidecar": "node test/capture-golden.js --verify",
-    "bench:semantic": "node bench/semantic-eval.js"
+    "bench:semantic": "node bench/semantic-eval.js",
+    "test:quality": "node bench/quality-eval.js"
   },
   "keywords": [
     "claude",

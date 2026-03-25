@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tamp — Token compression proxy for coding agents</title>
-    <meta name="description" content="Tamp is a token compression proxy for coding agents. Works with Claude Code, Aider, Cursor, Cline, Windsurf. 32.0% fewer input tokens, zero behavior change.">
+    <title>Tamp — Cut your AI coding costs in half</title>
+    <meta name="description" content="Tamp compresses 52.6% of input tokens for coding agents like Claude Code, Aider, and Cursor. A/B tested, open source, zero code changes. One command.">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" href="tamper-icon.png" type="image/png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daub-ui@latest/daub.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300..900&family=Source+Serif+4:wght@300..900&family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300..900&family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --tamp-espresso: #8B6914;
@@ -20,7 +20,6 @@
         html { scroll-behavior: smooth; }
         body { overflow-x: hidden; }
 
-        /* db-nav — bespoke marketing site nav (not in daub.css) */
         .db-nav {
             position: sticky; top: 0; z-index: 100;
             background: #ebdbb2;
@@ -49,180 +48,100 @@
             border-radius: var(--db-radius-2, 6px);
             transition: color 0.15s, background 0.15s;
         }
-        .db-nav__links a:hover {
-            color: #282828;
-            background: rgba(40,40,40,0.07);
-        }
+        .db-nav__links a:hover { color: #282828; background: rgba(40,40,40,0.07); }
         .db-nav__github {
             display: inline-flex; align-items: center; gap: 6px;
-            font-size: 0.8125rem; font-weight: 500;
-            color: #504945;
-            text-decoration: none;
-            padding: 6px 12px;
+            font-size: 0.8125rem; font-weight: 500; color: #504945;
+            text-decoration: none; padding: 6px 12px;
             border-radius: var(--db-radius-2, 6px);
-            border: 1px solid #bdae93;
-            transition: border-color 0.15s;
+            border: 1px solid #bdae93; transition: border-color 0.15s;
         }
         .db-nav__github:hover { border-color: #504945; }
         .db-nav__toggle {
             display: none; align-items: center; justify-content: center;
-            width: 36px; height: 36px;
-            background: none;
-            border: 1px solid #bdae93;
-            border-radius: var(--db-radius-2, 6px);
-            cursor: pointer;
-            color: #282828;
-            flex-shrink: 0;
+            width: 36px; height: 36px; background: none;
+            border: 1px solid #bdae93; border-radius: var(--db-radius-2, 6px);
+            cursor: pointer; color: #282828; flex-shrink: 0;
         }
-        .db-nav__toggle:hover { background: rgba(40,40,40,0.05); }
         @media (max-width: 768px) {
             .db-nav__toggle { display: flex; }
             .db-nav__links {
-                display: none; position: absolute;
-                top: 48px; left: 0; right: 0;
-                flex-direction: column;
-                background: #ebdbb2;
-                border-bottom: 1px solid #d5c4a1;
-                padding: 8px 16px; gap: 0;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                z-index: 99;
+                display: none; position: absolute; top: 48px; left: 0; right: 0;
+                flex-direction: column; background: #ebdbb2;
+                border-bottom: 1px solid #d5c4a1; padding: 8px 16px; gap: 0;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 99;
             }
             .db-nav__links li { width: 100%; }
-            .db-nav__links a { display: block; width: 100%; padding: 10px 12px; font-size: 0.875rem; }
+            .db-nav__links a { display: block; width: 100%; padding: 10px 12px; }
             .db-nav__github { width: 100%; justify-content: flex-start; border: none; padding: 10px 12px !important; }
             .db-nav--open .db-nav__links { display: flex; }
         }
 
         .hero-section {
             min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             padding: 6rem 1.5rem 4rem;
         }
-        .hero-inner {
-            max-width: 720px;
-            width: 100%;
-            text-align: center;
+        .hero-inner { max-width: 720px; width: 100%; text-align: center; }
+        .hero-inner .db-h1 { font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -0.02em; }
+        .hero-stat {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 800; letter-spacing: -0.03em;
+            color: var(--db-accent, var(--tamp-espresso));
+            line-height: 1;
+            margin: 1rem 0 0.5rem;
         }
-        .hero-inner .db-h1 {
-            font-size: clamp(3rem, 8vw, 5rem);
-            letter-spacing: -0.02em;
-        }
-
         section { padding: clamp(3rem, 8vh, 6rem) 1.5rem; }
         .section-inner { max-width: 960px; margin: 0 auto; }
 
-        .install-card {
-            text-align: left;
-            margin-top: 2rem;
-        }
+        .install-card { text-align: left; }
         .install-card pre {
-            margin: 0;
-            padding: 1.25rem 1.5rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            overflow-x: auto;
-            border-radius: 8px;
-            background: #1d2021;
-            color: #ebdbb2;
+            margin: 0; padding: 1.25rem 1.5rem;
+            font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.8;
+            overflow-x: auto; border-radius: 8px; background: #1d2021; color: #ebdbb2;
         }
         .install-card pre .prompt { opacity: 0.5; }
         .install-card pre .cmd { color: var(--db-accent, var(--tamp-espresso)); font-weight: 600; }
-        .install-card pre .comment { opacity: 0.4; }
 
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        @media (max-width: 600px) {
-            .comparison-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 768px) {
-            .grid-2, .grid-3 { grid-template-columns: 1fr !important; }
-        }
+        .stat-big { font-size: clamp(2rem, 6vw, 4rem); font-weight: 700; color: var(--db-accent, var(--tamp-espresso)); }
 
-        .code-sample {
-            background: var(--db-surface-inset, rgba(0,0,0,0.3));
-            border-radius: 6px;
-            padding: 1rem;
-            font-family: monospace;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
+        .tamp-chart-wrap { max-width: 720px; margin: 0 auto; }
+        .tamp-chart-wrap .db-chart { height: 280px; align-items: flex-end; gap: var(--db-space-3); padding: 0 var(--db-space-2); }
+        .tamp-chart-wrap .db-chart__bar { position: relative; min-width: 0; border-radius: var(--db-radius-2) var(--db-radius-2) 0 0; }
+        .bar-value { position: absolute; top: -1.6em; left: 50%; transform: translateX(-50%); font-family: var(--db-font-ui); font-size: 0.75rem; font-weight: 600; color: var(--db-color-text); white-space: nowrap; }
+        .tamp-chart-wrap .db-chart__labels { gap: var(--db-space-3); padding: var(--db-space-2) var(--db-space-2) 0; }
+        .tamp-chart-wrap .db-chart__labels span { font-family: var(--db-font-ui); font-size: 0.7rem; color: var(--db-color-text-muted); text-align: center; line-height: 1.2; }
+        .tamp-stat-card { padding: var(--db-space-4); text-align: center; }
+        .tamp-stat-card .db-stat__value { font-family: var(--db-font-heading); }
+        .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+        .flow-arrow { opacity: 0.5; font-size: 1.25rem; }
 
-        .stat-big {
-            font-size: clamp(2rem, 6vw, 4rem);
-            font-weight: 700;
-            color: var(--db-accent, var(--tamp-espresso));
-        }
+        @media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr !important; } }
 
-        .tamp-chart-wrap {
-            max-width: 720px;
-            margin: 0 auto;
+        .stage-list { list-style: none; padding: 0; margin: 0; }
+        .stage-list li {
+            display: flex; align-items: baseline; gap: 0.75rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.06));
         }
-        .tamp-chart-wrap .db-chart {
-            height: 280px;
-            align-items: flex-end;
-            gap: var(--db-space-3);
-            padding: 0 var(--db-space-2);
-        }
-        .tamp-chart-wrap .db-chart__bar {
-            position: relative;
-            min-width: 0;
-            border-radius: var(--db-radius-2) var(--db-radius-2) 0 0;
-        }
-        .tamp-chart-wrap .db-chart__bar--muted {
-            opacity: 0.3;
-        }
-        .bar-value {
-            position: absolute;
-            top: -1.6em;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: var(--db-font-ui);
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--db-color-text);
-            white-space: nowrap;
-        }
-        .tamp-chart-wrap .db-chart__labels {
-            gap: var(--db-space-3);
-            padding: var(--db-space-2) var(--db-space-2) 0;
-        }
-        .tamp-chart-wrap .db-chart__labels span {
-            font-family: var(--db-font-ui);
-            font-size: 0.7rem;
-            color: var(--db-color-text-muted);
-            text-align: center;
-            line-height: 1.2;
-        }
-        .tamp-stat-card {
-            padding: var(--db-space-4);
-            text-align: center;
-        }
-        .tamp-stat-card .db-stat__value {
-            font-family: var(--db-font-heading);
-        }
+        .stage-list li:last-child { border-bottom: none; }
+        .stage-name { font-family: monospace; font-weight: 600; min-width: 110px; color: var(--db-color-accent, var(--tamp-espresso)); }
+        .stage-type { font-size: 0.7rem; padding: 1px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stage-type--lossless { background: rgba(81,207,102,0.15); color: #51cf66; }
+        .stage-type--lossy { background: rgba(255,107,107,0.15); color: #ff6b6b; }
+        .stage-type--opt { background: rgba(255,255,255,0.08); color: var(--db-color-text-muted); }
 
-        .flow-diagram {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
+        .trust-badges { display: flex; align-items: center; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+        .trust-badges img { height: 20px; }
 
-        .flow-arrow {
-            opacity: 0.5;
-            font-size: 1.25rem;
-        }
-
+        /* Entrance animations */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-inner > * { animation: fadeUp 0.6s ease-out both; }
+        .hero-inner > *:nth-child(2) { animation-delay: 0.1s; }
+        .hero-inner > *:nth-child(3) { animation-delay: 0.15s; }
+        .hero-inner > *:nth-child(4) { animation-delay: 0.25s; }
+        .hero-inner > *:nth-child(5) { animation-delay: 0.35s; }
+        .hero-inner > *:nth-child(6) { animation-delay: 0.45s; }
     </style>
 </head>
 <body>
@@ -242,18 +161,16 @@
       Tamp
     </a>
     <button class="db-nav__toggle" aria-label="Menu" aria-expanded="false" onclick="this.closest('.db-nav').classList.toggle('db-nav--open');this.setAttribute('aria-expanded',this.closest('.db-nav').classList.contains('db-nav--open'))">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <ul class="db-nav__links">
       <li><a href="#how-it-works">How it works</a></li>
-      <li><a href="#benchmark">Benchmark</a></li>
-      <li><a href="#savings">Savings</a></li>
-      <li><a href="#architecture">Architecture</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#proof">Proof</a></li>
+      <li><a href="#max-plan">Claude Max</a></li>
       <li>
         <a href="https://github.com/sliday/tamp" class="db-nav__github" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
-          <span>GitHub</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
         </a>
       </li>
     </ul>
@@ -262,48 +179,43 @@
 
 <main>
 
-<!-- ============================
-     1. HERO — Hook
-     ============================ -->
+<!-- ============================================================
+     1. HERO — Brand + Promise + CTA
+     ============================================================ -->
 <section class="hero-section" id="hero">
     <div class="hero-inner">
         <h1 class="db-h1">Tamp</h1>
-        <p class="db-body" style="margin-top: 0.5rem; opacity: 0.6; font-size: 1.1rem;">
-            Token compression proxy for coding agents.
+        <p class="db-body" style="opacity: 0.5; font-size: 1rem; margin-top: 0.25rem;">
+            Token compression proxy for coding agents
         </p>
-        <p class="db-body" style="margin-top: 0.5rem; font-size: 1.25rem;">
-            52.6% fewer input tokens. Zero code changes.
+        <p class="hero-stat">52.6%</p>
+        <p class="db-body" style="font-size: 1.2rem; max-width: 460px; margin: 0 auto;">
+            fewer input tokens. Measured across 120 A/B API calls. Zero code changes.
         </p>
 
         <div class="install-card db-card db-surface--raised" style="margin-top: 2rem;">
             <pre style="position: relative;"><span class="prompt">$</span> <span class="cmd">npx @sliday/tamp</span><button onclick="navigator.clipboard.writeText('npx @sliday/tamp').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#ebdbb2;padding:4px 10px;border-radius:4px;font-size:0.75rem;cursor:pointer;transition:background 0.15s;">Copy</button></pre>
         </div>
 
-        <p class="db-caption" style="margin-top: 0.75rem; opacity: 0.5;">
-            Works with Claude Code, Aider, Cursor, Cline, and any OpenAI-compatible agent.
-        </p>
-
-        <details style="margin-top: 1.5rem; text-align: left; max-width: 720px; width: 100%; margin-left: auto; margin-right: auto;">
-            <summary class="db-caption" style="cursor: pointer; opacity: 0.5;">Other installation methods</summary>
-            <div class="install-card" style="margin-top: 0.75rem;">
-                <pre style="position: relative;"><span class="comment"># Shell installer</span>
-<span class="prompt">$</span> <span class="cmd">curl -fsSL tamp.dev/setup.sh | bash</span>
-
-<span class="comment"># Manual</span>
-<span class="prompt">$</span> <span class="cmd">git clone https://github.com/sliday/tamp ~/.tamp</span>
-<span class="prompt">$</span> <span class="cmd">cd ~/.tamp && npm install</span>
-<span class="prompt">$</span> <span class="cmd">node index.js</span><button onclick="navigator.clipboard.writeText('curl -fsSL tamp.dev/setup.sh | bash').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})" style="position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#ebdbb2;padding:4px 10px;border-radius:4px;font-size:0.75rem;cursor:pointer;transition:background 0.15s;">Copy</button></pre>
-            </div>
-        </details>
+        <div class="trust-badges">
+            <img src="https://img.shields.io/npm/v/@sliday/tamp?style=flat-square&color=8B6914&label=npm" alt="npm version">
+            <img src="https://img.shields.io/github/stars/sliday/tamp?style=flat-square&color=8B6914" alt="GitHub stars">
+            <img src="https://img.shields.io/badge/license-MIT-8B6914?style=flat-square" alt="MIT License">
+            <img src="https://img.shields.io/badge/A%2FB%20tested-120%20calls-51cf66?style=flat-square" alt="A/B tested">
+        </div>
     </div>
 </section>
 
-<!-- ============================
+<!-- ============================================================
      2. THE PROBLEM — Pain
-     ============================ -->
+     ============================================================ -->
 <section id="problem">
     <div class="section-inner">
-        <h2 class="db-h2">Tokens pile up. Fast.</h2>
+        <h2 class="db-h2">Every turn costs more than the last.</h2>
+        <p class="db-body" style="opacity: 0.7; margin-top: 0.5rem; max-width: 640px;">
+            Coding agents re-send the full conversation on every API call. Tool results accumulate &mdash;
+            file reads, JSON configs, CLI output &mdash; all re-sent as input tokens, every single turn.
+        </p>
 
         <div style="margin: 2rem auto; max-width: 620px;">
             <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; font-family: var(--db-font-ui, system-ui, sans-serif);">
@@ -316,53 +228,46 @@
                 <path d="M40,175 C100,172 140,165 180,150 S260,110 320,85 S420,40 500,25 L580,20 L580,180 L40,180 Z" fill="url(#tokenFill)" stroke="none"/>
                 <path d="M40,175 C100,172 140,165 180,150 S260,110 320,85 S420,40 500,25 L580,20" fill="none" stroke="#ff6b6b" stroke-width="2.5" stroke-linecap="round"/>
                 <circle cx="40" cy="175" r="3" fill="#ff6b6b" opacity="0.6"/>
-                <circle cx="120" cy="168" r="3" fill="#ff6b6b" opacity="0.6"/>
                 <circle cx="200" cy="148" r="3" fill="#ff6b6b" opacity="0.7"/>
-                <circle cx="280" cy="118" r="3" fill="#ff6b6b" opacity="0.7"/>
                 <circle cx="360" cy="78" r="3" fill="#ff6b6b" opacity="0.8"/>
-                <circle cx="440" cy="48" r="3" fill="#ff6b6b" opacity="0.9"/>
                 <circle cx="540" cy="22" r="3" fill="#ff6b6b" opacity="1"/>
                 <text x="40" y="195" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.4)">Turn 1</text>
                 <text x="200" y="195" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.4)">Turn 10</text>
                 <text x="360" y="195" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.4)">Turn 20</text>
                 <text x="540" y="195" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.4)">Turn 30</text>
-                <text x="120" y="158" font-size="9" fill="rgba(255,255,255,0.5)">5K tokens</text>
-                <text x="280" y="108" font-size="9" fill="rgba(255,255,255,0.6)">25K</text>
                 <text x="440" y="38" font-size="10" font-weight="600" fill="#ff6b6b">80K</text>
                 <text x="555" y="14" font-size="11" font-weight="700" fill="#ff6b6b">100K+</text>
-                <text x="12" y="105" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.3)" transform="rotate(-90 12 105)">input tokens</text>
             </svg>
         </div>
 
-        <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem;">
+        <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
             <div class="db-card" style="padding: 1.25rem; text-align: center; border-top: 2px solid #ff6b6b;">
                 <p style="font-size: 1.75rem; font-weight: 700; color: #ff6b6b;">200+</p>
                 <p class="db-caption">API calls per session<br><span style="opacity: 0.5;">each sends full history</span></p>
             </div>
             <div class="db-card" style="padding: 1.25rem; text-align: center; border-top: 2px solid #ff6b6b;">
                 <p style="font-size: 1.75rem; font-weight: 700; color: #ff6b6b;">60%</p>
-                <p class="db-caption">is tool_result bloat<br><span style="opacity: 0.5;">pretty JSON, raw files, CLI output</span></p>
+                <p class="db-caption">is tool_result bloat<br><span style="opacity: 0.5;">JSON, files, CLI output</span></p>
             </div>
             <div class="db-card" style="padding: 1.25rem; text-align: center; border-top: 2px solid #ff6b6b;">
                 <p style="font-size: 1.75rem; font-weight: 700; color: #ff6b6b;">$6&ndash;15</p>
-                <p class="db-caption">per coding session<br><span style="opacity: 0.5;">at $3/Mtok input pricing</span></p>
+                <p class="db-caption">per coding session<br><span style="opacity: 0.5;">at $3/Mtok pricing</span></p>
             </div>
         </div>
-
-        <p class="db-caption" style="margin-top: 1.25rem; opacity: 0.5; text-align: center;">
-            Every turn re-sends everything. Tamp compresses before it leaves your machine.
-        </p>
     </div>
 </section>
 
 <div class="section-inner"><div class="db-separator"></div></div>
 
-<!-- ============================
-     3. HOW IT WORKS — Solution (merged pipeline + stages)
-     ============================ -->
+<!-- ============================================================
+     3. HOW IT WORKS — 8 stages + flow
+     ============================================================ -->
 <section id="how-it-works">
     <div class="section-inner">
-        <h2 class="db-h2" style="text-align: center;">Compression Pipeline</h2>
+        <h2 class="db-h2" style="text-align: center;">8 stages. Zero config.</h2>
+        <p class="db-body" style="text-align: center; opacity: 0.7; margin-top: 0.5rem;">
+            Tamp sits between your agent and the API. It classifies each tool result and applies the right compression &mdash; automatically.
+        </p>
 
         <div class="flow-diagram" style="margin-top: 1.5rem;">
             <span class="db-chip">Claude Code / Aider / Cursor / Cline</span>
@@ -372,331 +277,112 @@
             <span class="db-chip">Anthropic / OpenAI / Gemini</span>
         </div>
 
-        <!-- Stage 1 -->
-        <div class="db-card" style="padding: 1.25rem; margin-top: 2rem;">
-            <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
-                <span class="db-badge">1</span>
-                <p class="db-body" style="font-weight: 600;">JSON Minify</p>
-                <span class="db-caption" style="opacity: 0.5;">&mdash; strip whitespace, lossless</span>
-            </div>
-            <div class="comparison-grid">
-                <div>
-                    <p class="db-label" style="margin-bottom: 0.5rem; color: #ff6b6b;">Before</p>
-                    <div class="code-sample">{
-  "name": "tamp",
-  "version": "0.1.0",
-  "type": "module",
-  "dependencies": {
-    "@toon-format/toon": "^2.1.0"
-  }
-}</div>
-                </div>
-                <div>
-                    <p class="db-label" style="margin-bottom: 0.5rem; color: #51cf66;">After</p>
-                    <div class="code-sample">{"name":"tamp","version":"0.1.0","type":"module","dependencies":{"@toon-format/toon":"^2.1.0"}}</div>
-                </div>
-            </div>
+        <div class="db-card" style="padding: 1.5rem; margin-top: 2rem;">
+            <ul class="stage-list">
+                <li>
+                    <span class="stage-name">minify</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Strip JSON whitespace. <code>package.json</code> shrinks 22%.</span>
+                </li>
+                <li>
+                    <span class="stage-name">toon</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Columnar encoding for arrays. File listings shrink 49%.</span>
+                </li>
+                <li>
+                    <span class="stage-name">prune</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Strip lockfile hashes, registry URLs, npm metadata. <strong>-81%</strong> on lockfiles.</span>
+                </li>
+                <li>
+                    <span class="stage-name">dedup</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Same file read twice? Send a reference, not the content.</span>
+                </li>
+                <li>
+                    <span class="stage-name">diff</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Tiny edit? Send a patch, not the full file.</span>
+                </li>
+                <li>
+                    <span class="stage-name">strip-lines</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Remove line-number prefixes from Read tool output.</span>
+                </li>
+                <li>
+                    <span class="stage-name">whitespace</span>
+                    <span class="stage-type stage-type--lossless">lossless</span>
+                    <span class="db-caption">Collapse blank lines, trim trailing spaces.</span>
+                </li>
+                <li>
+                    <span class="stage-name">llmlingua</span>
+                    <span class="stage-type stage-type--lossy">neural</span>
+                    <span class="db-caption">LLMLingua-2 token pruning for text. Source code shrinks 40%. Auto-starts sidecar.</span>
+                </li>
+            </ul>
         </div>
 
-        <!-- Stage 2 -->
-        <div class="db-card" style="padding: 1.25rem; margin-top: 0.75rem;">
-            <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
-                <span class="db-badge">2</span>
-                <p class="db-body" style="font-weight: 600;">TOON Encoding</p>
-                <span class="db-caption" style="opacity: 0.5;">&mdash; objects &rarr; columnar format</span>
-            </div>
-            <div class="comparison-grid">
-                <div>
-                    <p class="db-label" style="margin-bottom: 0.5rem; color: #ff6b6b;">JSON (334 chars)</p>
-                    <div class="code-sample">[{"name":"a.js","size":1024},
- {"name":"b.js","size":2048},
- {"name":"c.js","size":512}]</div>
-                </div>
-                <div>
-                    <p class="db-label" style="margin-bottom: 0.5rem; color: #51cf66;">TOON (165 chars)</p>
-                    <div class="code-sample">name[3]{a.js|b.js|c.js}
-size[3]{1024|2048|512}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stage 3 -->
-        <div class="db-card" style="padding: 1.25rem; margin-top: 0.75rem;">
-            <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
-                <span class="db-badge">3</span>
-                <p class="db-body" style="font-weight: 600;">LLMLingua-2</p>
-                <span class="db-caption" style="opacity: 0.5;">&mdash; ML token pruning for text content</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-                <div>
-                    <p class="db-caption">compress.js source code</p>
-                    <p class="db-body" style="font-family: monospace;">
-                        <span style="color: #ff6b6b;">4,630</span> chars &rarr;
-                        <span style="color: #51cf66;">2,214</span> chars
-                    </p>
-                </div>
-                <span class="stat-big" style="font-size: clamp(1.5rem, 4vw, 2.5rem);">-52.2%</span>
-            </div>
+        <div class="db-card" style="padding: 1.25rem; margin-top: 0.75rem; opacity: 0.7;">
+            <p class="db-body" style="font-weight: 600; margin-bottom: 0.5rem;">Opt-in stages <span class="db-caption" style="opacity: 0.5;">(lossy, not enabled by default)</span></p>
+            <ul class="stage-list">
+                <li>
+                    <span class="stage-name">strip-comments</span>
+                    <span class="stage-type stage-type--opt">opt-in</span>
+                    <span class="db-caption">Remove <code>//</code>, <code>/* */</code>, <code>#</code> comments. -35% on commented code.</span>
+                </li>
+                <li>
+                    <span class="stage-name">textpress</span>
+                    <span class="stage-type stage-type--opt">opt-in</span>
+                    <span class="db-caption">LLM semantic compression via <a href="https://github.com/sliday/textpress" style="color: var(--db-accent, #8B6914);">Ollama or OpenRouter</a>. -73% on stacktraces.</span>
+                </li>
+            </ul>
         </div>
 
         <p class="db-caption" style="margin-top: 1rem; text-align: center; opacity: 0.5;">
-            Each stage runs only when effective. Error results are never compressed.
+            Works with Claude Code, Aider, Cursor, Cline, and any OpenAI-compatible agent.
         </p>
-    </div>
-</section>
-
-<!-- ============================
-     3b. LLM OPTIMIZATION — Lossy (opt-in)
-     ============================ -->
-<section>
-    <div class="section-inner">
-        <h2 class="db-h2" style="text-align: center;">LLM-Powered Optimization <span class="db-caption" style="opacity: 0.5;">(opt-in, lossy)</span></h2>
-        <p class="db-body" style="text-align: center; opacity: 0.7; margin-top: 0.5rem; max-width: 640px; margin-left: auto; margin-right: auto;">
-            For aggressive compression, Tamp can use a local or remote LLM to semantically shorten text &mdash;
-            keeping all facts while removing redundant wording. Inspired by <a href="https://github.com/sliday/textpress" style="color: var(--db-accent, #8B6914);">Textpress</a>.
-        </p>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;" class="grid-2">
-            <div class="db-card" style="padding: 1.25rem;">
-                <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
-                    <span class="db-badge">1</span>
-                    <p class="db-body" style="font-weight: 600;">strip-comments</p>
-                </div>
-                <p class="db-caption">Removes <code>//</code>, <code>/* */</code>, <code>#</code>, and <code>&lt;!-- --&gt;</code> comments from source code. Fast, regex-based, no external service needed.</p>
-                <p class="db-body" style="margin-top: 0.5rem; font-family: monospace;">
-                    <span style="color: #ff6b6b;">342</span> tok &rarr;
-                    <span style="color: #51cf66;">222</span> tok
-                    <span style="opacity: 0.5;">&mdash; -35%</span>
-                </p>
-            </div>
-            <div class="db-card" style="padding: 1.25rem;">
-                <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
-                    <span class="db-badge">2</span>
-                    <p class="db-body" style="font-weight: 600;">textpress</p>
-                </div>
-                <p class="db-caption">LLM semantic compression via <strong>Ollama</strong> (local, free) or <strong>OpenRouter</strong> (cloud fallback). Shortens text while keeping all names, versions, paths.</p>
-                <p class="db-body" style="margin-top: 0.5rem; font-family: monospace;">
-                    <span style="color: #ff6b6b;">152</span> tok &rarr;
-                    <span style="color: #51cf66;">28</span> tok
-                    <span style="opacity: 0.5;">&mdash; -82%</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="install-card" style="margin-top: 1.5rem;">
-            <pre style="position: relative;"><span class="comment"># Enable lossy stages</span>
-<span class="prompt">$</span> <span class="cmd">TAMP_STAGES=minify,toon,strip-lines,whitespace,llmlingua,dedup,diff,prune,strip-comments,textpress npx @sliday/tamp -y</span></pre>
-        </div>
-
-        <p class="db-caption" style="margin-top: 0.75rem; opacity: 0.5; text-align: center;">
-            Both stages are opt-in &mdash; not enabled by default. The interactive prompt lets you toggle them on launch.
-        </p>
-    </div>
-</section>
-
-<!-- Sample Output -->
-<section>
-    <div class="section-inner">
-        <h2 class="db-h2" style="text-align: center;">Live Output</h2>
-        <p class="db-body" style="text-align: center; opacity: 0.7; margin-top: 0.5rem;">
-            Every request shows compression stats, token savings, and cumulative $ saved.
-        </p>
-        <div style="margin-top: 1.5rem; background: #1d2021; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.25rem; overflow-x: auto;">
-<pre style="margin: 0; font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 0.8rem; line-height: 1.6; color: #ebdbb2; white-space: pre; overflow-x: auto;"><span style="color:#83a598;">Compression:</span>
-  <span style="color:#b8bb26;">&#10003;</span> <span style="color:#83a598;">minify</span>      &#8212; Strip JSON whitespace (lossless)
-  <span style="color:#b8bb26;">&#10003;</span> <span style="color:#83a598;">toon</span>        &#8212; Columnar array encoding (lossless)
-  <span style="color:#b8bb26;">&#10003;</span> <span style="color:#83a598;">strip-lines</span> &#8212; Remove line-number prefixes
-  <span style="color:#b8bb26;">&#10003;</span> <span style="color:#83a598;">whitespace</span>  &#8212; Collapse blank lines, trim trailing
-  <span style="color:#b8bb26;">&#10003;</span> <span style="color:#83a598;">llmlingua</span>   &#8212; Neural text compression (LLMLingua-2)
-
-<span style="color:#83a598;">anthropic</span> /v1/messages <span style="color:#928374;">45.2k</span> <span style="color:#b8bb26;">&#8212; 5 blocks compressed, -32.0%</span>
-  <span style="color:#928374;">block[0]</span> 12.5k&#8594;8.2k <span style="color:#b8bb26;">-34.4%</span> <span style="color:#928374;">3340&#8594;2201 tok</span> <span style="color:#928374;">[toon]</span>
-  <span style="color:#928374;">block[1]</span> 2.1k&#8594;1.4k <span style="color:#b8bb26;">-33.3%</span> <span style="color:#928374;">560&#8594;374 tok</span> <span style="color:#928374;">[minify]</span>
-  <span style="color:#928374;">block[2]</span> 890&#8594;534 <span style="color:#b8bb26;">-40.0%</span> <span style="color:#928374;">237&#8594;142 tok</span> <span style="color:#928374;">[minify]</span>
-  <span style="color:#928374;">block[3] skipped (error)</span>
-  <span style="color:#928374;">block[4]</span> 1.1k&#8594;712 <span style="color:#b8bb26;">-35.3%</span> <span style="color:#928374;">293&#8594;190 tok</span> <span style="color:#928374;">[normalize]</span>
-  <span style="color:#d3869b;">session</span> 31.4k chars, 8686 tokens saved across 8 blocks <span style="color:#928374;">(32.0% avg)</span> <span style="color:#b8bb26;">$0.0261 saved</span> <span style="color:#928374;">@ $3/Mtok</span>
-
-<span style="color:#83a598;">anthropic</span> /v1/messages <span style="color:#928374;">2.1k</span> <span style="color:#928374;">&#8212; no tool blocks</span></pre>
-        </div>
     </div>
 </section>
 
 <div class="section-inner"><div class="db-separator"></div></div>
 
-<!-- ============================
-     4. BENCHMARK — Proof (single unified section)
-     ============================ -->
-<section id="benchmark">
+<!-- ============================================================
+     4. PROOF — Benchmark + Savings merged
+     ============================================================ -->
+<section id="proof">
     <div class="section-inner">
         <h2 class="db-h2">Measured: 52.6% fewer tokens</h2>
         <p class="db-body" style="margin-top: 0.5rem; opacity: 0.7;">
-            A/B tested via OpenRouter with Claude Sonnet 4.6. Twelve scenarios, five runs each, 120 API calls total.
+            A/B tested via OpenRouter with Claude Sonnet 4.6. Twelve scenarios, five runs each, 120 API calls.
         </p>
 
-        <!-- DAUB native bar chart -->
         <div class="tamp-chart-wrap" style="margin-top: 2rem;">
             <div class="db-chart" style="height:280px;">
-                <div class="db-chart__bar" style="height:26.8%;">
-                    <span class="bar-value">21.8%</span>
-                </div>
-                <div class="db-chart__bar" style="height:79.7%;">
-                    <span class="bar-value">64.9%</span>
-                </div>
-                <div class="db-chart__bar" style="height:59.7%;">
-                    <span class="bar-value">48.6%</span>
-                </div>
-                <div class="db-chart__bar" style="height:39.0%;">
-                    <span class="bar-value">31.8%</span>
-                </div>
-                <div class="db-chart__bar" style="height:38.8%;">
-                    <span class="bar-value">31.6%</span>
-                </div>
-                <div class="db-chart__bar" style="height:100%;">
-                    <span class="bar-value">81.4%</span>
-                </div>
-                <div class="db-chart__bar db-chart__bar--secondary" style="height:45.5%;">
-                    <span class="bar-value">37.1%</span>
-                </div>
+                <div class="db-chart__bar" style="height:26.8%;"><span class="bar-value">21.8%</span></div>
+                <div class="db-chart__bar" style="height:79.7%;"><span class="bar-value">64.9%</span></div>
+                <div class="db-chart__bar" style="height:59.7%;"><span class="bar-value">48.6%</span></div>
+                <div class="db-chart__bar" style="height:48.8%;"><span class="bar-value">39.7%</span></div>
+                <div class="db-chart__bar" style="height:39.0%;"><span class="bar-value">31.8%</span></div>
+                <div class="db-chart__bar" style="height:100%;"><span class="bar-value">81.4%</span></div>
+                <div class="db-chart__bar db-chart__bar--secondary" style="height:45.5%;"><span class="bar-value">37.1%</span></div>
             </div>
             <div class="db-chart__labels">
                 <span>Small JSON</span>
                 <span>Large JSON</span>
                 <span>Tabular</span>
+                <span>Source Code</span>
                 <span>Multi-turn</span>
-                <span>Line-Num</span>
                 <span>Lockfile</span>
                 <span>Dedup Read</span>
             </div>
         </div>
-
-        <!-- Data table -->
-        <div style="margin-top: 2rem; overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; font-family: var(--db-font-ui, inherit);">
-                <thead>
-                    <tr style="border-bottom: 2px solid var(--db-border, rgba(255,255,255,0.15)); text-align: left;">
-                        <th style="padding: 8px 12px;">Scenario</th>
-                        <th style="padding: 8px 12px; text-align: right;">Control</th>
-                        <th style="padding: 8px 12px; text-align: right;">Compressed</th>
-                        <th style="padding: 8px 12px; text-align: right;">Reduction</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Small JSON <span class="db-caption">(package.json)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">315</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">246</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-21.9%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Large JSON <span class="db-caption">(dependency tree + prune)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">6,774</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">2,380</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-64.9%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Tabular Data <span class="db-caption">(file listing)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">3,574</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,835</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-48.7%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Multi-turn <span class="db-caption">(5-turn, all messages)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,027</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">700</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.8%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Line-Numbered JSON <span class="db-caption">(Read tool output)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">473</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">323</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-31.7%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Lockfile <span class="db-caption">(npm deps + prune)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">3,444</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">640</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-81.4%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">Duplicate Read <span class="db-caption">(same file twice + dedup)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">490</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">308</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-37.1%</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
-                        <td style="padding: 8px 12px;">All-Message 10-turn <span class="db-caption">(historical compression)</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">2,218</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">1,718</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">-22.5%</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 12px;">Error Result <span class="db-caption">(is_error: true)</span> <span style="font-style: italic; opacity: 0.5;">&mdash; skipped by design</span></td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace; opacity: 0.4;">167</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace; opacity: 0.4;">167</td>
-                        <td style="padding: 8px 12px; text-align: right; opacity: 0.4; font-style: italic;">0.0%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Methodology cards -->
-        <div class="db-grid db-grid--3 db-gap-4" style="max-width: 800px; margin: var(--db-space-5) auto 0;">
-            <div class="db-card" style="padding: 1.25rem;">
-                <div style="margin-bottom: 0.75rem;">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--db-color-accent, currentColor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
-                </div>
-                <p class="db-body" style="font-weight: 600; margin-bottom: 0.25rem;">How we tested</p>
-                <p class="db-caption">Identical requests via OpenRouter. Raw vs. compressed. Exact <code>input_tokens</code> from the API. No estimation.</p>
-            </div>
-            <div class="db-card" style="padding: 1.25rem;">
-                <div style="margin-bottom: 0.75rem;">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--db-color-accent, currentColor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                </div>
-                <p class="db-body" style="font-weight: 600; margin-bottom: 0.25rem;">What compresses</p>
-                <p class="db-caption">8 stages: minify, TOON, strip-lines, whitespace, LLMLingua-2, dedup, diff, field pruning.</p>
-            </div>
-            <div class="db-card" style="padding: 1.25rem;">
-                <div style="margin-bottom: 0.75rem;">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--db-color-accent, currentColor)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <p class="db-body" style="font-weight: 600; margin-bottom: 0.25rem;">What doesn't</p>
-                <p class="db-caption">Error results, already-minified JSON, and TOON content pass through untouched. Safety first.</p>
-            </div>
-        </div>
-
-        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
-            <a href="whitepaper.pdf" class="db-card" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; text-decoration: none; color: inherit; transition: transform 0.15s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                <span class="db-body" style="font-weight: 600;">Read the white paper</span>
-            </a>
-            <a href="https://github.com/sliday/tamp/tree/main/bench" class="db-card" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; text-decoration: none; color: inherit; transition: transform 0.15s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                <span class="db-body" style="font-weight: 600;">Reproduce the benchmark</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<div class="section-inner"><div class="db-separator"></div></div>
-
-<!-- ============================
-     5. SAVINGS — Value
-     ============================ -->
-<section id="savings">
-    <div class="section-inner" style="text-align: center;">
-        <h2 class="db-h2">~$48/month saved per developer</h2>
-        <p class="db-body" style="margin-top: 0.75rem; max-width: 640px; margin-left: auto; margin-right: auto; opacity: 0.7;">
-            At Sonnet 4.6 pricing ($3/Mtok input), Tamp saves ~$0.32 per 200-request session (107K tokens).
-            Heavy users running 5 sessions/day see ~$48/month. For a 10-person team: ~$5,800/year.
-        </p>
 
         <div class="db-grid db-grid--3 db-gap-4" style="max-width: 720px; margin: var(--db-space-5) auto 0;">
             <div class="db-card tamp-stat-card">
                 <div class="db-stat">
                     <span class="db-stat__label">Per Session</span>
                     <span class="db-stat__value">$0.32</span>
-                    <span class="db-stat__change">200 requests</span>
+                    <span class="db-stat__change">107K tokens saved</span>
                 </div>
             </div>
             <div class="db-card tamp-stat-card">
@@ -715,22 +401,33 @@ size[3]{1024|2048|512}</div>
             </div>
         </div>
 
-        <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4;">
-            Based on Sonnet 4.6 ($3/Mtok) with 60% compressible traffic. Opus 4.6 ($5/Mtok) saves ~$80/dev/month.
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+            <a href="whitepaper.pdf" class="db-card" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; text-decoration: none; color: inherit; transition: transform 0.15s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span class="db-body" style="font-weight: 600;">Read the white paper</span>
+            </a>
+            <a href="https://github.com/sliday/tamp/tree/main/bench" class="db-card" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; text-decoration: none; color: inherit; transition: transform 0.15s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <span class="db-body" style="font-weight: 600;">Reproduce the benchmark</span>
+            </a>
+        </div>
+
+        <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4; text-align: center;">
+            Quality verified: 8/8 A/B scenarios &mdash; compressed responses identical to uncompressed. Sonnet 4.6, $3/Mtok.
         </p>
     </div>
 </section>
 
 <div class="section-inner"><div class="db-separator"></div></div>
 
-<!-- ============================
-     5b. CLAUDE MAX — Extension
-     ============================ -->
+<!-- ============================================================
+     5. CLAUDE MAX — Differentiator
+     ============================================================ -->
 <section id="max-plan">
     <div class="section-inner" style="text-align: center;">
         <h2 class="db-h2">Claude Max? Last 2&times; longer.</h2>
         <p class="db-body" style="margin-top: 0.75rem; max-width: 640px; margin-left: auto; margin-right: auto; opacity: 0.7;">
-            Max subscribers have a fixed token budget per session. Tamp compresses input tokens
+            Max subscribers have a fixed token budget. Tamp compresses input tokens
             before they count against your limit &mdash; same work, fewer tokens consumed.
         </p>
 
@@ -740,18 +437,16 @@ size[3]{1024|2048|512}</div>
                 <p style="margin-top: 0.5rem;">
                     <span style="font-size: 1.25rem; opacity: 0.4; text-decoration: line-through;">5&times;</span>
                     <span style="font-size: 1.5rem; margin-left: 0.5rem;">&rarr;</span>
-                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">10.1&times;</span>
+                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">10.6&times;</span>
                 </p>
-                <p class="db-caption" style="margin-top: 0.25rem; color: #51cf66;">+2&times; more usage</p>
             </div>
             <div class="db-card" style="padding: 1.5rem; text-align: center;">
                 <p class="db-caption" style="opacity: 0.5;">Max 20&times; &mdash; $200/mo</p>
                 <p style="margin-top: 0.5rem;">
                     <span style="font-size: 1.25rem; opacity: 0.4; text-decoration: line-through;">20&times;</span>
                     <span style="font-size: 1.5rem; margin-left: 0.5rem;">&rarr;</span>
-                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">40.4&times;</span>
+                    <span style="font-size: 2rem; font-weight: 700; color: var(--db-accent, #8B6914); margin-left: 0.5rem;">42.2&times;</span>
                 </p>
-                <p class="db-caption" style="margin-top: 0.25rem; color: #51cf66;">+2&times; more usage</p>
             </div>
         </div>
 
@@ -763,103 +458,69 @@ size[3]{1024|2048|512}</div>
                         <th style="padding: 8px 12px; text-align: right;">Input $/MTok</th>
                         <th style="padding: 8px 12px; text-align: right;">Saved/session</th>
                         <th style="padding: 8px 12px; text-align: right;">Per dev/month</th>
-                        <th style="padding: 8px 12px; text-align: right;">10-person team/yr</th>
+                        <th style="padding: 8px 12px; text-align: right;">Team/year</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Sonnet 4.6</td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$3</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.31</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$46</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$5,500</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.32</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$48</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$5,800</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--db-border, rgba(255,255,255,0.08));">
                         <td style="padding: 8px 12px;">Opus 4.6</td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$5</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.52</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$77</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$9,200</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$0.54</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$80</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$9,600</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 12px;">Opus 4.6 <span class="db-caption">(extended &gt;200k)</span></td>
+                        <td style="padding: 8px 12px;">Opus 4.6 <span class="db-caption">(extended)</span></td>
                         <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$10</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$1.03</td>
-                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$155</td>
-                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$18,500</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$1.07</td>
+                        <td style="padding: 8px 12px; text-align: right; font-family: monospace;">$161</td>
+                        <td style="padding: 8px 12px; text-align: right; color: #51cf66; font-weight: 600;">$19,300</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <p class="db-caption" style="margin-top: var(--db-space-3); opacity: 0.4;">
-            Math: 52.6% fewer input tokens &rarr; 1/(1&minus;0.526) = 2.11&times; more requests per budget. 5 sessions/day assumed.
+            52.6% fewer input tokens &rarr; 2.11&times; more requests per budget. 10-person team, 5 sessions/day.
         </p>
     </div>
 </section>
 
 <div class="section-inner"><div class="db-separator"></div></div>
 
-<!-- ============================
-     6. ARCHITECTURE — Details
-     ============================ -->
-<section id="architecture">
+<!-- ============================================================
+     6. FINAL CTA
+     ============================================================ -->
+<section>
     <div class="section-inner" style="text-align: center;">
-        <h2 class="db-h2">Transparent HTTP Proxy</h2>
-        <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; text-align: left;">
-            <div class="db-card" style="padding: 1.25rem;">
-                <p class="db-label">Intercept</p>
-                <p class="db-caption">POST /v1/messages only. All other routes pass through untouched.</p>
-            </div>
-            <div class="db-card" style="padding: 1.25rem;">
-                <p class="db-label">Compress</p>
-                <p class="db-caption">Last user message &rarr; tool_result blocks get compressed per content type.</p>
-            </div>
-            <div class="db-card" style="padding: 1.25rem;">
-                <p class="db-label">Forward</p>
-                <p class="db-caption">Rewrite Content-Length, forward to upstream API. Response streams back untouched.</p>
-            </div>
-            <div class="db-card" style="padding: 1.25rem;">
-                <p class="db-label">Safety</p>
-                <p class="db-caption">Bodies over 256KB bypass compression. Parse errors fall through gracefully.</p>
-            </div>
-        </div>
-    </div>
-</section>
+        <h2 class="db-h2">One command. No config.</h2>
+        <p class="db-body" style="opacity: 0.7; margin-top: 0.5rem;">
+            Point your agent at <code>localhost:7778</code> and go.
+        </p>
 
-<div class="section-inner"><div class="db-separator"></div></div>
-
-<!-- ============================
-     7. ROADMAP + CTA — Action
-     ============================ -->
-<section id="roadmap">
-    <div class="section-inner">
-        <h2 class="db-h2">What's Next</h2>
-        <div class="db-list" style="margin-top: 1.5rem;">
-            <div class="db-list__item"><div class="db-list__title">Extended thinking block compression</div></div>
-            <div class="db-list__item"><div class="db-list__title">Response caching for repeated tool calls</div></div>
-            <div class="db-list__item"><div class="db-list__title">Per-session dashboards with live stats</div></div>
-            <div class="db-list__item"><div class="db-list__title">Configurable compression aggressiveness</div></div>
-            <div class="db-list__item"><div class="db-list__title">Cloudflare Workers edge deployment</div></div>
+        <div class="install-card db-card db-surface--raised" style="max-width: 480px; margin: 1.5rem auto 0;">
+            <pre style="position: relative;"><span class="prompt">$</span> <span class="cmd">npx @sliday/tamp</span><button onclick="navigator.clipboard.writeText('npx @sliday/tamp').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#ebdbb2;padding:4px 10px;border-radius:4px;font-size:0.75rem;cursor:pointer;transition:background 0.15s;">Copy</button></pre>
         </div>
 
-        <!-- Bottom CTA -->
-        <div style="text-align: center; margin-top: 3rem;">
-            <p class="db-body" style="font-weight: 600; margin-bottom: 1rem;">Try it now</p>
-            <div class="install-card db-card db-surface--raised" style="max-width: 480px; margin: 0 auto;">
-                <pre style="position: relative;"><span class="prompt">$</span> <span class="cmd">npx @sliday/tamp</span><button onclick="navigator.clipboard.writeText('npx @sliday/tamp').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#ebdbb2;padding:4px 10px;border-radius:4px;font-size:0.75rem;cursor:pointer;transition:background 0.15s;">Copy</button></pre>
-            </div>
+        <div class="trust-badges" style="margin-top: 1.5rem;">
+            <img src="https://img.shields.io/npm/v/@sliday/tamp?style=flat-square&color=8B6914&label=npm" alt="npm version">
+            <img src="https://img.shields.io/github/stars/sliday/tamp?style=flat-square&color=8B6914" alt="GitHub stars">
+            <img src="https://img.shields.io/badge/license-MIT-8B6914?style=flat-square" alt="MIT License">
         </div>
     </div>
 </section>
 
 </main>
 
-<!-- FOOTER -->
-<footer style="text-align:center; padding:8px; background:var(--db-cream-dark); color:var(--db-warm-gray); margin-top:16px; font-family:var(--db-font-ui); font-size:0.75rem;">
-    Made by <a href="https://x.com/staskulesh" target="_blank" rel="noopener" style="color:var(--db-terracotta); text-decoration:none;">@staskulesh</a> <a href="https://aichess.co/static/easter-egg/index.html" title="&#127875;" style="text-decoration: none; display: inline-block; transition: transform 0.2s; transform: scale(1);" onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'">&#128007;</a>
+<footer style="text-align:center; padding:12px; background:var(--db-cream-dark); color:var(--db-warm-gray); margin-top:16px; font-family:var(--db-font-ui); font-size:0.75rem;">
+    Made by <a href="https://x.com/staskulesh" target="_blank" rel="noopener" style="color:var(--db-terracotta); text-decoration:none;">@staskulesh</a> &middot; <a href="https://github.com/sliday/tamp" target="_blank" rel="noopener" style="color:var(--db-terracotta); text-decoration:none;">GitHub</a> &middot; <a href="whitepaper.pdf" style="color:var(--db-terracotta); text-decoration:none;">White paper</a>
 </footer>
-
-<script></script>
 </body>
 </html>

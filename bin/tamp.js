@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { spawn, execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { checkbox } from '@inquirer/prompts'
+import { checkbox, Separator } from '@inquirer/prompts'
 import http from 'node:http'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -12,30 +12,26 @@ const root = join(__dirname, '..')
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'))
 
 const c = {
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
-  dim: '\x1b[2m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m',
-  bgGreen: '\x1b[42m',
+  reset: '\x1b[0m', bold: '\x1b[1m', dim: '\x1b[2m',
+  green: '\x1b[32m', yellow: '\x1b[33m', blue: '\x1b[34m',
+  magenta: '\x1b[35m', cyan: '\x1b[36m', bgGreen: '\x1b[42m', red: '\x1b[31m',
 }
-
 function log(msg = '') { console.error(msg) }
 
-const STAGE_INFO = {
-  minify:       'Strip JSON whitespace (lossless)',
-  toon:         'Columnar array encoding (lossless)',
-  'strip-lines':'Remove line-number prefixes from Read output',
-  whitespace:   'Collapse blank lines, trim trailing spaces',
-  llmlingua:    'Neural text compression via LLMLingua-2',
-  dedup:        'Replace duplicate tool_results with references',
-  diff:         'Replace similar re-reads with unified diffs',
-  prune:        'Strip lockfile hashes, registry URLs, npm metadata',
-  'strip-comments': 'Remove code comments (lossy, opt-in)',
-  textpress:        'LLM semantic compression via Ollama/OpenRouter (opt-in)',
+const DEFAULT_STAGES = ['minify', 'toon', 'strip-lines', 'whitespace', 'llmlingua', 'dedup', 'diff', 'prune']
+const EXTRA_STAGES = ['strip-comments', 'textpress']
+
+const STAGE_DESC = {
+  minify:           'Strip JSON whitespace (lossless)',
+  toon:             'Columnar array encoding (lossless)',
+  'strip-lines':    'Remove line-number prefixes',
+  whitespace:       'Collapse blank lines, trim trailing',
+  llmlingua:        'Neural compression via LLMLingua-2',
+  dedup:            'Deduplicate identical tool_results',
+  diff:             'Replace similar re-reads with diffs',
+  prune:            'Strip lockfile hashes & npm metadata',
+  'strip-comments': 'Remove code comments (lossy)',
+  textpress:        'LLM semantic compression (Ollama/OpenRouter)',
 }
 
 // --- Determine stages ---
@@ -45,21 +41,36 @@ let selectedStages
 if (process.env.TAMP_STAGES) {
   selectedStages = process.env.TAMP_STAGES.split(',').map(s => s.trim()).filter(Boolean)
 } else if (skipPrompt) {
-  selectedStages = Object.keys(STAGE_INFO).filter(s => s !== 'strip-comments' && s !== 'textpress')
+  selectedStages = [...DEFAULT_STAGES]
 } else {
   log('')
-  log(`  ${c.bold}${c.cyan}Tamp${c.reset} ${c.dim}v${pkg.version}${c.reset} — Token compression proxy`)
+  log(`  ${c.bold}${c.cyan}Tamp${c.reset} ${c.dim}v${pkg.version}${c.reset}`)
+  log(`  ${c.dim}Token compression proxy for coding agents${c.reset}`)
   log('')
+
   selectedStages = await checkbox({
-    message: 'Compression methods (space to toggle, enter to confirm):',
-    choices: Object.entries(STAGE_INFO).map(([value, desc]) => ({
-      name: `${value.padEnd(12)} ${c.dim}— ${desc}${c.reset}`,
-      value,
-      checked: value !== 'strip-comments' && value !== 'textpress',
-    })),
+    message: 'Select compression stages:',
+    choices: [
+      new Separator(`${c.dim}── Default (lossless) ──${c.reset}`),
+      ...DEFAULT_STAGES.map(s => ({
+        name: `${c.cyan}${s.padEnd(15)}${c.reset} ${c.dim}${STAGE_DESC[s]}${c.reset}`,
+        value: s,
+        checked: true,
+      })),
+      new Separator(`${c.dim}── Extra (lossy, opt-in) ──${c.reset}`),
+      ...EXTRA_STAGES.map(s => ({
+        name: `${c.yellow}${s.padEnd(15)}${c.reset} ${c.dim}${STAGE_DESC[s]}${c.reset}`,
+        value: s,
+        checked: false,
+      })),
+    ],
+    pageSize: 15,
+    loop: false,
   })
+
   if (selectedStages.length === 0) {
-    log(`  ${c.yellow}No methods selected — running as passthrough proxy.${c.reset}`)
+    log(`\n  ${c.red}No stages selected. At least one is required.${c.reset}`)
+    process.exit(1)
   }
 }
 
@@ -71,8 +82,7 @@ let sidecarProc = null
 async function checkPort(port) {
   return new Promise(resolve => {
     const req = http.get(`http://127.0.0.1:${port}/health`, (res) => {
-      res.resume()
-      resolve(res.statusCode === 200)
+      res.resume(); resolve(res.statusCode === 200)
     })
     req.on('error', () => resolve(false))
     req.setTimeout(1000, () => { req.destroy(); resolve(false) })
@@ -88,46 +98,37 @@ async function startSidecar() {
   const sidecarDir = join(root, 'sidecar')
   const serverPy = join(sidecarDir, 'server.py')
 
-  // 1. Already running?
   if (await checkPort(sidecarPort)) {
-    log(`  ${c.green}✓${c.reset} LLMLingua-2 sidecar already running on port ${sidecarPort}`)
+    log(`  ${c.green}✓${c.reset} LLMLingua-2 sidecar already running on :${sidecarPort}`)
     return `http://localhost:${sidecarPort}`
   }
-
-  if (!existsSync(serverPy)) {
-    return null
-  }
+  if (!existsSync(serverPy)) return null
 
   log(`  ${c.yellow}→${c.reset} Starting LLMLingua-2 sidecar ...`)
 
-  // 2. Try uv run (no venv needed)
   if (hasCommand('uv')) {
     try {
       const proc = spawn('uv', [
         'run', '--with', 'fastapi', '--with', 'uvicorn', '--with', 'llmlingua', '--with', 'mlx',
         'uvicorn', 'server:app', '--host', '127.0.0.1', '--port', String(sidecarPort),
       ], { cwd: sidecarDir, stdio: ['ignore', 'pipe', 'pipe'] })
-
       const url = await waitForSidecar(proc, sidecarPort)
       if (url) { sidecarProc = proc; return url }
       proc.kill()
     } catch { /* try next */ }
   }
 
-  // 3. Try existing venv
   const venvPython = join(sidecarDir, '.venv', 'bin', 'python')
   if (existsSync(venvPython)) {
     try {
       const proc = spawn(venvPython, [
         '-m', 'uvicorn', 'server:app', '--host', '127.0.0.1', '--port', String(sidecarPort),
       ], { cwd: sidecarDir, stdio: ['ignore', 'pipe', 'pipe'] })
-
       const url = await waitForSidecar(proc, sidecarPort)
       if (url) { sidecarProc = proc; return url }
       proc.kill()
     } catch { /* fall through */ }
   }
-
   return null
 }
 
@@ -137,7 +138,7 @@ function waitForSidecar(proc, port, timeout = 30000) {
     proc.stderr.on('data', (d) => {
       if (d.toString().includes('Uvicorn running')) {
         clearTimeout(timer)
-        log(`  ${c.green}✓${c.reset} LLMLingua-2 sidecar ready on port ${c.bold}${port}${c.reset}`)
+        log(`  ${c.green}✓${c.reset} LLMLingua-2 ready on :${c.bold}${port}${c.reset}`)
         resolve(`http://localhost:${port}`)
       }
     })
@@ -145,18 +146,14 @@ function waitForSidecar(proc, port, timeout = 30000) {
   })
 }
 
-// Start sidecar if llmlingua is in selected stages
 if (selectedStages.includes('llmlingua')) {
   const sidecarUrl = await startSidecar()
   if (sidecarUrl) {
     process.env.TAMP_LLMLINGUA_URL = sidecarUrl
   } else {
-    log(`  ${c.yellow}!${c.reset} LLMLingua-2 sidecar not available`)
-    if (!hasCommand('uv')) {
-      log(`    Install uv: ${c.cyan}curl -LsSf https://astral.sh/uv/install.sh | sh${c.reset}`)
-    }
-    log(`    Continuing without neural compression.`)
-    log('')
+    log(`  ${c.yellow}!${c.reset} LLMLingua-2 not available`)
+    if (!hasCommand('uv')) log(`    ${c.dim}Install uv: curl -LsSf https://astral.sh/uv/install.sh | sh${c.reset}`)
+    log(`    ${c.dim}Continuing without neural compression.${c.reset}`)
     selectedStages = selectedStages.filter(s => s !== 'llmlingua')
     process.env.TAMP_STAGES = selectedStages.join(',')
   }
@@ -167,39 +164,36 @@ const { config, server } = createProxy()
 
 function printBanner() {
   const url = `http://localhost:${config.port}`
+  const active = config.stages
+  const defaultActive = active.filter(s => DEFAULT_STAGES.includes(s))
+  const extraActive = active.filter(s => EXTRA_STAGES.includes(s))
 
   log('')
-  log(`  ${c.bold}${c.cyan}┌─ Tamp ${c.dim}v${pkg.version}${c.reset}${c.bold}${c.cyan} ───────────────────────────────┐${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}  Proxy: ${c.bold}${c.green}${url}${c.reset}${c.cyan}              │${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}  Status: ${c.bgGreen}${c.bold} ● READY ${c.reset}${c.cyan}                    │${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}                                        ${c.cyan}│${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}  ${c.bold}Claude Code:${c.reset}                          ${c.cyan}│${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}    ${c.dim}ANTHROPIC_BASE_URL=${c.reset}${c.yellow}${url}${c.reset}  ${c.cyan}│${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}                                        ${c.cyan}│${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}  ${c.bold}Aider / Cursor / Cline:${c.reset}               ${c.cyan}│${c.reset}`)
-  log(`  ${c.cyan}│${c.reset}    ${c.dim}OPENAI_BASE_URL=${c.reset}${c.yellow}${url}${c.reset}     ${c.cyan}│${c.reset}`)
-  log(`  ${c.cyan}└────────────────────────────────────────┘${c.reset}`)
+  log(`  ${c.cyan}${c.bold}Tamp${c.reset} ${c.dim}v${pkg.version}${c.reset}  ${c.bgGreen}${c.bold} READY ${c.reset}  ${c.green}${url}${c.reset}`)
+  log('')
+  log(`  ${c.bold}Setup:${c.reset}`)
+  log(`    ${c.dim}Claude Code:${c.reset}  ANTHROPIC_BASE_URL=${c.yellow}${url}${c.reset}`)
+  log(`    ${c.dim}Aider/Cursor:${c.reset} OPENAI_BASE_URL=${c.yellow}${url}${c.reset}`)
   log('')
 
-  log(`  ${c.bold}Upstreams:${c.reset}`)
-  log(`    ${c.magenta}anthropic${c.reset} → ${c.dim}${config.upstreams.anthropic}${c.reset}`)
-  log(`    ${c.magenta}openai${c.reset}    → ${c.dim}${config.upstreams.openai}${c.reset}`)
-  log(`    ${c.magenta}gemini${c.reset}    → ${c.dim}${config.upstreams.gemini}${c.reset}`)
-  log('')
-
-  log(`  ${c.bold}Compression:${c.reset}`)
-  for (const [stage, desc] of Object.entries(STAGE_INFO)) {
-    const active = config.stages.includes(stage)
-    const icon = active ? `${c.green}✓${c.reset}` : `${c.dim}✗${c.reset}`
-    const extra = stage === 'llmlingua' && active && config.llmLinguaUrl ? ` ${c.dim}(${config.llmLinguaUrl})${c.reset}` : ''
-    log(`    ${icon} ${active ? c.cyan : c.dim}${stage}${c.reset} — ${active ? desc : c.dim + desc + c.reset}${extra}`)
+  log(`  ${c.bold}Stages${c.reset} ${c.dim}(${active.length} active)${c.reset}`)
+  for (const s of defaultActive) {
+    const extra = s === 'llmlingua' && config.llmLinguaUrl ? ` ${c.dim}(${config.llmLinguaUrl})${c.reset}` : ''
+    log(`    ${c.green}✓${c.reset} ${c.cyan}${s}${c.reset}${extra}`)
+  }
+  if (extraActive.length) {
+    for (const s of extraActive) {
+      log(`    ${c.yellow}✓${c.reset} ${c.yellow}${s}${c.reset} ${c.dim}(lossy)${c.reset}`)
+    }
+  }
+  const disabled = [...DEFAULT_STAGES, ...EXTRA_STAGES].filter(s => !active.includes(s))
+  if (disabled.length && disabled.length <= 4) {
+    log(`    ${c.dim}✗ ${disabled.join(', ')}${c.reset}`)
   }
   log('')
 }
 
-server.listen(config.port, () => {
-  printBanner()
-})
+server.listen(config.port, () => { printBanner() })
 
 process.on('exit', () => sidecarProc?.kill())
 process.on('SIGINT', () => { sidecarProc?.kill(); process.exit() })

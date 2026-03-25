@@ -38,10 +38,13 @@ const STAGE_DESC = {
 const skipPrompt = process.argv.includes('-y') || process.argv.includes('--no-interactive') || !process.stdin.isTTY
 let selectedStages
 
-if (process.env.TAMP_STAGES) {
-  selectedStages = process.env.TAMP_STAGES.split(',').map(s => s.trim()).filter(Boolean)
-} else if (skipPrompt) {
-  selectedStages = [...DEFAULT_STAGES]
+// Determine pre-checked stages from env var (if set)
+const envStages = process.env.TAMP_STAGES
+  ? new Set(process.env.TAMP_STAGES.split(',').map(s => s.trim()).filter(Boolean))
+  : null
+
+if (skipPrompt) {
+  selectedStages = envStages ? [...envStages] : [...DEFAULT_STAGES]
 } else {
   log('')
   log(`  ${c.bold}${c.cyan}Tamp${c.reset} ${c.dim}v${pkg.version}${c.reset}`)
@@ -55,13 +58,13 @@ if (process.env.TAMP_STAGES) {
       ...DEFAULT_STAGES.map(s => ({
         name: `${c.cyan}${s.padEnd(15)}${c.reset} ${c.dim}${STAGE_DESC[s]}${c.reset}`,
         value: s,
-        checked: true,
+        checked: envStages ? envStages.has(s) : true,
       })),
       new Separator(`${c.dim}── Extra (lossy, opt-in) ──${c.reset}`),
       ...EXTRA_STAGES.map(s => ({
         name: `${c.yellow}${s.padEnd(15)}${c.reset} ${c.dim}${STAGE_DESC[s]}${c.reset}`,
         value: s,
-        checked: false,
+        checked: envStages ? envStages.has(s) : false,
       })),
     ],
     pageSize: 15,

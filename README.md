@@ -1,6 +1,6 @@
 # Tamp
 
-**Token compression proxy for coding agents.** 52.6% fewer input tokens, zero code changes. Works with Claude Code, Aider, Cursor, Cline, Windsurf, and any OpenAI-compatible agent.
+**Token compression proxy for coding agents.** 52.6% fewer input tokens, zero code changes. Works with Claude Code, Aider, Cursor, Cline, Windsurf, 🦞 [OpenClaw](https://openclaw.app), and any OpenAI-compatible agent.
 
 ```
 npx @sliday/tamp
@@ -9,8 +9,24 @@ npx @sliday/tamp
 Or install globally:
 
 ```bash
-curl -fsSL https://tamp.dev/setup.sh | bash
+npm i -g @sliday/tamp@0.3.9
 ```
+
+### 🦞 OpenClaw Quick Setup
+
+```bash
+# 1. Start Tamp
+TAMP_STAGES=minify,toon,strip-lines,whitespace,dedup,diff,prune tamp -y
+
+# 2. Add provider to OpenClaw config
+#    baseUrl: "http://localhost:7778"
+#    apiKey: "${ANTHROPIC_API_KEY}"
+#    api: "anthropic-messages"
+
+# 3. Set as primary model → done
+```
+
+70MB RAM. <5ms latency. No Python needed. Full guide: [docs/openclaw-setup.md](docs/openclaw-setup.md)
 
 ## How It Works
 

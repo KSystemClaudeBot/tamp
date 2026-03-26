@@ -105,6 +105,13 @@ function pipeRequest(req, res, upstreamUrl, prefixChunks) {
 }
 
 return http.createServer(async (req, res) => {
+  // Health check endpoint
+  if (req.url === '/health' && (req.method === 'GET' || req.method === 'HEAD')) {
+    const body = JSON.stringify({ status: 'ok', version: config.version || '0.3.7', stages: config.stages })
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) })
+    return res.end(req.method === 'HEAD' ? undefined : body)
+  }
+
   const provider = detectProvider(req.method, req.url)
 
   if (!provider) {

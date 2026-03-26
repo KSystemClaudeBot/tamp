@@ -47,6 +47,7 @@ export function StagePicker({ version, envStages, onSelect }) {
     h(MultiSelect, {
       options,
       defaultValue: preSelected,
+      visibleOptionCount: 12,
       onSubmit: (values) => {
         if (values.length === 0) {
           setError('At least one stage required.')

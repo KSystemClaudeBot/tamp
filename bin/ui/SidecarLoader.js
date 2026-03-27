@@ -10,19 +10,20 @@ export function SidecarLoader({ startSidecar, onReady, onFail }) {
 
   useEffect(() => {
     let mounted = true
+    let tid
     startSidecar().then(url => {
       if (!mounted) return
       if (url) {
         setStatus('success')
         setMessage(`LLMLingua-2 ready on ${url}`)
-        setTimeout(() => onReady(url), 600)
+        tid = setTimeout(() => onReady(url), 600)
       } else {
         setStatus('warning')
         setMessage('LLMLingua-2 not available. Continuing without neural compression.')
-        setTimeout(() => onFail(), 1200)
+        tid = setTimeout(() => onFail(), 1200)
       }
     })
-    return () => { mounted = false }
+    return () => { mounted = false; clearTimeout(tid) }
   }, [])
 
   if (status === 'loading') {

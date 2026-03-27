@@ -17,6 +17,7 @@ export function App({ version, envStages, startSidecar, createProxy }) {
   const [config, setConfig] = useState(null)
   const serverRef = useRef(null)
   const sidecarUrlRef = useRef(null)
+  const stagesRef = useRef(null)
   const eventIdRef = useRef(0)
 
   const onCompress = useCallback((stats, newTotals, meta) => {
@@ -33,13 +34,19 @@ export function App({ version, envStages, startSidecar, createProxy }) {
     serverRef.current = server
     setConfig(proxyConfig)
 
+    server.on('error', (err) => {
+      exit()
+      process.stderr.write(`\n[tamp] Failed to start: ${err.message}\n`)
+      process.exit(1)
+    })
     server.listen(proxyConfig.port, () => {
       setPhase('running')
     })
-  }, [onCompress, createProxy])
+  }, [onCompress, createProxy, exit])
 
   const onStagesSelected = useCallback((selected) => {
     setStages(selected)
+    stagesRef.current = selected
     if (selected.includes('llmlingua')) {
       setPhase('loading')
     } else {
@@ -47,16 +54,19 @@ export function App({ version, envStages, startSidecar, createProxy }) {
     }
   }, [startProxy])
 
+  // Use stagesRef to avoid stale closure — SidecarLoader's useEffect
+  // captures onReady/onFail on first render only
   const onSidecarReady = useCallback((url) => {
     sidecarUrlRef.current = url
-    startProxy(stages, url)
-  }, [stages, startProxy])
+    startProxy(stagesRef.current, url)
+  }, [startProxy])
 
   const onSidecarFail = useCallback(() => {
-    const filtered = stages.filter(s => s !== 'llmlingua')
+    const filtered = stagesRef.current.filter(s => s !== 'llmlingua')
     setStages(filtered)
+    stagesRef.current = filtered
     startProxy(filtered, null)
-  }, [stages, startProxy])
+  }, [startProxy])
 
   useEffect(() => {
     const shutdown = () => {

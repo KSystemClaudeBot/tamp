@@ -167,6 +167,7 @@ if (skipPrompt) {
 
   const cleanup = () => { sidecarProc?.kill() }
   process.on('exit', cleanup)
+  process.on('SIGTERM', () => { cleanup(); process.exit() })
 
   render(h(App, {
     version: pkg.version,

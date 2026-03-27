@@ -624,7 +624,9 @@
     requestAnimationFrame(step);
   }
 
-  fetch('https://api.github.com/repos/sliday/tamp', { headers: { Accept: 'application/vnd.github.v3+json' } })
+  var ctrl = new AbortController();
+  setTimeout(function() { ctrl.abort(); }, 5000);
+  fetch('https://api.github.com/repos/sliday/tamp', { headers: { Accept: 'application/vnd.github.v3+json' }, signal: ctrl.signal })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var stars = d.stargazers_count;

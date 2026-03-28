@@ -188,6 +188,16 @@ cd tamp && npm install
 node bin/tamp.js
 ```
 
+### Claude Code plugin
+
+Auto-start Tamp on every Claude Code session:
+
+```bash
+claude plugins add sliday/tamp-plugin
+```
+
+The plugin auto-starts the proxy, adds `/tamp:status` and `/tamp:config` commands, and provides setup guidance. See [tamp-plugin](https://github.com/sliday/tamp-plugin).
+
 ### Systemd service (Ubuntu/Linux)
 
 ```bash

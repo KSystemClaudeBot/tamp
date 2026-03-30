@@ -89,7 +89,17 @@ function pipeRequest(req, res, upstreamUrl, prefixChunks) {
 return http.createServer(async (req, res) => {
   // Health check endpoint
   if (req.url === '/health' && (req.method === 'GET' || req.method === 'HEAD')) {
-    const body = JSON.stringify({ status: 'ok', version: config.version, stages: config.stages })
+    const totals = session.getTotals()
+    const body = JSON.stringify({
+      status: 'ok', version: config.version, stages: config.stages,
+      session: {
+        requests: totals.requestCount,
+        tokensSaved: totals.totalTokensSaved,
+        charsSaved: totals.totalSaved,
+        charsOriginal: totals.totalOriginal,
+        blocksCompressed: totals.compressionCount,
+      },
+    })
     res.writeHead(200, { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) })
     return res.end(req.method === 'HEAD' ? undefined : body)
   }

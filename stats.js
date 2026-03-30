@@ -70,9 +70,11 @@ export function createSession() {
   let totalOriginal = 0
   let totalTokensSaved = 0
   let compressionCount = 0
+  let requestCount = 0
 
   return {
     record(stats) {
+      requestCount++
       for (const s of stats) {
         if (s.method && s.originalLen && s.compressedLen) {
           totalSaved += s.originalLen - s.compressedLen
@@ -83,7 +85,7 @@ export function createSession() {
       }
     },
     getTotals() {
-      return { totalSaved, totalOriginal, totalTokensSaved, compressionCount }
+      return { totalSaved, totalOriginal, totalTokensSaved, compressionCount, requestCount }
     },
   }
 }

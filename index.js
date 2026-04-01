@@ -88,8 +88,26 @@ function pipeRequest(req, res, upstreamUrl, prefixChunks) {
 
 return http.createServer(async (req, res) => {
   // Health check endpoint
-  if (req.url === '/health' && (req.method === 'GET' || req.method === 'HEAD')) {
+  if ((req.url === '/health' || req.url === '/health?text') && (req.method === 'GET' || req.method === 'HEAD')) {
     const totals = session.getTotals()
+    if (req.url === '/health?text') {
+      const ratio = totals.totalOriginal > 0 ? (totals.totalSaved * 100 / totals.totalOriginal).toFixed(1) + '%' : 'n/a'
+      const lines = [`Tamp v${config.version} | ${config.stages.length} stages active`]
+      if (totals.requestCount === 0) {
+        lines.push('No requests yet this session')
+      } else {
+        lines.push(`Requests: ${totals.requestCount} | Blocks: ${totals.compressionCount}`)
+        lines.push(`Tokens saved: ${totals.totalTokensSaved} | Chars: ${totals.totalSaved}/${totals.totalOriginal} (${ratio})`)
+        if (totals.totalTokensSaved > 0) {
+          const son = (totals.totalTokensSaved * 3 / 1e6).toFixed(4)
+          const opus = (totals.totalTokensSaved * 15 / 1e6).toFixed(4)
+          lines.push(`Est. savings: $${son} (Sonnet $3/Mtok) | $${opus} (Opus $15/Mtok)`)
+        }
+      }
+      const body = lines.join('\n') + '\n'
+      res.writeHead(200, { 'Content-Type': 'text/plain', 'Content-Length': Buffer.byteLength(body) })
+      return res.end(req.method === 'HEAD' ? undefined : body)
+    }
     const body = JSON.stringify({
       status: 'ok', version: config.version, stages: config.stages,
       session: {

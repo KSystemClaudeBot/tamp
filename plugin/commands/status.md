@@ -3,17 +3,14 @@ description: Show Tamp proxy status, active stages, and session compression stat
 allowed-tools: Bash
 ---
 
-Check the Tamp token compression proxy status. Run this command and report results concisely:
+Check the Tamp token compression proxy status. Run this command and report the output directly to the user:
 
 ```bash
-curl -sf http://localhost:${TAMP_PORT:-7778}/health | python3 -m json.tool
+curl -sf http://localhost:${TAMP_PORT:-7778}/health?text
 ```
 
-If healthy, show:
-- Version and active stages count
-- **Session savings**: requests processed, tokens saved, chars saved, compression ratio (charsSaved/charsOriginal as %). If tokensSaved > 0, also show estimated dollar savings at $3/Mtok (Sonnet) and $5/Mtok (Opus).
-- If session.requests is 0, note "No requests yet"
+If curl fails (empty output), report that Tamp is not running and suggest: `tamp -y` or `tamp install-service`
 
-If not healthy, report that Tamp is not running and suggest: `tamp -y` or `tamp install-service`
+Show the output as-is. Do not reformat or add extra commentary.
 
 $ARGUMENTS

@@ -84,43 +84,23 @@ All 8 default stages are enabled by default. Two additional lossy stages are ava
 
 ## Quick Start
 
-### 1. Start the proxy
+### Option A: One-line installer
 
 ```bash
-npx @sliday/tamp
+curl -fsSL https://tamp.dev/setup.sh | bash
 ```
 
-```
-  ┌─ Tamp ─────────────────────────────────┐
-  │  Proxy: http://localhost:7778          │
-  │  Status: ● Ready                       │
-  │                                        │
-  │  Claude Code:                          │
-  │    ANTHROPIC_BASE_URL=http://localhost:7778
-  │                                        │
-  │  Aider / Cursor / Cline:              │
-  │    OPENAI_API_BASE=http://localhost:7778
-  └────────────────────────────────────────┘
-```
+Installs via npm, sets `ANTHROPIC_BASE_URL` and `OPENAI_API_BASE` in your shell profile. Then just run `tamp` in one terminal and your agent in another.
 
-### 2. Point your agent at the proxy
+### Option B: Manual
 
-**Claude Code:**
 ```bash
-export ANTHROPIC_BASE_URL=http://localhost:7778
-claude
+npx @sliday/tamp                                    # start proxy
+export ANTHROPIC_BASE_URL=http://localhost:7778       # Claude Code
+export OPENAI_API_BASE=http://localhost:7778          # Aider, Cursor, Cline
 ```
 
-**Aider:**
-```bash
-export OPENAI_API_BASE=http://localhost:7778
-aider
-```
-
-**Cursor / Cline / Windsurf:**
-Set the API base URL to `http://localhost:7778` in your editor's settings.
-
-That's it. Use your agent as normal — Tamp compresses silently in the background.
+Use your agent as normal — Tamp compresses silently in the background.
 
 ## Configuration
 
@@ -222,7 +202,7 @@ tamp uninstall-service     # remove
 curl -fsSL https://tamp.dev/setup.sh | bash
 ```
 
-The installer clones to `~/.tamp`, adds `ANTHROPIC_BASE_URL` to your shell profile, and creates a `tamp` alias.
+Installs `@sliday/tamp` globally via npm and adds `ANTHROPIC_BASE_URL` + `OPENAI_API_BASE` to your shell profile.
 
 ## What Gets Compressed
 

@@ -8,6 +8,11 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ensure-tamp.sh",
             "timeout": 12
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ensure-claude-md.sh",
+            "timeout": 5
           }
         ]
       }

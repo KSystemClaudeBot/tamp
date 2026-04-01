@@ -58,7 +58,7 @@ function openUpstream(method, upstreamUrl, headers, res) {
     if (!res.headersSent) {
       res.writeHead(502, { 'Content-Type': 'application/json' })
     }
-    res.end(JSON.stringify({ error: 'upstream_error', message: err.message }))
+    res.end(JSON.stringify({ error: 'upstream_error', message: 'failed to connect to upstream' }))
   })
 
   res.on('error', (err) => {

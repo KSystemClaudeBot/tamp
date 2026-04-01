@@ -195,9 +195,9 @@ async function textpressCompress(text, config) {
 
 // --- Core compression ---
 export function compressText(text, config) {
-  if (text.length < config.minSize) return null
+  if (text.length < config.minSize) { if (config.log !== false) process.stderr.write(`[tamp]   skip: too small (${text.length} < ${config.minSize})\n`); return null }
   const cls = classifyContent(text)
-  if (cls === 'toon') return null
+  if (cls === 'toon') { if (config.log !== false) process.stderr.write(`[tamp]   skip: classified as toon (first 80: ${text.slice(0, 80).replace(/\n/g, '\\n')})\n`); return null }
 
   if (cls === 'text') {
     let processed = text
@@ -220,6 +220,7 @@ export function compressText(text, config) {
     if (config.stages.includes('textpress')) {
       return { async: true, asyncMethod: 'textpress', text: processed, cls }
     }
+    if (config.log !== false) process.stderr.write(`[tamp]   skip: text not compressible (${config.stages.includes('llmlingua') && !config.llmLinguaUrl ? 'no llmlingua sidecar' : 'whitespace savings < 10%'})\n`)
     return null
   }
 

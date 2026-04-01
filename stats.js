@@ -22,7 +22,8 @@ export function formatRequestLog(stats, session, providerName, url, bodySize, to
   if (!compressed.length) {
     const skipCount = stats.filter(s => s.skipped).length
     const n = stats.length
-    const reason = skipCount ? `${skipCount} skipped` : 'nothing to compress'
+    const reasons = [...new Set(stats.filter(s => s.skipped).map(s => s.skipped))].join(', ')
+    const reason = skipCount ? `${skipCount} skipped (${reasons})` : 'nothing to compress'
     return `[tamp] ${c.cyan}${label}${c.reset} ${path}${sizeInfo} ${c.dim}— ${n} block${n !== 1 ? 's' : ''}, ${reason}${c.reset}`
   }
 

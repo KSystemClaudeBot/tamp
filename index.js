@@ -92,7 +92,8 @@ return http.createServer(async (req, res) => {
     const totals = session.getTotals()
     if (req.url === '/health?text') {
       const ratio = totals.totalOriginal > 0 ? (totals.totalSaved * 100 / totals.totalOriginal).toFixed(1) + '%' : 'n/a'
-      const lines = [`Tamp v${config.version} | ${config.stages.length} stages active`]
+      const sidecarStatus = config.stages.includes('llmlingua') ? (sidecarAvailable ? 'ok' : 'not running') : 'n/a'
+      const lines = [`Tamp v${config.version} | ${config.stages.length} stages active | sidecar: ${sidecarStatus}`]
       if (totals.requestCount === 0) {
         lines.push('No requests yet this session')
       } else {
@@ -109,7 +110,7 @@ return http.createServer(async (req, res) => {
       return res.end(req.method === 'HEAD' ? undefined : body)
     }
     const body = JSON.stringify({
-      status: 'ok', version: config.version, stages: config.stages,
+      status: 'ok', version: config.version, stages: config.stages, sidecar: sidecarAvailable,
       session: {
         requests: totals.requestCount,
         tokensSaved: totals.totalTokensSaved,
@@ -235,6 +236,28 @@ function createRequestLogger(config) {
   }
 }
 
+const SIDECAR_PORT = 8788
+const SIDECAR_URL = `http://localhost:${SIDECAR_PORT}`
+
+let sidecarAvailable = false
+
+function probeSidecar(config) {
+  const req = http.get(`${SIDECAR_URL}/health`, { timeout: 2000 }, (res) => {
+    if (res.statusCode === 200) {
+      sidecarAvailable = true
+      if (!config.llmLinguaUrl) config.llmLinguaUrl = SIDECAR_URL
+      console.error(`[tamp] llmlingua sidecar: ok (${config.llmLinguaUrl})`)
+    }
+    res.resume()
+  })
+  req.on('error', () => {
+    sidecarAvailable = false
+    console.error('[tamp] \u26a0 llmlingua stage enabled but sidecar not running \u2014 text blocks won\u2019t compress')
+    console.error('[tamp]   start with: uv run --with fastapi --with uvicorn --with llmlingua --with mlx uvicorn server:app --host 0.0.0.0 --port 8788 --app-dir sidecar')
+  })
+  req.on('timeout', () => { req.destroy() })
+}
+
 const isMain = !process.argv[1]?.includes('node_modules') && process.argv[1] === new URL(import.meta.url).pathname
 
 if (isMain) {
@@ -243,5 +266,9 @@ if (isMain) {
     console.error(`[tamp] proxy listening on http://localhost:${config.port}`)
     console.error(`[tamp] upstream: ${config.upstream}`)
     console.error(`[tamp] stages: ${config.stages.join(', ')}`)
+
+    if (config.stages.includes('llmlingua')) {
+      probeSidecar(config)
+    }
   })
 }

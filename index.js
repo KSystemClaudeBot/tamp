@@ -162,18 +162,27 @@ return http.createServer(async (req, res) => {
   const encoding = (req.headers['content-encoding'] || '').toLowerCase()
   let textBody
   let decompressed = false
+
+  // Safety limit: decompressed body must not exceed 5× maxBody
+  // Prevents compression bomb DoS (small gzip → huge expansion)
+  const MAX_DECOMPRESSED = config.maxBody * 5
+
   try {
     if (encoding === 'gzip') {
-      textBody = zlib.gunzipSync(rawBody)
+      textBody = zlib.gunzipSync(rawBody, { maxOutputLength: MAX_DECOMPRESSED })
       decompressed = true
     } else if (encoding === 'deflate') {
-      textBody = zlib.inflateSync(rawBody)
+      textBody = zlib.inflateSync(rawBody, { maxOutputLength: MAX_DECOMPRESSED })
       decompressed = true
     } else if (encoding === 'br') {
-      textBody = zlib.brotliDecompressSync(rawBody)
+      textBody = zlib.brotliDecompressSync(rawBody, { maxOutputLength: MAX_DECOMPRESSED })
       decompressed = true
     } else if (encoding === 'zstd') {
-      textBody = Buffer.from(fzstd.decompress(new Uint8Array(rawBody)))
+      const decompressedBytes = fzstd.decompress(new Uint8Array(rawBody))
+      if (decompressedBytes.length > MAX_DECOMPRESSED) {
+        throw new Error('zstd decompression exceeded size limit')
+      }
+      textBody = Buffer.from(decompressedBytes)
       decompressed = true
     } else if (encoding && encoding !== 'identity') {
       // Unknown encoding — can't decompress, passthrough as-is
@@ -186,6 +195,13 @@ return http.createServer(async (req, res) => {
   } catch {
     // Decompression failed — passthrough original body
     log('[tamp] passthrough (decompression failed)')
+    forwardRequest(req.method, upstreamUrl, headers, rawBody, res)
+    return
+  }
+
+  // Double-check decompressed size
+  if (textBody.length > MAX_DECOMPRESSED) {
+    log('[tamp] passthrough (decompressed body too large)')
     forwardRequest(req.method, upstreamUrl, headers, rawBody, res)
     return
   }

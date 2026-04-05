@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto'
+import { spawn } from 'node:child_process'
 import { encode } from '@toon-format/toon'
 import { countTokens } from '@anthropic-ai/tokenizer'
 import { createPatch } from 'diff'
@@ -217,6 +218,9 @@ export function compressText(text, config) {
     if (config.stages.includes('llmlingua') && config.llmLinguaUrl) {
       return { async: true, asyncMethod: 'llmlingua', text: processed, cls }
     }
+    if (config.stages.includes('foundation-models') && config.foundationModelsPath) {
+      return { async: true, asyncMethod: 'foundation-models', text: processed, cls }
+    }
     if (config.stages.includes('textpress')) {
       return { async: true, asyncMethod: 'textpress', text: processed, cls }
     }
@@ -263,10 +267,22 @@ export function compressText(text, config) {
 
 async function compressWithLLMLingua(text, config) {
   try {
+    // SSRF protection: only allow localhost URLs
+    let url
+    try {
+      url = new URL(config.llmLinguaUrl + '/compress')
+      const hostname = url.hostname.toLowerCase()
+      if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '::1' && !hostname.startsWith('127.')) {
+        return null
+      }
+    } catch {
+      return null
+    }
+
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 5000)
     try {
-      const res = await fetch(config.llmLinguaUrl + '/compress', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, rate: config.llmLinguaRate || 0.7 }),
@@ -276,6 +292,69 @@ async function compressWithLLMLingua(text, config) {
       const data = await res.json()
       return { text: data.text, method: 'llmlingua', originalLen: text.length, compressedLen: data.text.length, originalTokens: countTokens(text), compressedTokens: countTokens(data.text) }
     } finally { clearTimeout(timeout) }
+  } catch {
+    return null
+  }
+}
+
+async function compressWithFoundationModels(text, config) {
+  if (!config.foundationModelsPath) return null
+
+  const SYSTEM_PROMPT = config.foundationModelsSystemPrompt ||
+    'Compress this text to 50% length while preserving all key information and meaning. Return only the compressed text without explanation.'
+
+  try {
+    const args = [
+      '-o', 'json',
+      '-s', SYSTEM_PROMPT,
+      '--max-tokens', String(Math.floor(text.length * 0.7)),
+      '--quiet',
+      text
+    ]
+
+    const proc = spawn(config.foundationModelsPath, args, {
+      stdio: ['pipe', 'pipe', 'pipe']
+    })
+
+    let responseData = ''
+    proc.stdout.on('data', (chunk) => {
+      responseData += chunk.toString()
+    })
+
+    const response = await new Promise((resolve, reject) => {
+      proc.on('close', (code) => {
+        if (code === 5) {
+          reject(new Error('FoundationModels not available (requires macOS 15+, Apple Silicon)'))
+          return
+        }
+        if (code !== 0) {
+          reject(new Error(`apfel exited with code ${code}`))
+          return
+        }
+        try {
+          const data = JSON.parse(responseData)
+          resolve(data)
+        } catch (err) {
+          reject(new Error(`Failed to parse apfel JSON output: ${err.message}`))
+        }
+      })
+
+      proc.on('error', (err) => {
+        reject(err)
+      })
+    })
+
+    const compressedText = response.content || response.compressedText
+    if (!compressedText || compressedText.length >= text.length * 0.9) return null
+
+    return {
+      text: compressedText,
+      method: 'foundation-models',
+      originalLen: text.length,
+      compressedLen: compressedText.length,
+      originalTokens: countTokens(text),
+      compressedTokens: countTokens(compressedText),
+    }
   } catch {
     return null
   }
@@ -291,6 +370,8 @@ async function compressBlock(text, config) {
     if (sync.asyncMethod === 'textpress') {
       const compressed = await textpressCompress(sync.text, config)
       result = compressed ? { text: compressed, method: 'textpress', originalLen: text.length, compressedLen: compressed.length, originalTokens: countTokens(text), compressedTokens: countTokens(compressed) } : null
+    } else if (sync.asyncMethod === 'foundation-models') {
+      result = await compressWithFoundationModels(sync.text, config)
     } else {
       result = await compressWithLLMLingua(sync.text, config)
     }

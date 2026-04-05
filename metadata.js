@@ -18,6 +18,7 @@ export const DEFAULT_STAGES = Object.freeze([
 export const EXTRA_STAGES = Object.freeze([
   'strip-comments',
   'textpress',
+  'foundation-models',
 ])
 
 export const ALL_STAGES = Object.freeze([
@@ -31,6 +32,7 @@ export const STAGE_DESCRIPTIONS = Object.freeze({
   'strip-lines': 'Remove line-number prefixes',
   whitespace: 'Collapse blank lines, trim trailing',
   llmlingua: 'Neural compression via LLMLingua-2',
+  'foundation-models': 'Apple Intelligence neural compression (macOS 15+, Apple Silicon, 100% local)',
   dedup: 'Deduplicate identical tool_results',
   diff: 'Replace similar re-reads with diffs',
   prune: 'Strip lockfile hashes & npm metadata',

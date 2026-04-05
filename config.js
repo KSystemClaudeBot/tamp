@@ -58,6 +58,9 @@ export function loadConfig(env = process.env) {
     textpressOllamaModel: get('TAMP_TEXTPRESS_OLLAMA_MODEL') || 'qwen3.5:0.8b',
     textpressModel: get('TAMP_TEXTPRESS_MODEL') || 'google/gemini-3.1-flash-lite-preview',
     textpressApiKey: get('TAMP_TEXTPRESS_API_KEY') || get('OPENROUTER_API_KEY') || null,
+    foundationModelsPath: get('TAMP_FOUNDATION_MODELS_PATH') || 'apfel',
+    foundationModelsTimeout: parseInt(get('TAMP_FOUNDATION_MODELS_TIMEOUT'), 10) || 10000,
+    foundationModelsSystemPrompt: get('TAMP_FOUNDATION_MODELS_SYSTEM_PROMPT') || 'Compress this text to 50% length while preserving all key information and meaning. Return only the compressed text without explanation.',
     tokenCost: parseFloat(get('TAMP_TOKEN_COST')) || 3,
   })
 }
@@ -77,4 +80,7 @@ export const CONFIG_TEMPLATE = `# Tamp configuration
 # TAMP_MAX_BODY=10485760
 # TAMP_CACHE_SAFE=true
 # TAMP_TOKEN_COST=3
+# TAMP_FOUNDATION_MODELS_PATH=apfel
+# TAMP_FOUNDATION_MODELS_TIMEOUT=10000
+# TAMP_FOUNDATION_MODELS_SYSTEM_PROMPT=
 `

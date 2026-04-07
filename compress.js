@@ -140,11 +140,25 @@ async function textpressCompress(text, config) {
   // Try Ollama first (local, free, no rate limits)
   const ollamaUrl = config.textpressOllamaUrl || 'http://localhost:11434'
   const ollamaModel = config.textpressOllamaModel || 'qwen3.5:0.8b'
+
+  // SSRF protection: only allow localhost URLs
+  let validatedUrl
+  try {
+    const parsed = new URL(ollamaUrl)
+    const hostname = parsed.hostname.toLowerCase()
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '::1' && !hostname.startsWith('127.')) {
+      return null
+    }
+    validatedUrl = parsed
+  } catch {
+    return null
+  }
+
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 15000)
     try {
-      const res = await fetch(`${ollamaUrl}/api/chat`, {
+      const res = await fetch(`${validatedUrl}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -45,6 +45,12 @@ function openUpstream(method, upstreamUrl, headers, res) {
     method,
     headers,
   }, (upstreamRes) => {
+    config.onResponse?.(upstreamRes.headers, {
+      method,
+      url: upstreamUrl.href,
+      path: upstreamUrl.pathname + upstreamUrl.search,
+      statusCode: upstreamRes.statusCode,
+    }, session.getTotals())
     res.writeHead(upstreamRes.statusCode, upstreamRes.headers)
     upstreamRes.pipe(res)
     upstreamRes.on('error', (err) => {
